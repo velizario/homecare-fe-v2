@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
 import HomePage from './structure/homepage/HomePage';
 import About from './structure/about/About';
 import Contact from './structure/contact/Contact';
@@ -9,7 +9,7 @@ import PageNotFound from './structure/defaultRoutePage/PageNotFound';
 function App() {
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route index element={<HomePage />} />
         <Route path='about' element={<About/>} />
@@ -17,7 +17,7 @@ function App() {
         <Route path='dashboard/*' element={<Dashboard/>} />
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
