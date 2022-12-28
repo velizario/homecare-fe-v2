@@ -1,96 +1,34 @@
-
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, Transition } from '@headlessui/react'
 import {
   Bars3BottomLeftIcon,
-  CogIcon,
   HomeIcon,
-  PhotoIcon,
-  PlusIcon,
-  RectangleStackIcon,
-  Squares2X2Icon,
-  UserGroupIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Header from '../header/Header'
-import Footer from '../footer/Footer'
-import ProfileSettingsMenuBar from './profile/ProfileSettingsMenuBar'
+  ChatBubbleBottomCenterTextIcon,
+  UserIcon,
+  ClipboardDocumentListIcon,
+  Bars3Icon,
+} from "@heroicons/react/24/outline";
 import ProfileSettingsContent from './profile/ProfileSettingsContent'
 import Submenu from './profile/Submenu'
-
-const sidebarNavigation = [
-  { name: 'Home', href: '#', icon: HomeIcon, current: false },
-  { name: 'All Files', href: '#', icon: Squares2X2Icon, current: false },
-  { name: 'Photos', href: '#', icon: PhotoIcon, current: true },
-  { name: 'Shared', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Albums', href: '#', icon: RectangleStackIcon, current: false },
-  { name: 'Settings', href: '#', icon: CogIcon, current: false },
-]
-
-const tabs = [
+import Header from '../header/Header'
+import Sidebar from './sidebar/Sidebar'
+import SidebarMobile from './sidebar/SidebarMobile';
 
 
-  { name: 'My Account', href: '#', current: false },
-  { name: 'Company', href: '#', current: false },
-  { name: 'Team Members', href: '#', current: true },
-  { name: 'Billing', href: '#', current: false },
-]
-
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
-
-function classNames(...classes: string[]) {
+function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+export default function Dashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <>
-    <Header/>
-      <div className="flex h-full">
-        {/* Narrow sidebar */}
-        <div className="hidden w-28 overflow-y-auto bg-indigo-700 md:block">
-          <div className="flex w-full flex-col items-center py-6">
-            <div className="flex flex-shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                alt="Your Company"
-              />
-            </div>
-            <div className="mt-6 w-full flex-1 space-y-1 px-2">
-              {sidebarNavigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className={classNames(
-                    item.current ? 'bg-indigo-800 text-white' : 'text-indigo-100 hover:bg-indigo-800 hover:text-white',
-                    'group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium'
-                  )}
-                  aria-current={item.current ? 'page' : undefined}
-                >
-                  <item.icon
-                    className={classNames(
-                      item.current ? 'text-white' : 'text-indigo-300 group-hover:text-white',
-                      'h-6 w-6'
-                    )}
-                    aria-hidden="true"
-                  />
-                  <span className="mt-2">{item.name}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        <Transition.Root show={mobileMenuOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-20 md:hidden" onClose={setMobileMenuOpen}>
+      <Header/>
+      <div className="flex">
+        <Transition.Root show={sidebarOpen} as={Fragment}>
+          <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -113,7 +51,7 @@ export default function Example() {
                 leaveFrom="translate-x-0"
                 leaveTo="-translate-x-full"
               >
-                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-indigo-700 pt-5 pb-4">
+                <Dialog.Panel className="relative flex w-full max-w-xs flex-1 flex-col bg-indigo-700">
                   <Transition.Child
                     as={Fragment}
                     enter="ease-in-out duration-300"
@@ -123,97 +61,73 @@ export default function Example() {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <div className="absolute top-1 right-0 -mr-14 p-1">
+                    <div className="absolute top-0 right-0 -mr-12 pt-2">
                       <button
                         type="button"
-                        className="flex h-12 w-12 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => setMobileMenuOpen(false)}
+                        className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                        onClick={() => setSidebarOpen(false)}
                       >
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                         <span className="sr-only">Close sidebar</span>
+                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
                       </button>
                     </div>
                   </Transition.Child>
-                  <div className="flex flex-shrink-0 items-center px-4">
-                    <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                      alt="Your Company"
-                    />
-                  </div>
-                  <div className="mt-5 h-0 flex-1 overflow-y-auto px-2">
-                    <nav className="flex h-full flex-col">
-                      <div className="space-y-1">
-                        {sidebarNavigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? 'bg-indigo-800 text-white'
-                                : 'text-indigo-100 hover:bg-indigo-800 hover:text-white',
-                              'group py-2 px-3 rounded-md flex items-center text-sm font-medium'
-                            )}
-                            aria-current={item.current ? 'page' : undefined}
-                          >
-                            <item.icon
-                              className={classNames(
-                                item.current ? 'text-white' : 'text-indigo-300 group-hover:text-white',
-                                'mr-3 h-6 w-6'
-                              )}
-                              aria-hidden="true"
-                            />
-                            <span>{item.name}</span>
-                          </a>
-                        ))}
+                  <SidebarMobile/>
+                  <div className="flex flex-shrink-0 border-t border-indigo-800 p-4">
+                    <a href="#" className="group block flex-shrink-0">
+                      <div className="flex items-center">
+                        <div>
+                          <img
+                            className="inline-block h-10 w-10 rounded-full"
+                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            alt=""
+                          />
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-base font-medium text-white">Tom Cook</p>
+                          <p className="text-sm font-medium text-indigo-200 group-hover:text-white">View profile</p>
+                        </div>
                       </div>
-                    </nav>
+                    </a>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
               <div className="w-14 flex-shrink-0" aria-hidden="true">
-                {/* Dummy element to force sidebar to shrink to fit close icon */}
+                {/* Force sidebar to shrink to fit close icon */}
               </div>
             </div>
           </Dialog>
         </Transition.Root>
 
-        {/* Content area */}
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <header className="w-full">
-            <div className="relative z-10 flex h-16 flex-shrink-0 border-b border-gray-200 bg-white shadow-sm">
-              <button
-                type="button"
-                className="border-r border-gray-200 px-4 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-                onClick={() => setMobileMenuOpen(true)}
-              >
-                <span className="sr-only">Open sidebar</span>
-                <Bars3BottomLeftIcon className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-          </header>
-
-          {/* Main content */}
-          <Submenu/>
-          <div className="flex flex-1 items-stretch overflow-hidden">
-            {/* Secondary column (hidden on smaller screens) */}
-            <aside className="hidden w-96 overflow-y-auto border-l border-gray-200 bg-white lg:block">
-              <ProfileSettingsMenuBar/>
-            </aside>
-            <main className="flex-1 overflow-y-auto">
-              {/* Primary column */}
-              <section aria-labelledby="primary-heading" className="flex h-full min-w-0 flex-1 flex-col lg:order-last">
-                <h1 id="primary-heading" className="sr-only">
-                  Photos
-                </h1>
-                <ProfileSettingsContent/>
-              </section>
-            </main>
-
+        {/* Static sidebar for desktop */}
+          {/* Sidebar component, swap this element with another sidebar if you like */}
+          <Sidebar/>
+        <div className="flex flex-1 flex-col">
+          <div className="sticky top-0 z-10 bg-gray-100 pl-1 pt-1 sm:pl-3 sm:pt-3 md:hidden">
+            <button
+              type="button"
+              className="-ml-0.5 -mt-0.5 inline-flex h-12 w-12 items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <span className="sr-only">Open sidebar</span>
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+            </button>
           </div>
+          <main className="flex-1">
+            <div className="py-6">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+              </div>
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                {/* Replace with your content */}
+                <Submenu />
+                <ProfileSettingsContent/>
+                {/* /End replace */}
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-      <Footer/>
     </>
   )
 }

@@ -1,5 +1,10 @@
+import { useNavigate } from "react-router";
+
 const HomePage = () => {
-    return <></>
+    const navigate = useNavigate()
+    return <>
+        <button onClick={() => navigate("/dashboard")}>to dashboard</button>
+    </>
 }
 
 export default HomePage;
