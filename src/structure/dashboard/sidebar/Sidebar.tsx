@@ -33,9 +33,8 @@ export const navigation = [
 export default function Sidebar() {
   return (
     <>
-      <div className="hidden w-28 overflow-y-auto bg-indigo-700 md:block">
         <div className="flex w-full flex-col items-center py-6">
-          <div className="flex flex-shrink-0 items-center">
+          <div className="hidden md:block flex flex-shrink-0 items-center">
             <img
               className="h-8 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=white"
@@ -69,7 +68,6 @@ export default function Sidebar() {
             ))}
           </div>
         </div>
-      </div>
     </>
   );
 }

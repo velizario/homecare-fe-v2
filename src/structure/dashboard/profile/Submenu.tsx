@@ -10,10 +10,10 @@ const tabs = [
     name: "Информация",
     href: "#",
     icon: InformationCircleIcon,
-    current: false,
+    current: true,
   },
   { name: "Акаунт", href: "#", icon: UserIcon, current: false },
-  { name: "Известявания", href: "#", icon: BellAlertIcon, current: true },
+  { name: "Известявания", href: "#", icon: BellAlertIcon, current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -22,7 +22,7 @@ function classNames(...classes: string[]) {
 
 export default function Submenu() {
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-4">
+    <>
       <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
@@ -69,6 +69,6 @@ export default function Submenu() {
           </nav>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -23,7 +23,7 @@ export default function ProfilePhoto() {
                 className="pointer-events-none relative text-sm font-medium text-blue-gray-900"
               >
                 {/* //TODO bug - sticks above the mobile menu */}
-                <span>Change</span>
+                <span>Смени</span>
                 <span className="sr-only"> user photo</span>
               </label>
               <input
@@ -37,7 +37,7 @@ export default function ProfilePhoto() {
               type="button"
               className="ml-3 rounded-md border border-transparent bg-transparent py-2 px-3 text-sm font-medium text-blue-gray-900 hover:text-blue-gray-700 focus:border-blue-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-gray-50"
             >
-              Remove
+              Премахни
             </button>
           </div>
         </div>
