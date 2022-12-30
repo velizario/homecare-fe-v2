@@ -35,7 +35,7 @@ export default function Orderslist() {
                                 <h3 className="text-base font-medium">{order.name}</h3>
                                 <div className="flex flex-row gap-2 text-gray-500">
                                     <ClockIcon className="h-5 w-5" />
-                                    <p className="text-sm font-medium">{order.time}</p>
+                                    <p className="text-sm font-medium">{order.time}</p> 
                                 </div>
                                 <div className="flex flex-row gap-2 text-gray-500">
                                     <MapPinIcon className="h-5 w-5" />
