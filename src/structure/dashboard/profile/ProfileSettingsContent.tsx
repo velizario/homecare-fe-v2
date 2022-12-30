@@ -59,8 +59,8 @@ function classNames(...classes: string[]) {
 export default function ProfileSettingsContent() {
   return (
     <>
-      <div className="flex-1">
-        <form className="divide-y-blue-gray-200 mt-6 space-y-8 divide-y max-w-3xl">
+      <div className="flex-1 py-4">
+        <form className="divide-y-blue-gray-200 space-y-8 divide-y max-w-3xl">
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <div className="sm:col-span-6">
               <h2 className="text-xl font-medium text-blue-gray-900">
@@ -151,13 +151,13 @@ export default function ProfileSettingsContent() {
               type="button"
               className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-blue-gray-900 shadow-sm hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Cancel
+              Отмени
             </button>
             <button
               type="submit"
               className="ml-3 inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Save
+              Запиши
             </button>
           </div>
         </form>

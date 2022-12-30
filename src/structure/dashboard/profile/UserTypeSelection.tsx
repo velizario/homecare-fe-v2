@@ -14,11 +14,11 @@ export default function ProfileSettingsContent() {
   const [selectedService, setSelectedService] = useState(serviceType[0])
 
   return (
-    <div className="sm:col-span-4 ">
+    <div className="sm:col-span-4">
       <p className="block text-sm font-medium text-blue-gray-900">Предоставяте или търсите услуги за почистване?</p>
     <RadioGroup value={selectedService} onChange={setSelectedService} className="mt-2">
       <RadioGroup.Label className="sr-only"> Choose a memory option </RadioGroup.Label>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-3 ">
         {serviceType.map((option) => (
           <RadioGroup.Option
             key={option.name}

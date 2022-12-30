@@ -5,36 +5,48 @@ import {
     UserIcon,
     ClipboardDocumentListIcon,
   } from "@heroicons/react/24/outline";
+import { Link, useNavigate } from "react-router-dom";
 
-export const navigation = [
-    { name: "Начало", href: "#", icon: HomeIcon, current: false },
+export const sideNavigation = [
+    { name: "Начало", route: "/", icon: HomeIcon, current: false, count: 0 },
     {
       name: "Поръчки",
-      href: "#",
+      route: "orders",
       icon: ClipboardDocumentListIcon,
       current: false,
+      count: 2
     },
     {
       name: "Съобщения",
-      href: "#",
+      route: "chat",
       icon: ChatBubbleBottomCenterTextIcon,
       current: true,
+      count: 12
     },
-    { name: "Профил", href: "#", icon: UserIcon, current: false },
+    { name: "Профил", route: "profile", icon: UserIcon, current: false, count: 0 },
   ]
   const userNavigation = [
   
   
-    { name: 'Your Profile', href: '#' },
-    { name: 'Sign out', href: '#' },
+    { name: 'Your Profile', route: '#' },
+    { name: 'Sign out', route: '#' },
   ]
+
 
   
 export default function Sidebar() {
+
+  const navigate = useNavigate();
+
+  const routeTo = (to?: string) => {
+    if (!to) return;
+    navigate(to);
+  }
+
   return (
     <>
         <div className="flex w-full flex-col items-center py-6">
-          <div className="hidden md:block flex flex-shrink-0 items-center">
+          <div className="hidden md:block flex-shrink-0 items-center">
             <img
               className="h-8 w-auto"
               src="https://tailwindui.com/img/logos/mark.svg?color=white"
@@ -42,10 +54,10 @@ export default function Sidebar() {
             />
           </div>
           <div className="mt-6 w-full flex-1 space-y-1 px-2">
-            {navigation.map((item) => (
-              <a
+            {sideNavigation.map((item) => (
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.route}
                 className={classNames(
                   item.current
                     ? "bg-indigo-800 text-white"
@@ -64,7 +76,7 @@ export default function Sidebar() {
                   aria-hidden="true"
                 />
                 <span className="mt-2">{item.name}</span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
