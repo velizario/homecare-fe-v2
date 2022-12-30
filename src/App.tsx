@@ -9,7 +9,7 @@ import PageNotFound from './structure/defaultRoutePage/PageNotFound';
 function App() {
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route index element={<HomePage />} />
@@ -18,7 +18,7 @@ function App() {
         <Route path='dashboard/*' element={<Dashboard/>} />
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 
