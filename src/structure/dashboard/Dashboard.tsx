@@ -11,6 +11,7 @@ import Footer from '../footer/Footer';
 import { Route, Routes } from 'react-router-dom';
 import Chat from './chat/Chat';
 import Orders from './orders/Orders';
+import TabsMenu from '../../utilityComponents/TabsMenu';
 
 
 function classNames(...classes:string[]) {
@@ -23,7 +24,7 @@ export default function Dashboard() {
   return (
     <>
       <Header setSidebarOpen={setSidebarOpen}/>
-      <div className="flex max-w-5xl mx-auto">
+      <div className="flex max-w-5xl mx-auto bg-white">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -91,7 +92,7 @@ export default function Dashboard() {
         <div className="hidden bg-indigo-700 lg:block">
           <SidebarDesktop/>
         </div>
-        <div className="flex-1 px-4 md:px-6 lg:px-8">
+        <div className="flex-1  px-4 md:px-6 lg:px-8">
           <Routes>
             <Route path="chat" element={<Chat/>}/>
             <Route path="profile" element={<ProfileSettingsContent/>}/>
