@@ -28,7 +28,7 @@ export default function Orderslist() {
             <div className="space-y-4">
                 {orders.map(order => {
                     return (
-                        <div className="flex gap-2 cursor-pointer items-center hover:bg-indigo-50  hover:transition-all relative max-w-xl w-full bg-white rounded-md p-4 md:gap-4 md:pl-6 pr-1 overflow-hidden">
+                        <div className="flex gap-2 cursor-pointer items-center hover:bg-indigo-50 hover:transition-all ring-1 ring-indigo-50  relative w-full shadow-md shadow-indigo-50 rounded-md p-4 md:gap-4 md:pl-6 pr-1 overflow-hidden">
                             <div className="absolute left-0 h-full w-2 bg-indigo-200"></div>
                             <img className="h-12 w-12 rounded-full self-start" src={order.imageUrl} alt="" />
                             <div className="flex flex-col gap-2">
