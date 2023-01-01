@@ -14,7 +14,7 @@ import Orders from './orders/Orders';
 import TabsMenu from '../../utilityComponents/TabsMenu';
 
 
-function classNames(...classes:string[]) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header setSidebarOpen={setSidebarOpen}/>
+      <Header setSidebarOpen={setSidebarOpen} />
       <div className="flex max-w-5xl mx-auto bg-white">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
@@ -72,7 +72,7 @@ export default function Dashboard() {
                     </div>
                   </Transition.Child>
                   {/* mobile sidebar */}
-                  <Sidebar/>
+                  <Sidebar />
                 </Dialog.Panel>
               </Transition.Child>
               <div className="w-14 flex-shrink-0" aria-hidden="true">
@@ -87,21 +87,21 @@ export default function Dashboard() {
 
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="hidden bg-indigo-700 md:block lg:hidden">
-          <Sidebar/>
+          <Sidebar />
         </div>
         <div className="hidden bg-indigo-700 lg:block">
-          <SidebarDesktop/>
+          <SidebarDesktop />
         </div>
-        <div className="flex-1  px-4 md:px-6 lg:px-8">
+        <div className="flex-1 ">
           <Routes>
-            <Route path="chat" element={<Chat/>}/>
-            <Route path="profile" element={<ProfileSettingsContent/>}/>
-            <Route path="orders" element={<Orders/>}/>
-            
+            <Route path="chat" element={<Chat />} />
+            <Route path="profile" element={<ProfileSettingsContent />} />
+            <Route path="orders" element={<Orders />} />
+
           </Routes>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   )
 }

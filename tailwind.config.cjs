@@ -12,11 +12,16 @@ module.exports = {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
       boxShadow: {
-        'order' : '1px 1px 15px -4px rgba(200,200,200,0.5)'
+        'order' : '1px 1px 15px -4px rgba(200,200,200,0.7)',
+        'order-hover' : '2px 2px 20px -4px rgba(200,200,200,1)',
+        'button-active' : '1px 2px 8px -2px rgba(200, 200, 200,0.8)'
       }
     },
   },
   plugins: [
     require('@tailwindcss/forms'),
   ],
+  variants: {
+    
+  }
 }

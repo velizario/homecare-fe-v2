@@ -25,11 +25,11 @@ export default function ProfileSettingsContent() {
             value={option}
             className={({ active, checked }) =>
               classNames(
-                active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
+
                 checked
                   ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
                   : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                'border rounded-md py-3 px-3 flex flex-col text-sm font-medium sm:flex-1 gap-1 cursor-pointer'
+                'border rounded-md py-3 px-3 flex flex-col text-sm font-medium sm:flex-1 gap-1 cursor-pointer shadow-order'
               )
             }
           >

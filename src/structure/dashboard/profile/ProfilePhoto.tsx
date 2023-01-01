@@ -17,7 +17,7 @@ export default function ProfilePhoto() {
             alt=""
           />
           <div className="ml-4 flex">
-            <div className="relative flex cursor-pointer items-center rounded-md border border-blue-gray-300 bg-white py-2 px-3 shadow-sm focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:ring-offset-blue-gray-50 hover:bg-blue-gray-50">
+            <div className="relative flex cursor-pointer items-center rounded-md border border-blue-gray-300 bg-white py-2 px-3 shadow-sm hover:bg-blue-gray-50">
               <label
                 htmlFor="user-photo"
                 className="pointer-events-none relative text-sm font-medium text-blue-gray-900"
@@ -35,7 +35,7 @@ export default function ProfilePhoto() {
             </div>
             <button
               type="button"
-              className="ml-3 rounded-md border border-transparent bg-transparent py-2 px-3 text-sm font-medium text-blue-gray-900 hover:text-blue-gray-700 focus:border-blue-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-blue-gray-50"
+              className="ml-3 rounded-md border border-transparent bg-transparent py-2 px-3 text-sm font-medium text-blue-gray-900 hover:text-blue-gray-700 focus:border-blue-gray-300 "
             >
               Премахни
             </button>
