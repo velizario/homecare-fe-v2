@@ -15,6 +15,10 @@ module.exports = {
         'order' : '1px 1px 15px -4px rgba(200,200,200,0.7)',
         'order-hover' : '2px 2px 20px -4px rgba(200,200,200,1)',
         'button-active' : '1px 2px 8px -2px rgba(200, 200, 200,0.8)'
+      },
+      maxWidth: {
+        'chat' : "15rem",
+        'chat-md' : "17rem"
       }
     },
   },
