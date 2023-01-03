@@ -1,3 +1,4 @@
+import ScrollIntoView from "../../../utilityComponents/ScrollIntoView";
 import InputField from "./InputField";
 import ProfilePhoto from "./ProfilePhoto";
 import UserTypeSelection from "./UserTypeSelection";
@@ -102,7 +103,6 @@ export default function ProfileSettingsContent() {
             <InputField {...ProfileInputValues.facebook} />
             <InputField {...ProfileInputValues.url} />
           </div>
-
           <div className="grid grid-cols-1 gap-y-6 pt-8 sm:grid-cols-6 sm:gap-x-6">
             <div className="sm:col-span-6">
               <h2 className="text-xl font-medium text-blue-gray-900">

@@ -136,7 +136,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
           </a>
           <a
             href="#"
-            className="ml-8 inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+            className="ml-8 inline-flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
           >
             Sign up
           </a>

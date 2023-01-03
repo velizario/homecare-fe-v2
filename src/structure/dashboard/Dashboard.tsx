@@ -97,7 +97,6 @@ export default function Dashboard() {
             <Route path="chat" element={<Chat />} />
             <Route path="profile" element={<ProfileSettingsContent />} />
             <Route path="orders" element={<Orders />} />
-
           </Routes>
         </div>
       </div>
