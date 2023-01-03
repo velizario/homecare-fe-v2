@@ -19,6 +19,9 @@ module.exports = {
       maxWidth: {
         'chat' : "15rem",
         'chat-md' : "17rem"
+      },
+      height: {
+        "screen-fixed": "100dvh"
       }
     },
   },
