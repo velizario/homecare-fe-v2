@@ -10,7 +10,7 @@ function classNames(...classes:string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function ProfileSettingsContent() {
+export default function UserTypeSelection() {
   const [selectedService, setSelectedService] = useState(serviceType[0])
 
   return (

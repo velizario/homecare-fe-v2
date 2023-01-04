@@ -40,7 +40,7 @@ export default function Orderslist() {
             <div className="space-y-4">
                 {orders.map(order => {
                     return (
-                        <OrderDetails order={order} />
+                        <OrderDetails key={order.id} order={order} />
                     )
                 })}
             </div>

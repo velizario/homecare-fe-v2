@@ -23,7 +23,7 @@ export const sideNavigation = [
       current: true,
       count: 12
     },
-    { name: "Профил", route: "profile", icon: UserIcon, current: false, count: 0 },
+    { name: "Акаунт", route: "account", icon: UserIcon, current: false, count: 0 },
   ]
   const userNavigation = [
   

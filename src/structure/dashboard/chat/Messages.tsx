@@ -2,7 +2,7 @@ import { FaceSmileIcon, ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import classNames from "../../../helpers/classNames";
-import data from '@emoji-mart/data'
+import data from '@emoji-mart/data/sets/14/native.json'
 import Picker from '@emoji-mart/react'
 import throttle from 'lodash.throttle'
 import React from "react";
@@ -13,7 +13,7 @@ const messages = [
     text: "sdgasdgasdga, asdg as,dga ,sdg, asdg",
     date: "12:35 AM",
     type: "in",
-  },
+  }, 
   {
     id: 2,
     text: "sdgasdgasd ga, asdg as,dga ,sdg sad fas df as df asd f asdf asdf asdf asdf sd , asdg",
@@ -256,7 +256,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
             <FaceSmileIcon onClick={() => toggleEmoji("toggle")} className="cursor-pointer h-7 w-7 text-indigo-500" />
             <div className={classNames(emojiActive ? "block" : "hidden", "absolute transform bottom-0 -translate-y-11")} >
               {/* <EmojiPicker onEmojiClick={selectEmoji} /> */}
-              <Picker onClickOutside={() => toggleEmoji("off")} data={data} onEmojiSelect={selectEmoji} />
+              <Picker set="native" onClickOutside={() => toggleEmoji("off")} data={data} onEmojiSelect={selectEmoji} />
             </div>
           </div>
           <div className="w-full flex items-center overflow-hidden pr-4 rounded-2xl border-indigo-300 border-2  focus:border-indigo-500 transition-colors duration-200 text-sm text-gray-700">

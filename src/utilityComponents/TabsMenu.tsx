@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -11,14 +10,17 @@ interface TabsMenuProps {
     name: string;
     href: string;
   }[];
-  activeTab: number;
+  defaultTab: string;
 }
 
-export default function TabsMenu({ tabs, activeTab }: TabsMenuProps) {
+export default function TabsMenu({ tabs, defaultTab }: TabsMenuProps) {
 
-  // const [current, setCurrent] = useState('Заявени');
+  const [current, setCurrent] = useState(defaultTab);
 
-  const {register, handleSubmit, watch} = useForm({});
+  // const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   let id = tabs.find(tab => tab.name === e.target.value)?.id;
+  //   id && setCurrent(id)
+  // }
 
   return (
     <div className="mb-4">
@@ -30,9 +32,8 @@ export default function TabsMenu({ tabs, activeTab }: TabsMenuProps) {
           <select
             id="tabs"
             className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-            // onChange={(e) => setCurrent(e.target.value)}
-            {...register("tabs")}
-            // value={tabs.find(tab => tab.name === current)?.name}
+            onChange={e => setCurrent(e.target.value)}
+            value={current}
           >
             {tabs.map((tab) => (
               <option key={tab.name}>{tab.name}</option>
@@ -45,7 +46,8 @@ export default function TabsMenu({ tabs, activeTab }: TabsMenuProps) {
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
               <a
-                key={tab.name}
+                key={tab.id}
+                href={tab.href}
                 onClick={() => setCurrent(tab.name)}
                 className={classNames(
                   tab.name === current

@@ -12,6 +12,7 @@ import { Route, Routes } from 'react-router-dom';
 import Chat from './chat/Chat';
 import Orders from './orders/Orders';
 import TabsMenu from '../../utilityComponents/TabsMenu';
+import Account from './profile/Account';
 
 
 function classNames(...classes: string[]) {
@@ -95,7 +96,7 @@ export default function Dashboard() {
         <div className="flex-1 ">
           <Routes>
             <Route path="chat" element={<Chat />} />
-            <Route path="profile" element={<ProfileSettingsContent />} />
+            <Route path="account/*" element={<Account />} />
             <Route path="orders" element={<Orders />} />
           </Routes>
         </div>

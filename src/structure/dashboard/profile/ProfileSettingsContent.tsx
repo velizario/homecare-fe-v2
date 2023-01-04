@@ -1,4 +1,3 @@
-import ScrollIntoView from "../../../utilityComponents/ScrollIntoView";
 import InputField from "./InputField";
 import ProfilePhoto from "./ProfilePhoto";
 import UserTypeSelection from "./UserTypeSelection";
@@ -64,19 +63,12 @@ export default function ProfileSettingsContent() {
         <form className="divide-y-blue-gray-200 space-y-8 divide-y max-w-3xl">
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <div className="sm:col-span-6">
-              <h2 className="text-xl font-medium text-blue-gray-900">
-                Профил
-              </h2>
               <p className="mt-1 text-sm text-blue-gray-500">
                 Информацията ще бъде използвана за да съставим вашата "Визитка".
               </p>
             </div>
             <UserTypeSelection/>
-            
-
-
             <ProfilePhoto />
-
             <InputField {...ProfileInputValues.firstName} />
             <InputField {...ProfileInputValues.lastName} />
             <InputField {...ProfileInputValues.companyName} />
