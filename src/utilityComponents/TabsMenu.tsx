@@ -1,36 +1,44 @@
 import { useState } from "react";
-
-const tabs = [
-  { id: 1, name: 'Заявени', href: '#/dashboard/orders' },
-  { id: 2, name: 'Планирани', href: '#/dashboard/orders' },
-  { id: 3, name: 'Завършени', href: '#/dashboard/orders' },
-]
+import { useForm } from "react-hook-form";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function TabsMenu() {
+interface TabsMenuProps {
+  tabs: {
+    id: number;
+    name: string;
+    href: string;
+  }[];
+  activeTab: number;
+}
 
-  const [ current, setCurrent ] = useState('Заявени');
-  
+export default function TabsMenu({ tabs, activeTab }: TabsMenuProps) {
+
+  // const [current, setCurrent] = useState('Заявени');
+
+  const {register, handleSubmit, watch} = useForm({});
+
   return (
     <div className="mb-4">
       <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
-        <select
-          id="tabs"
-          name="tabs"
-          className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-          onChange={(e) => setCurrent(e.target.value)}
-          value={tabs.find(tab => tab.name === current)?.name}
-        >
-          {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
-          ))}
-        </select>
+        <form>
+          <select
+            id="tabs"
+            className="block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+            // onChange={(e) => setCurrent(e.target.value)}
+            {...register("tabs")}
+            // value={tabs.find(tab => tab.name === current)?.name}
+          >
+            {tabs.map((tab) => (
+              <option key={tab.name}>{tab.name}</option>
+            ))}
+          </select>
+        </form>
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">

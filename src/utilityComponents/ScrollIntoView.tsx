@@ -11,7 +11,11 @@ export default function ScrollIntoView({ messageAdded }: ScrollIntoViewProps) {
             // Back off, browser, I got this...
             history.scrollRestoration = 'manual';
         }
-        if (ref.current) ref.current.scrollIntoView({ block: "nearest" })
+        if (ref.current) {
+            setTimeout(() => {
+                ref.current?.scrollIntoView({ block: "nearest", behavior:"smooth" })
+            }, 100);
+        }
     }, [messageAdded]);
     return <div ref={ref} />
 }

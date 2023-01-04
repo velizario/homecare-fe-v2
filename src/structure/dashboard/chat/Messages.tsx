@@ -1,10 +1,11 @@
 import { FaceSmileIcon, ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import classNames from "../../../helpers/classNames";
-import ScrollIntoView from "../../../utilityComponents/ScrollIntoView";
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import throttle from 'lodash.throttle'
+import React from "react";
 
 const messages = [
   {
@@ -92,33 +93,62 @@ interface Emojis {
   unified: string;
 }
 
-export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
-  let toggledEmoji = false;
 
+export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
+  
   const [emojiActive, setEmojiActive] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [messageAdded, setMessageAdded] = useState(1);
   const [chatContent, setChatContent] = useState(messages);
   const inputRef = useRef<null | HTMLTextAreaElement>(null);
   const formRef = useRef<null | HTMLFormElement>(null);
+  const chatRef = useRef<null | HTMLUListElement>(null);
+  let emojiRE = /(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji_Presentation}|\u{FE0F}|\u{200d})/gu;
+  
+  const scrollChatToBottom = () => {
+    if (!chatRef.current) return;
+    chatRef.current.scrollTo({
+      left: 0,
+      top: chatRef.current.scrollHeight,
+    })
+  }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
     inputRef.current?.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) return
+        // avoids leaving enter in input element after form is submitted
         e.preventDefault()
+        // submits form on enter for desktop
         formRef.current?.requestSubmit();
       }
     })
   }, [])
-
-
-
+  
   useEffect(() => {
-    if (!inputRef.current) return;
+    // chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    scrollChatToBottom()
+  }, [chatContent])
+
+  
+  useLayoutEffect(() => {
+    // adjust automatically chat input height and keep chat window scrolled at the end
+    if (!inputRef.current || !chatRef.current) return;
+    let scrollTo;
+    // detect scrolled position of chat window 
+    let atBottom = chatRef.current?.scrollHeight - chatRef.current?.clientHeight - chatRef.current?.scrollTop
+    // save chatwindow height if it is scrolled at the bottom
+    if (atBottom < 10) scrollTo = chatRef.current?.scrollHeight
+    // set automatically input height based on the text inside. Minimum height is 36px
     inputRef.current.style.height = '36px';
-    inputRef.current.style.height = inputRef.current.scrollHeight + 'px';
+    inputRef.current.style.height = inputRef.current.scrollHeight + 'px';;
+    // push chat window if it was at the bottom, in case input height has changed
+    if (atBottom < 10)
+      chatRef.current.scrollTo({
+        left: 0,
+        top: scrollTo,
+      })
   }, [messageText])
 
   const handleChat: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
@@ -126,7 +156,6 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
   }
 
   const addMessage = () => {
-
     if (messageText.length === 0) return;
     let newId = chatContent[chatContent.length - 1].id + 1;
     setChatContent(chat =>
@@ -137,21 +166,17 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         type: "in",
       }]);
     setMessageText("")
-    setMessageAdded(count => count+1)
+    setMessageAdded(count => count + 1)
   }
 
-  const toggleEmoji = (enabled: boolean) => {
-    // use debounce as toggleEmoji is called also by onClickOutside and is potentially executed two times
-    toggledEmoji = true
-    if (enabled) {
-      toggledEmoji = false
-      setTimeout(() => {
-        setEmojiActive(true);
-        toggledEmoji = true;
-      }, 20);
-    }
-    if (toggledEmoji) setEmojiActive(enabled);
-  }
+  const toggleEmoji = throttle((toggle: "on" | "off" | "toggle") => {
+    // use throttle as toggleEmoji is called also by onClickOutside and is potentially executed two times
+    setEmojiActive(active => (
+      toggle === "off" ? false :
+        toggle === "on" ? true :
+          toggle === "toggle" && !active
+    ))
+  }, 50, { trailing: false })
 
   const selectEmoji = (data: Emojis) => {
     setMessageText(text => text + data.native);
@@ -159,7 +184,6 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
     // inputRef.current?.focus()
   }
 
-  let emojiRE = /(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji_Presentation}|\u{FE0F}|\u{200d})/gu;
 
 
   return (
@@ -180,7 +204,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         </div>
       </div>
       {/* Chat window */}
-      <ul className="flex flex-col overflow-y-auto  px-4">
+      <ul ref={chatRef} className="flex flex-col overflow-y-auto  px-4">
         {chatContent.map((message) => {
           return (
             <li
@@ -223,20 +247,21 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
           );
         })}
 
-        <ScrollIntoView messageAdded={messageAdded} />
+        {/* <ScrollIntoView messageAdded={messageAdded} /> */}
       </ul>
       {/* Chat input */}
       <div className="flex items-end gap-2 px-4">
         <form ref={formRef} onSubmit={() => addMessage()} className="flex w-full gap-2 items-end">
           <div className="h-10 flex items-center relative">
-            <FaceSmileIcon onClick={() => toggleEmoji(true)} className="cursor-pointer h-7 w-7 text-indigo-500" />
+            <FaceSmileIcon onClick={() => toggleEmoji("toggle")} className="cursor-pointer h-7 w-7 text-indigo-500" />
             <div className={classNames(emojiActive ? "block" : "hidden", "absolute transform bottom-0 -translate-y-11")} >
               {/* <EmojiPicker onEmojiClick={selectEmoji} /> */}
-              <Picker onClickOutside={() => toggleEmoji(false)} data={data} onEmojiSelect={selectEmoji} />
+              <Picker onClickOutside={() => toggleEmoji("off")} data={data} onEmojiSelect={selectEmoji} />
             </div>
           </div>
           <div className="w-full flex items-center overflow-hidden pr-4 rounded-2xl border-indigo-300 border-2  focus:border-indigo-500 transition-colors duration-200 text-sm text-gray-700">
             <textarea
+              id="textarea"
               value={messageText}
               ref={inputRef}
               onChange={handleChat}
