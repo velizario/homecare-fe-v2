@@ -25,15 +25,8 @@ export const sideNavigation = [
     },
     { name: "Акаунт", route: "account", icon: UserIcon, current: false, count: 0 },
   ]
-  const userNavigation = [
-  
-  
-    { name: 'Your Profile', route: '#' },
-    { name: 'Sign out', route: '#' },
-  ]
 
-
-  
+ 
 export default function Sidebar() {
 
   const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import ProfileSettingsContent from './profile/ProfileSettingsContent'
+import ProfileSettingsContent from './profile/account/Profile'
 import Header from '../header/Header'
 import Sidebar from './sidebar/Sidebar'
 import SidebarDesktop from './sidebar/SidebarDesktop';

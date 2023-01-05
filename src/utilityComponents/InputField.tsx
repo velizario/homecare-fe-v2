@@ -3,13 +3,13 @@ interface InputFieldProps {
     name: string;
     id: string;
     autoComplete?: string;
-    colSpan: string;
+    className: string;
     defaultValue?: string;
 }
 
-export default function InputField ({label, name, id, autoComplete, colSpan, defaultValue}: InputFieldProps) {
+export default function InputField ({label, name, id, autoComplete, className, defaultValue}: InputFieldProps) {
     return (
-        <div className={colSpan}>
+        <div className={className}>
             <label htmlFor={name} className="block text-sm font-medium text-blue-gray-900">
             {label}
             </label>

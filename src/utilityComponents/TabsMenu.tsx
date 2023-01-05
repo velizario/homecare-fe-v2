@@ -23,7 +23,7 @@ export default function TabsMenu({ tabs, defaultTab }: TabsMenuProps) {
   // }
 
   return (
-    <div className="mb-4">
+    <div>
       <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab

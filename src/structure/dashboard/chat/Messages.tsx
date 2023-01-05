@@ -228,7 +228,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
                       ? "bg-indigo-600 text-gray-200"
                       : "bg-gray-200 text-gray-800",
                     message.text.replace(emojiRE, '').length === 0 ? "text-4xl bg-transparent p-0" :
-                      "py-2 px-4 rounded-2xl text-sm max-w-chat md:max-w-chat-md break-words whitespace-pre-line"
+                      "py-2 px-4 rounded-2xl text-sm max-w-chat md:max-w-chat-md break-words whitespace-pre-line shadow-md",
                   )}
                 >
                   {message.text}
