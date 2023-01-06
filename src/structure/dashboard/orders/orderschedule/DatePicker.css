@@ -1,0 +1,46 @@
+.rdp-cell {
+    padding-block: 5px;
+}
+
+.rdp-day_selected,
+.rdp-day_selected:hover {
+    color: unset
+}
+
+
+.rdp-day_range_start::after,
+.rdp-day_range_end::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(51, 0, 193, 0.1);
+}
+
+.rdp {
+    --rdp-accent-color: rgb(241, 236, 255);
+    --rdp-background-color: #e7edff;
+    /* Switch to dark colors for dark themes */
+    --rdp-accent-color-dark: #3003e1;
+    --rdp-background-color-dark: #180270;
+    /* Outline border for focused elements */
+    --rdp-outline: 2px solid var(--rdp-accent-color);
+    /* Outline border for focused and selected elements */
+    --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+    background-color: unset;
+}
+
+@media (hover: hover) {
+    .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+        background-color: var(--rdp-background-color);
+    }
+}

@@ -1,4 +1,4 @@
-import OrderDetails from "./OrderDetails";
+import OrderDetails from "../OrderDetails";
 
 export interface Order {
     id: number
@@ -36,7 +36,6 @@ export default function Orderslist() {
 
     return (
         <>
-            <h3 className="mb-2 font-semibold text-gray-700">29 Януари</h3>
             <div className="space-y-4">
                 {orders.map(order => {
                     return (

@@ -3,15 +3,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import ProfileSettingsContent from './profile/account/Profile'
 import Header from '../header/Header'
 import Sidebar from './sidebar/Sidebar'
-import SidebarDesktop from './sidebar/SidebarDesktop';
 import Footer from '../footer/Footer';
 import { Route, Routes } from 'react-router-dom';
 import Chat from './chat/Chat';
 import Orders from './orders/Orders';
-import TabsMenu from '../../utilityComponents/TabsMenu';
 import Account from './profile/Account';
 
 
@@ -25,7 +22,7 @@ export default function Dashboard() {
   return (
     <>
       <Header setSidebarOpen={setSidebarOpen} />
-      <div className="flex max-w-5xl mx-auto bg-white">
+      <div className="flex max-w-7xl  bg-white">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
             <Transition.Child
@@ -73,7 +70,7 @@ export default function Dashboard() {
                     </div>
                   </Transition.Child>
                   {/* mobile sidebar */}
-                  <Sidebar />
+                  <Sidebar  setSidebarOpen={setSidebarOpen}/>
                 </Dialog.Panel>
               </Transition.Child>
               <div className="w-14 flex-shrink-0" aria-hidden="true">
@@ -87,17 +84,14 @@ export default function Dashboard() {
 
 
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="hidden bg-indigo-700 md:block lg:hidden">
-          <Sidebar />
-        </div>
-        <div className="hidden bg-indigo-700 lg:block">
-          <SidebarDesktop />
+        <div className="hidden bg-indigo-700 md:block">
+          <Sidebar setSidebarOpen={setSidebarOpen} />
         </div>
         <div className="flex-1 ">
           <Routes>
-            <Route path="chat" element={<Chat />} />
+            <Route path="chat/*" element={<Chat />} />
             <Route path="account/*" element={<Account />} />
-            <Route path="orders" element={<Orders />} />
+            <Route path="orders/*" element={<Orders />} />
           </Routes>
         </div>
       </div>

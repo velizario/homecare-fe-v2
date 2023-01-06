@@ -9,7 +9,6 @@ export default function Chat() {
     setChatIsActive(toggle => !toggle);
   };
 
-  console.log(chatIsActive)
 
   return (
     <div className="flex">

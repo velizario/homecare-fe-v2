@@ -1,78 +1,116 @@
 import classNames from "../../../helpers/classNames";
 import {
-    HomeIcon,
-    ChatBubbleBottomCenterTextIcon,
-    UserIcon,
-    ClipboardDocumentListIcon,
-  } from "@heroicons/react/24/outline";
+  HomeIcon,
+  ChatBubbleBottomCenterTextIcon,
+  UserIcon,
+  ClipboardDocumentListIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const sideNavigation = [
-    { name: "Начало", route: "/", icon: HomeIcon, current: false, count: 0 },
-    {
-      name: "Поръчки",
-      route: "orders",
-      icon: ClipboardDocumentListIcon,
-      current: false,
-      count: 2
-    },
-    {
-      name: "Съобщения",
-      route: "chat",
-      icon: ChatBubbleBottomCenterTextIcon,
-      current: true,
-      count: 12
-    },
-    { name: "Акаунт", route: "account", icon: UserIcon, current: false, count: 0 },
-  ]
+  {
+    id: 1,
+    name: "Начало",
+    route: "/",
+    icon: HomeIcon,
+    count: 0
+  },
+  {
+    id: 2,
+    name: "Поръчки",
+    route: "orders",
+    icon: ClipboardDocumentListIcon,
+    count: 2
+  },
+  {
+    id: 3,
+    name: "Съобщения",
+    route: "chat",
+    icon: ChatBubbleBottomCenterTextIcon,
+    count: 12
+  },
+  {
+    id: 4,
+    name: "Акаунт",
+    route: "account",
+    icon: UserIcon,
+    count: 0
+  },
+]
 
- 
-export default function Sidebar() {
+interface SidebarProps {
+  setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+
+export default function Sidebar({ setSidebarOpen }: SidebarProps) {
 
   const navigate = useNavigate();
+
+  const [activeMenuItem, setActiveMenuItem] = useState(1)
+
 
   const routeTo = (to?: string) => {
     if (!to) return;
     navigate(to);
   }
 
+  const handleMenuItemClick = (selectedMenuItemId:number) => {
+    setActiveMenuItem(selectedMenuItemId)
+    setSidebarOpen(false)
+  }
+
   return (
     <>
-        <div className="flex w-full flex-col items-center py-6">
-          <div className="hidden md:block flex-shrink-0 items-center">
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=white"
-              alt="Your Company"
-            />
-          </div>
-          <div className="mt-6 w-full flex-1 space-y-1 px-2">
-            {sideNavigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.route}
-                className={classNames(
-                  item.current
-                    ? "bg-indigo-800 text-white"
-                    : "text-indigo-100 hover:bg-indigo-800 hover:text-white",
-                  "group w-full p-3 rounded-md flex flex-col items-center text-xs font-medium"
-                )}
-                aria-current={item.current ? "page" : undefined}
-              >
-                <item.icon
-                  className={classNames(
-                    item.current
-                      ? "text-white"
-                      : "text-indigo-300 group-hover:text-white",
-                    "h-6 w-6"
-                  )}
-                  aria-hidden="true"
-                />
-                <span className="mt-2">{item.name}</span>
-              </Link>
-            ))}
-          </div>
+      <div className="flex w-full flex-col items-center py-6">
+        <div className="hidden md:flex  flex-shrink-0 items-center lg:self-start lg:pl-6">
+          <img
+            className="h-8 w-auto"
+            src="https://tailwindui.com/img/logos/mark.svg?color=white"
+            alt="Your Company"
+          />
         </div>
+        <nav className="mt-5 w-full flex-1 space-y-1 px-2">
+          {sideNavigation.map((item) => (
+            <Link
+              key={item.name}
+              data-id={item.id}
+              onClick={() => handleMenuItemClick(item.id)}
+              to={item.route}
+              className={classNames(
+                item.id === activeMenuItem
+                  ? "bg-indigo-800 text-white"
+                  : "text-indigo-100 hover:bg-indigo-600 hover:bg-opacity-75 ",
+                "group w-full p-3 lg:px-6 lg:text-sm rounded-md flex flex-col lg:flex-row items-center text-xs font-medium"
+              )}
+              aria-current={item.id === activeMenuItem ? "page" : undefined}
+            >
+              <item.icon
+                className={classNames(
+                  item.id === activeMenuItem
+                    ? "text-white"
+                    : "text-indigo-300 ",
+                  "h-6 w-6 lg:mr-3"
+                )}
+                aria-hidden="true"
+              />
+              {/* no mt-2; flex-1 */}
+              <span className="mt-2 lg:mt-0">{item.name}</span>
+              {item.count ? (
+                <span
+                  className={classNames(
+                    item.id === activeMenuItem ? 'bg-indigo-600' : 'bg-indigo-800',
+                    'hidden lg:inline-block ml-3 py-0.5 px-3 text-xs font-medium rounded-full'
+                  )}
+                >
+                  {item.count}
+                </span>
+              ) : null}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
 import { ClockIcon, MapPinIcon, ChevronRightIcon, ChevronUpIcon, EnvelopeIcon, ChatBubbleBottomCenterTextIcon, CalendarDaysIcon, CalendarIcon, ListBulletIcon, HomeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Fragment, useState } from 'react'
-import { Order } from './Orderlist';
+import { Order } from './orderlist/Orderlist';
 
 interface OrderDetailsProps {
     order: Order;
@@ -14,7 +14,7 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
     return (
         <div className="relative ring-1 ring-indigo-50 w-full max-w-xl shadow-order hover:shadow-order-hover hover:transition-shadow  rounded-md overflow-hidden">
             {/* Order summary */}
-            <div className="absolute top-0 bottom-0 left-0 h-full w-2 bg-indigo-200 z-20"></div>
+            {/* <div className="absolute top-0 bottom-0 left-0 h-full w-2 bg-indigo-200 z-20"></div> */}
             <div onClick={() => setIsExpanded((isExpanded) => !isExpanded)} className="relative z-30 flex flex-col gap-3 p-3 pb-4 pl-5 pr-7 cursor-pointer ">
                 <div className={`" absolute bottom-0 left-6 right-4 bg-gray-200 h-px " ${!isExpanded && 'hidden'}`}></div>
                 <div className="flex gap-3 rounded-2xl">
