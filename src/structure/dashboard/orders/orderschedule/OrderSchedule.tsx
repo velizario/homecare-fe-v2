@@ -8,6 +8,7 @@ import {
 } from '@heroicons/react/20/solid'
 import { Menu, Transition } from '@headlessui/react'
 import DatePicker from './DatePicker'
+import Filters from '../../../../utilityComponents/Filters'
 
 const meetings = [
   {
@@ -138,6 +139,7 @@ export default function OrderSchedule() {
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
           <DatePicker />
           <ol className="mt-4 divide-y divide-gray-100 text-sm leading-6 lg:col-span-7">
+            <Filters/>
             {meetings.map((meeting) => (
               <li key={meeting.id} className="relative flex space-x-6 py-6 xl:static">
                 <img src={meeting.imageUrl} alt="" className="h-14 w-14 flex-none rounded-full" />

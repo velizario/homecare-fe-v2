@@ -17,6 +17,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@headlessui/react": "^1.7.7",
     "@heroicons/react": "^2.0.13",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "axios": "^1.2.1",
     "date-fns": "^2.29.3",
     "emoji-mart": "^5.4.0",
@@ -28,6 +29,7 @@
     "react-day-picker": "^8.4.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.41.5",
+    "react-icons": "^4.7.1",
     "react-router-dom": "^6.6.1",
     "yup": "^0.32.11",
     "zustand": "^4.1.5"
