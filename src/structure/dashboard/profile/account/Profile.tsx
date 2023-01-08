@@ -4,6 +4,7 @@ import UserTypeSelection from "./UserTypeSelection";
 
 const ProfileInputValues = {
   firstName: {
+    scope: "provider-private, client",
     className: "sm:col-span-3",
     name: "first-name",
     id: "first-name",
@@ -11,6 +12,7 @@ const ProfileInputValues = {
     autoComplete: "given-name",
   },
   lastName: {
+    scope: "provider-private, client",
     className: "sm:col-span-3",
     name: "last-name",
     id: "last-name",
@@ -18,18 +20,21 @@ const ProfileInputValues = {
     autoComplete: "family-name",
   },
   companyName: {
+    scope: "provider-company",
     className: "sm:col-span-6",
     name: "company",
     id: "company",
     label: "Име на фирма",
   },
   url: {
+    scope: "provider-private, provider-company",
     className: "sm:col-span-3",
     name: "url",
     id: "url",
     label: "Уеб сайт",
   },
   facebook: {
+    scope: "provider-private, provider-company",
     className: "sm:col-span-3",
     name: "facebook",
     id: "facebook",
@@ -37,6 +42,7 @@ const ProfileInputValues = {
   },
 
   phone: {
+    scope: " client, provider-private, provider-company",
     className: "sm:col-span-3",
     name: "phone-number",
     id: "phone-number",
@@ -49,7 +55,7 @@ const ProfileInputValues = {
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
-
+// TODO: based on field scope, conditionally expose inputs. Use the state provided from UserTypeSelection. Maybe elevate state to this component
 export default function Profile() {
   return (
     <>

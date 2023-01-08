@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ProfilePhoto() {
   return (
     <>
@@ -8,7 +6,7 @@ export default function ProfilePhoto() {
           htmlFor="photo"
           className="block text-sm font-medium text-blue-gray-900"
         >
-          Photo
+          Снимка
         </label>
         <div className="mt-1 flex items-center">
           <img
