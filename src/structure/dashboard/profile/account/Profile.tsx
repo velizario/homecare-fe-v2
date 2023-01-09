@@ -1,6 +1,17 @@
-import InputField from "../../../../utilityComponents/InputField";
+import { userServiceType, userProviderType } from "../../../../store/userTypeStore";
+import InputFieldProfile from "./InputFieldProfile";
 import ProfilePhoto from "./ProfilePhoto";
 import UserTypeSelection from "./UserTypeSelection";
+
+export interface InputFieldProfileType {
+    scope: string;
+    className: string;
+    name: string;
+    id: string;
+    label: string;
+    autoComplete?: string,
+}
+
 
 const ProfileInputValues = {
   firstName: {
@@ -24,7 +35,7 @@ const ProfileInputValues = {
     className: "sm:col-span-6",
     name: "company",
     id: "company",
-    label: "Име на фирма",
+    label: "Име на фирма*",
   },
   url: {
     scope: "provider-private, provider-company",
@@ -40,23 +51,25 @@ const ProfileInputValues = {
     id: "facebook",
     label: "Фейсбук",
   },
-
   phone: {
-    scope: " client, provider-private, provider-company",
+    scope: "client, provider-private, provider-company",
     className: "sm:col-span-3",
     name: "phone-number",
     id: "phone-number",
-    label: "Телефонен номер",
+    label: "Телефонен номер*",
     autoComplete: "tel",
   },
-
 };
+
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
-// TODO: based on field scope, conditionally expose inputs. Use the state provided from UserTypeSelection. Maybe elevate state to this component
+
+
 export default function Profile() {
+
+
   return (
     <>
       <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
@@ -69,9 +82,9 @@ export default function Profile() {
             </div>
             <UserTypeSelection />
             <ProfilePhoto />
-            <InputField {...ProfileInputValues.firstName} />
-            <InputField {...ProfileInputValues.lastName} />
-            <InputField {...ProfileInputValues.companyName} />
+            <InputFieldProfile {...ProfileInputValues.firstName}/>
+            <InputFieldProfile {...ProfileInputValues.lastName} />
+            <InputFieldProfile {...ProfileInputValues.companyName} />
 
 
             <div className="sm:col-span-6">
@@ -92,11 +105,11 @@ export default function Profile() {
               </div>
             </div>
 
-            <InputField {...ProfileInputValues.facebook} />
-            <InputField {...ProfileInputValues.url} />
+            <InputFieldProfile {...ProfileInputValues.facebook} />
+            <InputFieldProfile {...ProfileInputValues.url} />
 
 
-            <InputField {...ProfileInputValues.phone} />
+            <InputFieldProfile {...ProfileInputValues.phone} />
 
             <div className="sm:col-span-3">
               <label
