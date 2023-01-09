@@ -1,15 +1,16 @@
 import { userServiceType, userProviderType } from "../../../../store/userTypeStore";
+import ComboSelectBox from "./ComboSelectBox";
 import InputFieldProfile from "./InputFieldProfile";
 import ProfilePhoto from "./ProfilePhoto";
 import UserTypeSelection from "./UserTypeSelection";
 
 export interface InputFieldProfileType {
-    scope: string;
-    className: string;
-    name: string;
-    id: string;
-    label: string;
-    autoComplete?: string,
+  scope: string;
+  className: string;
+  name: string;
+  id: string;
+  label: string;
+  autoComplete?: string,
 }
 
 
@@ -82,7 +83,7 @@ export default function Profile() {
             </div>
             <UserTypeSelection />
             <ProfilePhoto />
-            <InputFieldProfile {...ProfileInputValues.firstName}/>
+            <InputFieldProfile {...ProfileInputValues.firstName} />
             <InputFieldProfile {...ProfileInputValues.lastName} />
             <InputFieldProfile {...ProfileInputValues.companyName} />
 
@@ -131,6 +132,7 @@ export default function Profile() {
               </select>
             </div>
 
+            <ComboSelectBox />
           </div>
           <div className="flex justify-end pt-8 gap-4">
             <button
