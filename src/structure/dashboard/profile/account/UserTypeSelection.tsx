@@ -7,8 +7,8 @@ const serviceType = [
 ]
 
 const providerType = [
-  { id: "private", name: 'Частно лице', description: 'Профилът Ви ще е с име, фамилия и кратко описание' },
-  { id: "company", name: 'Фирма', description: 'Профилът Ви ще е с информация за фирмата' },
+  { id: "private", name: 'Частно лице', description: 'Профилът Ви ще е представен с име и фамилия' },
+  { id: "company", name: 'Фирма', description: 'Профилът Ви ще е представен с име на фирмата' },
 ]
 
 function classNames(...classes: string[]) {
