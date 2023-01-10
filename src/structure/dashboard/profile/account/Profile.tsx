@@ -1,17 +1,12 @@
-import { userServiceType, userProviderType } from "../../../../store/userTypeStore";
+import InputField from "../../../../utilityComponents/InputField";
 import ComboSelectBox from "./ComboSelectBox";
-import InputFieldProfile from "./InputFieldProfile";
+import InputFieldProfileToggler from "./InputFieldProfileToggler";
+import InputFieldProfile from "./InputFieldProfileToggler";
+import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
+import RegionSelection from "./RegionSelection";
 import UserTypeSelection from "./UserTypeSelection";
 
-export interface InputFieldProfileType {
-  scope: string;
-  className: string;
-  name: string;
-  id: string;
-  label: string;
-  autoComplete?: string,
-}
 
 
 const ProfileInputValues = {
@@ -74,65 +69,22 @@ export default function Profile() {
   return (
     <>
       <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
-        <form className="space-y-8 divide-y max-w-3xl">
+        <form className="space-y-8 max-w-3xl">
+          <p className="text-sm text-blue-gray-500">
+            Информацията ще бъде използвана за да съставим вашата "Визитка".
+          </p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-            <div className="sm:col-span-6">
-              <p className="text-sm text-blue-gray-500">
-                Информацията ще бъде използвана за да съставим вашата "Визитка".
-              </p>
-            </div>
             <UserTypeSelection />
             <ProfilePhoto />
-            <InputFieldProfile {...ProfileInputValues.firstName} />
-            <InputFieldProfile {...ProfileInputValues.lastName} />
-            <InputFieldProfile {...ProfileInputValues.companyName} />
-
-
-            <div className="sm:col-span-6">
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-blue-gray-900"
-              >
-                Няколко думи за Вас*
-              </label>
-              <div className="mt-1">
-                <textarea
-                  id="description"
-                  name="description"
-                  rows={4}
-                  className="block w-full rounded-md border-blue-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm overflow-y-scroll md:overflow-y-auto"
-                  defaultValue={""}
-                />
-              </div>
-            </div>
-
-            <InputFieldProfile {...ProfileInputValues.facebook} />
-            <InputFieldProfile {...ProfileInputValues.url} />
-
-
-            <InputFieldProfile {...ProfileInputValues.phone} />
-
-            <div className="sm:col-span-3">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium text-blue-gray-900"
-              >
-                Квартал/Район
-              </label>
-              <select
-                id="country"
-                name="country"
-                autoComplete="country-name"
-                className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-              >
-                <option />
-                <option>United States</option>
-                <option>Canada</option>
-                <option>Mexico</option>
-              </select>
-            </div>
-
-            <ComboSelectBox />
+            <InputFieldProfile children={<InputField {...ProfileInputValues.firstName} />} scope={ProfileInputValues.firstName.scope} />
+            <InputFieldProfile children={<InputField {...ProfileInputValues.lastName} />} scope={ProfileInputValues.lastName.scope} />
+            <InputFieldProfile children={<InputField {...ProfileInputValues.companyName} />} scope={ProfileInputValues.companyName.scope} />
+            <InputFieldProfileToggler children={<ProfileAbout />} scope="client, provider-private, provider-company" />
+            <InputFieldProfile children={<InputField {...ProfileInputValues.facebook} />} scope={ProfileInputValues.facebook.scope} />
+            <InputFieldProfile children={<InputField {...ProfileInputValues.url} />} scope={ProfileInputValues.url.scope} />
+            <InputFieldProfile children={<InputField {...ProfileInputValues.phone} />} scope={ProfileInputValues.phone.scope} />
+            <InputFieldProfileToggler children={<RegionSelection />} scope="client" />
+            <InputFieldProfileToggler children={<ComboSelectBox />} scope="provider-private, provider-company" />
           </div>
           <div className="flex justify-end pt-8 gap-4">
             <button

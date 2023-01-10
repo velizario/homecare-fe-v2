@@ -19,30 +19,32 @@ export default function UserTypeSelection() {
   const providerType = userProviderType();
 
   return (
-    <div className="sm:col-span-4">
-      <p className="block text-sm font-medium text-blue-gray-900">Предоставяте или търсите услуги за почистване?</p>
-      <div className="mt-2">
-        <div className="grid grid-cols-2 gap-3 ">
-          {serviceMode.map((option) => (
-            <div
-              key={option.id}
-              onClick={() => userServiceType.setState(option.id as UserServices)}
-              className={classNames(
-                serviceType === option.id
-                  ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
-                  : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                'border rounded-md py-3 px-3 flex flex-col text-sm font-medium sm:flex-1 gap-1 cursor-pointer shadow-order'
-              )
-              }
-            >
-              <span className="text-base font-medium">{option.name}</span>
-              <span className={classNames(serviceType === option.id ? 'text-indigo-100' : 'text-gray-500', "text-xs font-normal")}>{option.description}</span>
-            </div>
-          ))}
+    <>
+      <div className="sm:col-span-4">
+        <p className="block text-sm font-medium text-blue-gray-900">Предоставяте или търсите услуги за почистване?</p>
+        <div className="mt-2">
+          <div className="grid grid-cols-2 gap-3">
+            {serviceMode.map((option) => (
+              <div
+                key={option.id}
+                onClick={() => userServiceType.setState(option.id as UserServices)}
+                className={classNames(
+                  serviceType === option.id
+                    ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
+                    : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
+                  'border rounded-md py-3 px-3 flex flex-col text-sm font-medium sm:flex-1 gap-1 cursor-pointer shadow-order'
+                )
+                }
+              >
+                <span className="text-base font-medium">{option.name}</span>
+                <span className={classNames(serviceType === option.id ? 'text-indigo-100' : 'text-gray-500', "text-xs font-normal")}>{option.description}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className={classNames(serviceType === "client" ? "hidden" : "rounded-md bg-white")}>
-        <div className="flex flex-col mt-4">
+      <div className={classNames(serviceType === "client" ? "hidden" : "rounded-md bg-white sm:col-span-4")}>
+        <div className="flex flex-col mt-4 ">
           {providerMode.map((option, selectionId) => (
             <div
               key={option.id}
@@ -76,6 +78,6 @@ export default function UserTypeSelection() {
           ))}
         </div>
       </div>
-    </div>
+    </>
   )
 }

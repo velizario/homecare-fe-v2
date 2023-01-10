@@ -1,9 +1,11 @@
-import classNames from "../../../../helpers/classNames";
 import { userProviderType, userServiceType } from "../../../../store/userTypeStore";
-import InputField from "../../../../utilityComponents/InputField";
-import { InputFieldProfileType } from "./Profile";
 
-const InputFieldProfile: React.FC<InputFieldProfileType> = (props) => {
+export interface InputFieldProfileType {
+    scope: string;
+    children: JSX.Element;
+  }
+
+const InputFieldProfileToggler: React.FC<InputFieldProfileType> = ({scope, children}) => {
     const serviceType = userServiceType();
     const providerType = userProviderType();
 
@@ -12,13 +14,13 @@ const InputFieldProfile: React.FC<InputFieldProfileType> = (props) => {
         return (matchingArray.includes(serviceType) || matchingArray.includes(`${serviceType}-${providerType}`))
     }
     
-    const isVisible = isMatchingScope(props.scope)
+    const isVisible = isMatchingScope(scope)
 
     return (
         <>
-            {isVisible && <InputField {...props} />}
+            {isVisible && children }
         </>
     )
 }
 
-export default InputFieldProfile;
+export default InputFieldProfileToggler;
