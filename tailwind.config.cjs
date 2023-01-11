@@ -30,6 +30,7 @@ module.exports = {
       height: {
         "screen-fixed": "100dvh",
       },
+      
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp")],

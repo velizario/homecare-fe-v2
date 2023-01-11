@@ -136,7 +136,7 @@ export default function OrderSchedule() {
   return (
     <>
       <div>
-        <div className="lg:grid lg:grid-cols-12 lg:gap-x-16">
+        <div className="first-letter:lg:grid lg:grid-cols-12 lg:gap-x-16">
           <DatePicker />
           <ol className="mt-4 divide-y divide-gray-100 text-sm leading-6 lg:col-span-7">
             <Filters/>

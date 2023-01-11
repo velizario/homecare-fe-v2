@@ -18,31 +18,30 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
+  { name: 'Дата', href: '#', current: true },
+  { name: 'Име на клиент', href: '#', current: false },
+  { name: 'Статус', href: '#', current: false },
 ]
 const filters = [
   {
-    id: 'category',
-    name: 'Category',
+    id: 'name',
+    name: 'Име',
     options: [
-      { value: 'new-arrivals', label: 'All New Arrivals', checked: false },
-      { value: 'tees', label: 'Tees', checked: false },
-      { value: 'objects', label: 'Objects', checked: true },
+      { value: 'GeorgiIvanov', label: 'Георги Иванов', checked: false },
+      { value: 'IlianIliev', label: 'Илиян Илиев', checked: false },
+      { value: 'VladimirGotsev', label: 'Владимир Гоцев', checked: true },
     ],
   },
   {
-    id: 'color',
-    name: 'Color',
+    id: 'type',
+    name: 'Тип посещение',
     options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: false },
+      { value: 'onetime', label: 'Еднократно', checked: false },
+      { value: 'subscription', label: 'Абонамент', checked: false },
     ],
   },
   {
-    id: 'sizes',
+    id: 'neighbourhood',
     name: 'Квартал',
     options: [
       { value: 's', label: 'Кръстова Вада', checked: false },
@@ -165,11 +164,11 @@ export default function Filters() {
         </h2>
 
         <div className="border-b border-gray-200 bg-white pb-4">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  Sort
+                  Сортиране
                   <ChevronDownIcon
                     className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"

@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import TabsMenu from "../../../utilityComponents/TabsMenu";
-import OrderList from "./orderlist/Orderlist";
 import OrderlistGrid from "./orderlist/OrderlistGrid";
-import OrderlistNew from "./orderlist/OrderlistNew";
 import OrderSchedule from "./orderschedule/OrderSchedule";
 
 const tabs = [

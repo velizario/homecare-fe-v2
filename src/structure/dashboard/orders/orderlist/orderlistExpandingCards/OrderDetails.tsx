@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
 import { ClockIcon, MapPinIcon, ChevronRightIcon, ChevronUpIcon, EnvelopeIcon, ChatBubbleBottomCenterTextIcon, CalendarDaysIcon, CalendarIcon, ListBulletIcon, HomeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Fragment, useState } from 'react'
-import { Order } from './orderlist/Orderlist';
+import { Order } from './Orderlist';
 
 interface OrderDetailsProps {
     order: Order;

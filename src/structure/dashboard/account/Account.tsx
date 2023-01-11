@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
 import TabsMenu from "../../../utilityComponents/TabsMenu";
 import Profile from "./profile/Profile";
+import AccountSettings from "./settings/AccountSettings";
 import Security from "./security/Security";
-import Settings from "./settings/Settings";
 
 const tabs = [
   { id: 1, name: "Профил", href: "#/dashboard/account/profile" },
@@ -20,7 +20,7 @@ export default function Account() {
         <Route path="/" element={<Profile />} />
         <Route path="profile" element={<Profile />} />
         <Route path="security" element={<Security />} />
-        <Route path="notifications" element={<Settings />} />
+        <Route path="settings" element={<AccountSettings />} />
       </Routes>
     </>
   );

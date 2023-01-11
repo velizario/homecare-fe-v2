@@ -24,7 +24,10 @@ const numRows = (people.length / numCols) + ((people.length % numCols) > 0 ? 1 :
 
 export default function OrderlistNew() {
   return (
-    <>
+    <div className="pt-4">
+      <p className="sm:col-span-6 text-sm text-gray-500 mb-4">
+        Списък със заявени, договорени и изпълнени поръчки.
+      </p>
       <Filters />
       <div className="mt-8 bg-indigo-50 flex flex-col gap-4 p-2 md:p-6 ">
         <div className="font-semibold grid grid-cols-[1fr,1fr,1rem] md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1rem] auto-rows-fr gap-y-10 px-5 rounded-lg border border-indigo-100 bg-white py-1">
@@ -52,6 +55,6 @@ export default function OrderlistNew() {
         })}
 
       </div>
-    </>
+    </div>
   )
 }
