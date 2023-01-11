@@ -21,7 +21,7 @@ export default function UserTypeSelection() {
   return (
     <>
       <div className="sm:col-span-4">
-        <p className="block text-sm font-medium text-blue-gray-900">Предоставяте или търсите услуги за почистване?</p>
+        <p className="block text-sm text-gray-900">Предоставяте или търсите услуги за почистване?</p>
         <div className="mt-2">
           <div className="grid grid-cols-2 gap-3">
             {serviceMode.map((option) => (
@@ -32,12 +32,12 @@ export default function UserTypeSelection() {
                   serviceType === option.id
                     ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
                     : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                  'border rounded-md py-3 px-3 flex flex-col text-sm font-medium sm:flex-1 gap-1 cursor-pointer shadow-order'
+                  'border rounded-md py-3 px-3 flex flex-col text-sm sm:flex-1 gap-1 cursor-pointer shadow-order'
                 )
                 }
               >
-                <span className="text-base font-medium">{option.name}</span>
-                <span className={classNames(serviceType === option.id ? 'text-indigo-100' : 'text-gray-500', "text-xs font-normal")}>{option.description}</span>
+                <span className="text-base">{option.name}</span>
+                <span className={classNames(serviceType === option.id ? 'text-indigo-100' : 'text-gray-500', "text-xs")}>{option.description}</span>
               </div>
             ))}
           </div>
@@ -71,8 +71,8 @@ export default function UserTypeSelection() {
                 <span className="rounded-full bg-white w-1.5 h-1.5" />
               </span>
               <span className="ml-3 flex flex-col">
-                <span className={classNames(providerType === option.id ? 'text-indigo-900' : 'text-gray-900', 'block text-sm font-medium')}>{option.name}</span>
-                <span className={classNames(providerType === option.id ? 'text-indigo-600' : 'text-gray-500', 'text-xs ')}>{option.description}</span>
+                <span className={classNames(providerType === option.id ? 'text-indigo-700' : 'text-gray-900', 'block text-sm')}>{option.name}</span>
+                <span className={classNames(providerType === option.id ? 'text-gray-800' : 'text-gray-500', 'text-xs ')}>{option.description}</span>
               </span>
             </div>
           ))}

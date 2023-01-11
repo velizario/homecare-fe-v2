@@ -1,0 +1,26 @@
+import { userProviderType, userServiceType } from "../../../../store/userTypeStore";
+
+export interface InputFieldProfileType {
+    scope: string;
+    children: JSX.Element;
+  }
+
+const InputFieldProfileToggler: React.FC<InputFieldProfileType> = ({scope, children}) => {
+    const serviceType = userServiceType();
+    const providerType = userProviderType();
+
+    const isMatchingScope = (scope: string) => {
+        const matchingArray = scope.replaceAll(",","").split(" ")
+        return (matchingArray.includes(serviceType) || matchingArray.includes(`${serviceType}-${providerType}`))
+    }
+    
+    const isVisible = isMatchingScope(scope)
+
+    return (
+        <>
+            {isVisible && children }
+        </>
+    )
+}
+
+export default InputFieldProfileToggler;

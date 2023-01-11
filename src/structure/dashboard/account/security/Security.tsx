@@ -35,7 +35,7 @@ export default function Security() {
         <form className="space-y-8 divide-y max-w-3xl">
 
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-            <p className="sm:col-span-6 text-sm text-blue-gray-500">
+            <p className="sm:col-span-6 text-sm text-gray-500">
               Промяна на мейл, парола и т.н.
             </p>
 
@@ -54,7 +54,7 @@ export default function Security() {
             </button>
             <button
               type="button"
-              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-blue-gray-900 shadow-sm hover:bg-blue-gray-50 "
+              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 "
             >
               Отмени
             </button>

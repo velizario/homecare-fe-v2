@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import InputField from "../../../../utilityComponents/InputField";
 import ComboSelectBox from "./ComboSelectBox";
-import InputFieldProfileToggler from "./InputFieldProfileToggler";
-import InputFieldProfile from "./InputFieldProfileToggler";
+import InputFieldProfileToggler from "./InputFieldProfile";
+import InputFieldProfile from "./InputFieldProfile";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
 import RegionSelection from "./RegionSelection";
@@ -63,14 +64,24 @@ function classNames(...classes: string[]) {
 }
 
 
+
 export default function Profile() {
+
+  const [scrolledPosition, setScrolledPosition] = useState<number | null>(null)
+
+  window.addEventListener("scroll", () => setScrolledPosition(window.scrollY));
+
+
+  useEffect(() => {
+    console.log(scrolledPosition)
+  }, [scrolledPosition])
 
 
   return (
     <>
       <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
         <form className="space-y-8 max-w-3xl">
-          <p className="text-sm text-blue-gray-500">
+          <p className="text-sm text-gray-500">
             Информацията ще бъде използвана за да съставим вашата "Визитка".
           </p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
@@ -95,7 +106,7 @@ export default function Profile() {
             </button>
             <button
               type="button"
-              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-blue-gray-900 shadow-sm hover:bg-blue-gray-50 "
+              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 "
             >
               Отмени
             </button>

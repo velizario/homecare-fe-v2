@@ -9,7 +9,7 @@ import Footer from '../footer/Footer';
 import { Route, Routes } from 'react-router-dom';
 import Chat from './chat/Chat';
 import Orders from './orders/Orders';
-import Account from './profile/Account';
+import Account from './account/Account';
 
 
 function classNames(...classes: string[]) {

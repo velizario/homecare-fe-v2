@@ -26,24 +26,24 @@ export default function OrderlistNew() {
   return (
     <>
       <Filters />
-      <div className="mt-8 bg-indigo-50 flex flex-col gap-4 p-6 ">
-        <div className="font-semibold grid grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1rem] auto-rows-fr gap-y-10 px-5 rounded-lg border border-indigo-100 bg-white py-1">
-          <OrderItem>#</OrderItem>
+      <div className="mt-8 bg-indigo-50 flex flex-col gap-4 p-2 md:p-6 ">
+        <div className="font-semibold grid grid-cols-[1fr,1fr,1rem] md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1rem] auto-rows-fr gap-y-10 px-5 rounded-lg border border-indigo-100 bg-white py-1">
+          <OrderItem hideOnMobile={true}>#</OrderItem>
           <OrderItem>Име</OrderItem>
-          <OrderItem>Помещение</OrderItem>
-          <OrderItem>Квартал</OrderItem>
-          <OrderItem>Услуги</OrderItem>
-          <OrderItem>Вид посещение</OrderItem>
+          <OrderItem hideOnMobile={true}>Помещение</OrderItem>
+          <OrderItem >Квартал</OrderItem>
+          <OrderItem hideOnMobile={true}>Услуги</OrderItem>
+          <OrderItem hideOnMobile={true}>Вид посещение</OrderItem>
         </div>
         {people.map((person) => {
           return <>
-            <div className="text-gray-800 grid grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1rem] auto-rows-fr gap-y-10 px-5 rounded-lg  border border-indigo-100 bg-white py-1 transition-shadow hover:shadow-order" >
-              <OrderItem styles="text-xs text-indigo-500 font-semibold cursor-pointer hover:text-indigo-900">#{person.id}</OrderItem>
+            <div className="text-gray-800 grid grid-cols-[1fr,1fr,1rem] md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1rem] auto-rows-fr gap-y-10 px-5 rounded-lg  border border-indigo-100 bg-white py-1 transition-shadow hover:shadow-order" >
+              <OrderItem hideOnMobile={true} styles="md:block text-xs text-indigo-500 font-semibold cursor-pointer hover:text-indigo-900">#{person.id}</OrderItem>
               <OrderItem>{person.name}</OrderItem>
-              <OrderItem>{person.detals}</OrderItem>
-              <OrderItem>{person.neighbourhood}</OrderItem>
-              <OrderItem styles="text-xs whitespace-normal line-clamp-3">{person.services}</OrderItem>
-              <OrderItem>{<span className={classNames(person.type === 'subscription' ? "bg-green-100 text-green-800" : "bg-purple-100 text-purple-800", "inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium")}>
+              <OrderItem hideOnMobile={true}>{person.detals}</OrderItem>
+              <OrderItem >{person.neighbourhood}</OrderItem>
+              <OrderItem hideOnMobile={true} styles="text-xs whitespace-normal line-clamp-3">{person.services}</OrderItem>
+              <OrderItem hideOnMobile={true}>{<span className={classNames(person.type === 'subscription' ? "bg-green-100 text-green-800" : "bg-purple-100 text-purple-800", "inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium")}>
                 {person.type === "onetime" ? "еднократно" : "абонамент"}
               </span>}</OrderItem>
               <ContextMenu />

@@ -1,5 +1,18 @@
 * {
     -webkit-tap-highlight-color: transparent;
     /* font-family: "Noto Color Emoji"; */
+
 }
 
+body {
+    min-height: 100vh;
+    /* fall-back */
+    min-height: -moz-available;
+    min-height: -webkit-fill-available;
+    min-height: stretch;
+}
+
+html {
+    height: stretch;
+    height: -webkit-fill-available;
+}

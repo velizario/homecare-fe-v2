@@ -12,7 +12,7 @@ const tabs = [
 
 export default function Orders() {
     return (
-        <div className="px-4 md:px-6 lg:px-8">
+        <div className="md:px-6 lg:px-8">
             <TabsMenu tabs={tabs} defaultTab={"График"} />
             <Routes>
                 <Route path="/" element={<OrderSchedule/>}/>

@@ -3,7 +3,7 @@ export default function RegionSelection() {
         <div className="sm:col-span-3">
             <label
                 htmlFor="country"
-                className="block text-sm font-medium text-blue-gray-900"
+                className="block text-sm text-gray-900"
             >
                 Квартал/Район
             </label>
@@ -11,7 +11,7 @@ export default function RegionSelection() {
                 id="country"
                 name="country"
                 autoComplete="country-name"
-                className="mt-1 block w-full rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             >
                 <option />
                 <option>United States</option>
