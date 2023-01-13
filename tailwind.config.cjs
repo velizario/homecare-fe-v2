@@ -30,6 +30,9 @@ module.exports = {
       height: {
         "screen-fixed": "100dvh",
       },
+      lineClamp: {
+        none: "display: flex"
+      }
       
     },
   },

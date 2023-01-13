@@ -135,11 +135,13 @@ function classNames(...classes: string[]) {
 export default function OrderSchedule() {
   return (
     <>
-      <div>
-        <div className="first-letter:lg:grid lg:grid-cols-12 lg:gap-x-16">
-          <DatePicker />
+      <div className="pt-4">
+        <p className="sm:col-span-6 text-sm text-gray-500 mb-4">
+          График на поръчките
+        </p>
+        <div className="md:max-w-3xl first-letter:lg:grid lg:grid-cols-12 lg:gap-x-16">
           <ol className="mt-4 divide-y divide-gray-100 text-sm leading-6 lg:col-span-7">
-            <Filters/>
+            <Filters />
             {meetings.map((meeting) => (
               <li key={meeting.id} className="relative flex space-x-6 py-6 xl:static">
                 <img src={meeting.imageUrl} alt="" className="h-14 w-14 flex-none rounded-full" />

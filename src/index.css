@@ -11,4 +11,7 @@
         /* border-radius: theme('borderRadius.lg');  - access theme presets */ 
         /* @apply rounded-lg  - use @apply directtive to do the same*/
     }
+    form {
+        margin-block-end: 0
+    }
 }

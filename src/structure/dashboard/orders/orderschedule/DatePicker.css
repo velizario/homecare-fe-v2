@@ -1,5 +1,13 @@
+.rdp {
+    margin: 0;
+}
+
 .rdp-cell {
     padding-block: 5px;
+}
+
+.rdp-caption_label {
+    @apply text-lg
 }
 
 .rdp-day_selected,

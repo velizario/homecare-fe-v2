@@ -8,7 +8,7 @@ function classNames(...classes:string[]) {
 
 export default function ContextMenu() {
   return (
-    <Menu as="div" className="relative text-left flex items-center justify-center w-min">
+    <Menu as="div" className="hidden md:flex relative text-left items-center justify-center w-min">
       <div>
         <Menu.Button className="flex items-center rounded-full  text-gray-600 hover:text-gray-600 focus:outline-none ">
           <span className="sr-only">Open options</span>

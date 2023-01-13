@@ -1,21 +1,8 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Popover, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ArrowLongUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ArrowLongDownIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import DatePicker from '../structure/dashboard/orders/orderschedule/DatePicker'
 
 const sortOptions = [
   { name: 'Дата', href: '#', current: true },
@@ -23,6 +10,13 @@ const sortOptions = [
   { name: 'Статус', href: '#', current: false },
 ]
 const filters = [
+  {
+    id: 'date',
+    name: 'Период',
+    options: [
+
+    ],
+  },
   {
     id: 'name',
     name: 'Име',
@@ -57,9 +51,9 @@ const filters = [
     ],
   },
 ]
-const activeFilters = [{ value: 'objects', label: 'Objects' }]
+// const activeFilters = [{ value: 'Велизар Стоянов', label: 'Велизар Стоянов' }]
 
-function classNames(...classes:string[]) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -124,26 +118,30 @@ export default function Filters() {
                             </Disclosure.Button>
                           </h3>
                           <Disclosure.Panel className="pt-6">
-                            <div className="space-y-6">
-                              {section.options.map((option, optionIdx) => (
-                                <div key={option.value} className="flex items-center">
-                                  <input
-                                    id={`filter-mobile-${section.id}-${optionIdx}`}
-                                    name={`${section.id}[]`}
-                                    defaultValue={option.value}
-                                    type="checkbox"
-                                    defaultChecked={option.checked}
-                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                  />
-                                  <label
-                                    htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                    className="ml-3 text-sm text-gray-500"
-                                  >
-                                    {option.label}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
+                            {({ close }) => (
+
+                              <div className="space-y-6">
+                                {section.options.map((option, optionIdx) => (
+                                  <div key={option.value} className="flex items-center">
+                                    <input
+                                      id={`filter-mobile-${section.id}-${optionIdx}`}
+                                      name={`${section.id}[]`}
+                                      defaultValue={option.value}
+                                      type="checkbox"
+                                      defaultChecked={option.checked}
+                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    />
+                                    <label
+                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                                      className="ml-3 text-sm text-gray-500"
+                                    >
+                                      {option.label}
+                                    </label>
+                                  </div>
+                                ))}
+                                {section.id === 'date' && <DatePicker close={close} />}
+                              </div>
+                            )}
                           </Disclosure.Panel>
                         </>
                       )}
@@ -166,16 +164,20 @@ export default function Filters() {
         <div className="border-b border-gray-200 bg-white pb-4">
           <div className="flex items-center justify-between">
             <Menu as="div" className="relative inline-block text-left">
-              <div>
+              <div className="flex items-center gap-2">
                 <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                  Сортиране
+                  {sortOptions.find(sortOption => sortOption.current)?.name}
                   <ChevronDownIcon
                     className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />
-                </Menu.Button>
-              </div>
 
+                </Menu.Button>
+                <div className="group h-full flex px-2 justify-center text-sm font-medium cursor-pointer items-center">
+                  <p className="text-gray-700">Възх</p>
+                  <ArrowLongUpIcon className="h-4 w-4 pt-0.5 flex-shrink-0 text-gray-500 group-hover:text-gray-800" />
+                </div>
+              </div>
               <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"
@@ -185,7 +187,7 @@ export default function Filters() {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute left-0 z-20 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div className="py-1">
                     {sortOptions.map((option) => (
                       <Menu.Item key={option.name}>
@@ -223,11 +225,12 @@ export default function Filters() {
                     <Popover key={section.name} className="relative inline-block px-4 text-left">
                       <Popover.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                         <span>{section.name}</span>
-                        {sectionIdx === 0 ? (
+                        {/* TODO: add here number of selected filters as additional tag */}
+                        {/* {numSelected > 0 ? (
                           <span className="ml-1.5 rounded bg-gray-200 py-0.5 px-1.5 text-xs font-semibold tabular-nums text-gray-700">
                             1
                           </span>
-                        ) : null}
+                        ) : null} */}
                         <ChevronDownIcon
                           className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                           aria-hidden="true"
@@ -243,27 +246,33 @@ export default function Filters() {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Popover.Panel className="absolute max-h-64 overflow-y-auto right-0 z-20 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                          <form className="space-y-4">
-                            {section.options.map((option, optionIdx) => (
-                              <div key={option.value} className="flex items-center">
-                                <input
-                                  id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  defaultValue={option.value}
-                                  type="checkbox"
-                                  defaultChecked={option.checked}
-                                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                />
-                                <label
-                                  htmlFor={`filter-${section.id}-${optionIdx}`}
-                                  className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
-                                >
-                                  {option.label}
-                                </label>
-                              </div>
-                            ))}
-                          </form>
+                        <Popover.Panel className={classNames(section.id !== 'date' && "max-h-64 overflow-y-auto" || "", "border absolute right-0 z-20 mt-2 origin-top-right rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none")}>
+                          {({ close }) => (
+
+                            <form className="space-y-4 relative">
+                              <>
+                                {section.id !== 'date' && section.options.map((option, optionIdx) => (
+                                  <div key={option.value} className="flex items-center">
+                                    <input
+                                      id={`filter-${section.id}-${optionIdx}`}
+                                      name={`${section.id}[]`}
+                                      defaultValue={option.value}
+                                      type="checkbox"
+                                      defaultChecked={option.checked}
+                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    />
+                                    <label
+                                      htmlFor={`filter-${section.id}-${optionIdx}`}
+                                      className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
+                                    >
+                                      {option.label}
+                                    </label>
+                                  </div>
+                                ))}
+                                {section.id === 'date' && <DatePicker close={close} />}
+                              </>
+                            </form>
+                          )}
                         </Popover.Panel>
                       </Transition>
                     </Popover>
@@ -275,16 +284,8 @@ export default function Filters() {
         </div>
 
         {/* Active filters */}
-        <div className="bg-gray-100">
-          <div className="mx-auto max-w-7xl py-3 px-4 sm:flex sm:items-center sm:px-6 lg:px-8">
-            <h3 className="text-sm font-medium text-gray-500">
-              Filters
-              <span className="sr-only">, active</span>
-            </h3>
-
-            <div aria-hidden="true" className="hidden h-5 w-px bg-gray-300 sm:ml-4 sm:block" />
-
-            <div className="mt-2 sm:mt-0 sm:ml-4">
+        {/* <div>
+          <div className="mx-auto max-w-7xl py-3 sm:flex sm:items-center ">
               <div className="-m-1 flex flex-wrap items-center">
                 {activeFilters.map((activeFilter) => (
                   <span
@@ -304,9 +305,8 @@ export default function Filters() {
                   </span>
                 ))}
               </div>
-            </div>
           </div>
-        </div>
+        </div> */}
       </section>
     </div>
   )

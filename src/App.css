@@ -15,3 +15,6 @@ html {
     height: stretch;
     height: -webkit-fill-available;
 } */
+
+/* Focusing the button with a keyboard will show a dashed black line. */
+:focus-visible{ outline: none }
