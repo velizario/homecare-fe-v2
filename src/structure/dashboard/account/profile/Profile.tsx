@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import InputField from "../../../../utilityComponents/InputField";
 import ComboSelectBox from "./ComboSelectBox";
 import InputFieldProfileToggler from "./InputFieldProfile";
-import InputFieldProfile from "./InputFieldProfile";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
 import RegionSelection from "./RegionSelection";
@@ -10,7 +9,7 @@ import UserTypeSelection from "./UserTypeSelection";
 
 
 
-const ProfileInputValues = {
+const profileInputValues = {
   firstName: {
     scope: "provider-private, client",
     className: "sm:col-span-3",
@@ -87,13 +86,13 @@ export default function Profile() {
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <UserTypeSelection />
             <ProfilePhoto />
-            <InputFieldProfile children={<InputField {...ProfileInputValues.firstName} />} scope={ProfileInputValues.firstName.scope} />
-            <InputFieldProfile children={<InputField {...ProfileInputValues.lastName} />} scope={ProfileInputValues.lastName.scope} />
-            <InputFieldProfile children={<InputField {...ProfileInputValues.companyName} />} scope={ProfileInputValues.companyName.scope} />
+            <InputFieldProfileToggler children={<InputField {...profileInputValues.firstName} />} scope={profileInputValues.firstName.scope} />
+            <InputFieldProfileToggler children={<InputField {...profileInputValues.lastName} />} scope={profileInputValues.lastName.scope} />
+            <InputFieldProfileToggler children={<InputField {...profileInputValues.companyName} />} scope={profileInputValues.companyName.scope} />
             <InputFieldProfileToggler children={<ProfileAbout />} scope="client, provider-private, provider-company" />
-            <InputFieldProfile children={<InputField {...ProfileInputValues.facebook} />} scope={ProfileInputValues.facebook.scope} />
-            <InputFieldProfile children={<InputField {...ProfileInputValues.url} />} scope={ProfileInputValues.url.scope} />
-            <InputFieldProfile children={<InputField {...ProfileInputValues.phone} />} scope={ProfileInputValues.phone.scope} />
+            <InputFieldProfileToggler children={<InputField {...profileInputValues.facebook} />} scope={profileInputValues.facebook.scope} />
+            <InputFieldProfileToggler children={<InputField {...profileInputValues.url} />} scope={profileInputValues.url.scope} />
+            <InputFieldProfileToggler children={<InputField {...profileInputValues.phone} />} scope={profileInputValues.phone.scope} />
             <InputFieldProfileToggler children={<RegionSelection />} scope="client" />
             <InputFieldProfileToggler children={<ComboSelectBox />} scope="provider-private, provider-company" />
           </div>

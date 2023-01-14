@@ -17,12 +17,13 @@ export default function InputField({ label, name, id, autoComplete, className, d
                 {label}
             </label>
             <input
+                
                 type="text"
                 name={name}
                 id={id}
                 defaultValue={defaultValue}
                 autoComplete={autoComplete}
-                className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                className=" mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
             />
 
         </div>
