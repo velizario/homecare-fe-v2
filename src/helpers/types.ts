@@ -1,0 +1,1 @@
+export interface SelectionOption {id: string; name: string}
