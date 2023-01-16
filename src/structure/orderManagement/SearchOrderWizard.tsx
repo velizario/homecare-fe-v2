@@ -2,7 +2,6 @@ import { useState } from "react";
 import { SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
 import TransitionWrapper from "../../utilityComponents/TransitionWrapper";
-import Header from "../header/Header";
 import CardChoice from "./CardChoice";
 
 
@@ -95,10 +94,10 @@ const ServiceHourChoices: SelectionOption[] = [
     // More users...
 ]
 
-export default function CreateOrder() {
+export default function SearchOrderWizard() {
     const [active, setActive] = useState(1);
     const [serviceMode, setServiceMode] = useState<string | undefined>()
-    const [additionalServices, setAdditionalServices] = useState<string | undefined>()
+    const [additionalServices, setAdditionalServices] = useState<Set<string>>(new Set())
     const [serviceType, setServiceType] = useState<string | undefined>()
     const [areaSize, setareaSize] = useState<string | undefined>()
     const [serviceDays, setServiceDays] = useState<Set<string>>(new Set())
@@ -109,7 +108,8 @@ export default function CreateOrder() {
     //     nextStep()
     // }, [serviceMode, serviceType, areaSize, serviceDays, serviceHours, district])
 
-    const toggleSelection = (selection: string, setSelection: React.Dispatch<React.SetStateAction<Set<string>>>) => {
+    const toggleSelection = (selection: string | undefined, setSelection: React.Dispatch<React.SetStateAction<Set<string>>>) => {
+        if (!selection) return;
         setSelection((current) => {
             const updated = new Set(current)
             updated.has(selection) ? updated.delete(selection) : updated.add(selection)
@@ -127,8 +127,7 @@ export default function CreateOrder() {
     }
 
     const handleAdditionalServices: React.MouseEventHandler<HTMLDivElement> = (e) => {
-        setAdditionalServices(e.currentTarget.dataset.id)
-        nextStep()
+        toggleSelection(e.currentTarget.dataset.id, setAdditionalServices)
     }
 
     const handleServiceType: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -142,15 +141,36 @@ export default function CreateOrder() {
     }
 
     const handleServiceDays: React.MouseEventHandler<HTMLDivElement> = (e) => {
-        const selection = e.currentTarget.dataset.id;
-        if (!selection) return;
-        toggleSelection(selection, setServiceDays)
+        toggleSelection(e.currentTarget.dataset.id, setServiceDays)
     }
 
     const handleServiceHours: React.MouseEventHandler<HTMLDivElement> = (e) => {
-        const selection = e.currentTarget.dataset.id;
-        if (!selection) return;
-        toggleSelection(selection, setServiceHours)
+        toggleSelection(e.currentTarget.dataset.id, setServiceHours)
+    }
+
+    const handleServiceHoursMultiple: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+        // let newSet = new Set(["1","2","3","4","5","6","7"])
+        const filterWord = e.currentTarget.dataset.id;
+        if (filterWord === "clear") {
+            setServiceHours(new Set([]));
+            return;
+        }
+        let newSet = new Set(ServiceHourChoices.filter(choice => {
+            switch (filterWord) {
+                case "morning":
+                    return choice.name <= "12:00";
+                case "afternoon":
+                    return choice.name >= "12:30";
+                // case "all":
+                //     return true;
+                default:
+                    return false;
+            }
+        }).map(hour => hour.id))
+        setServiceHours((currentHours) => {
+            const updatedHours = new Set([...newSet, ...currentHours])
+            return updatedHours;
+        })
     }
 
     const handleDistrict: React.Dispatch<React.SetStateAction<SelectionOption[] | {}[]>> = (e) => {
@@ -167,7 +187,7 @@ export default function CreateOrder() {
                         <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice>
                     </div>
                 </TransitionWrapper>
-                <TransitionWrapper visible={active === 2}>
+                <TransitionWrapper visible={active === 2} btnNext={nextStep}>
                     <div>
                         <p className="block text-sm font-normal text-gray-900">Детайли за услугата</p>
                         <CardChoice options={additionalServiceChoices[serviceType || "1"]} onClick={handleAdditionalServices} activeId={additionalServices} styles="grid"></CardChoice>
@@ -200,6 +220,12 @@ export default function CreateOrder() {
                 <TransitionWrapper visible={active === 7} btnNext={nextStep}>
                     <div>
                         <p className="block text-sm text-gray-900">В кои дни часове искате да са посещенията?</p>
+                        <div className="flex justify-between my-2 mx-2">
+                            <button className="text-xs underline" data-id="morning" onClick={handleServiceHoursMultiple}>преди обяд</button>
+                            <button className="text-xs underline" data-id="afternoon" onClick={handleServiceHoursMultiple}>след обяд</button>
+                            {/* <button className="text-xs underline" data-id="all" onClick={handleServiceHoursMultiple}>всички</button> */}
+                            <button className="text-xs underline" data-id="clear" onClick={handleServiceHoursMultiple}>изчисти</button>
+                        </div>
                         <CardChoice options={ServiceHourChoices} onClick={handleServiceHours} activeId={serviceHours}></CardChoice>
                     </div>
                 </TransitionWrapper>
