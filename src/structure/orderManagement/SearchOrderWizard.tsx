@@ -179,56 +179,57 @@ export default function SearchOrderWizard() {
     }
 
     return (
-        <div className="my-10 py-2 border-t">
-            <div className='px-4 flex flex-col gap-8'>
-                <TransitionWrapper visible={active === 1}>
-                    <div>
-                        <p className="block text-sm font-normal text-gray-900">Каква услуга търсите?</p>
-                        <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice>
+        <div className="relative flex flex-col my-10 py-2 px-4 border-t">
+            <TransitionWrapper visible={active === 1}>
+                <div>
+                    <p className="block text-sm font-normal text-gray-900">Каква услуга търсите?</p>
+                    <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice>
+                </div>
+            </TransitionWrapper>
+            <TransitionWrapper visible={active === 2} btnNext={nextStep}>
+                <div>
+                    <p className="block text-sm font-normal text-gray-900">Ще имате ли нужда от?</p>
+                    <CardChoice options={additionalServiceChoices[serviceType || "1"]} onClick={handleAdditionalServices} activeId={additionalServices} styles="grid"></CardChoice>
+                </div>
+            </TransitionWrapper>
+            <TransitionWrapper visible={active === 3}>
+                <div>
+                    <p className="block text-sm text-gray-900">Колко често ще са посещенията?</p>
+                    <CardChoice options={serviceModeChoices} onClick={handleServiceMode} activeId={serviceMode} styles="grid"></CardChoice>
+                </div>
+            </TransitionWrapper>
+            <TransitionWrapper visible={active === 4} btnNext={nextStep}>
+                <div>
+                    <p className="block text-sm text-gray-900">В кои дни искате да са посещенията?</p>
+                    <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+                    <CardChoice options={serviceDayChoices} onClick={handleServiceDays} activeId={serviceDays} styles="grid grid-cols-2"></CardChoice>
+                </div>
+            </TransitionWrapper>
+            <TransitionWrapper visible={active === 5} btnNext={nextStep}>
+                <div>
+                    <p className="text-sm text-gray-900">В кои часове искате да са посещенията?</p>
+                    <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+                    <div className="flex justify-between py-3 mx-2">
+                        <button className="inline-flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-gray-700  hover:bg-gray-50 underline active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="morning" onClick={handleServiceHoursMultiple}>преди обяд</button>
+                        <button className="inline-flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-gray-700  hover:bg-gray-50 underline active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="afternoon" onClick={handleServiceHoursMultiple}>след обяд</button>
+                        {/* <button className="text-xs underline" data-id="all" onClick={handleServiceHoursMultiple}>всички</button> */}
+                        <button className="inline-flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-gray-700  hover:bg-gray-50 underline active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="clear" onClick={handleServiceHoursMultiple}>изчисти</button>
                     </div>
-                </TransitionWrapper>
-                <TransitionWrapper visible={active === 2} btnNext={nextStep}>
-                    <div>
-                        <p className="block text-sm font-normal text-gray-900">Детайли за услугата</p>
-                        <CardChoice options={additionalServiceChoices[serviceType || "1"]} onClick={handleAdditionalServices} activeId={additionalServices} styles="grid"></CardChoice>
-                    </div>
-                </TransitionWrapper>
-                <TransitionWrapper visible={active === 3}>
-                    <div>
-                        <p className="block text-sm font-normal text-gray-900">Колко е голямо мястото (кв. м.)?</p>
-                        <CardChoice options={areaSizeChoices} onClick={handleAreaSize} activeId={areaSize} styles="grid grid-cols-2"></CardChoice>
-                    </div>
-                </TransitionWrapper>
-                <TransitionWrapper visible={active === 4}>
-                    <div>
-                        <p className="block text-sm font-normal text-gray-900">Къде ще почистваме?</p>
-                        <ComboSelect options={districtChoices} selection={district} handleChange={handleDistrict}></ComboSelect>
-                    </div>
-                </TransitionWrapper>
-                <TransitionWrapper visible={active === 5}>
-                    <div>
-                        <p className="block text-sm text-gray-900">Колко често ще са посещенията?</p>
-                        <CardChoice options={serviceModeChoices} onClick={handleServiceMode} activeId={serviceMode} styles="grid"></CardChoice>
-                    </div>
-                </TransitionWrapper>
-                <TransitionWrapper visible={active === 6} btnNext={nextStep}>
-                    <div>
-                        <p className="block text-sm text-gray-900">В кои дни искате да са посещенията?</p>
-                        <CardChoice options={serviceDayChoices} onClick={handleServiceDays} activeId={serviceDays} styles="grid grid-cols-2"></CardChoice>
-                    </div>
-                </TransitionWrapper>
-                <TransitionWrapper visible={active === 7} btnNext={nextStep}>
-                    <div>
-                        <p className="block text-sm text-gray-900">В кои дни часове искате да са посещенията?</p>
-                        <div className="flex justify-between my-2 mx-2">
-                            <button className="text-xs underline" data-id="morning" onClick={handleServiceHoursMultiple}>преди обяд</button>
-                            <button className="text-xs underline" data-id="afternoon" onClick={handleServiceHoursMultiple}>след обяд</button>
-                            {/* <button className="text-xs underline" data-id="all" onClick={handleServiceHoursMultiple}>всички</button> */}
-                            <button className="text-xs underline" data-id="clear" onClick={handleServiceHoursMultiple}>изчисти</button>
-                        </div>
-                        <CardChoice options={ServiceHourChoices} onClick={handleServiceHours} activeId={serviceHours}></CardChoice>
-                    </div>
-                </TransitionWrapper>
-            </div>
+                    <CardChoice options={ServiceHourChoices} onClick={handleServiceHours} activeId={serviceHours}></CardChoice>
+                </div>
+            </TransitionWrapper>
+            <TransitionWrapper visible={active === 6}>
+                <div>
+                    <p className="block text-sm font-normal text-gray-900">Каква площ ще почистваме (кв. м.)?</p>
+                    <CardChoice options={areaSizeChoices} onClick={handleAreaSize} activeId={areaSize} styles="grid grid-cols-2"></CardChoice>
+                </div>
+            </TransitionWrapper>
+            <TransitionWrapper visible={active === 7}>
+                <div>
+                    <p className="block text-sm font-normal text-gray-900">Къде ще почистваме?</p>
+                    <p className="text-xs text-gray-600">(Ориентировъчна локация)</p>
+                    <ComboSelect options={districtChoices} selection={district} handleChange={handleDistrict}></ComboSelect>
+                </div>
+            </TransitionWrapper>
         </div>)
 }
