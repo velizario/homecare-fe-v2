@@ -6,6 +6,7 @@ import Contact from './structure/contact/Contact';
 import Dashboard from './structure/dashboard/Dashboard';
 import PageNotFound from './structure/defaultRoutePage/PageNotFound';
 import SearchOrderWizard from './structure/orderManagement/SearchOrderWizard';
+import CardVendor from './structure/cards/CardVendor';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Route path='about' element={<Contact/>} />
         <Route path='dashboard/*' element={<Dashboard/>} />
         <Route path='create-order/*' element={<SearchOrderWizard/>} />
+        <Route path='card-vendor/*' element={<CardVendor/>} />
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
     </HashRouter>

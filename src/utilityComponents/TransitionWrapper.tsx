@@ -30,7 +30,7 @@ export default function TransitionWrapper({ children, visible, btnNext }: Transi
                     <button
                         type="button"
                         onClick={btnNext}
-                        className={classNames("inline-flex w-full justify-center items-center border border-transparent bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 ", !btnNext && "hidden" || "")}
+                        className={classNames("inline-flex w-full justify-center items-center border border-transparent bg-indigo-100 px-4 py-3 text-sm font-medium text-indigo-700 shadow-sm hover:bg-indigo-200 ", !btnNext && "hidden" || "")}
                     >
                         Напред
                     </button>

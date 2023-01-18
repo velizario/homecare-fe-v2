@@ -1,3 +1,4 @@
+import { MinusIcon, PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
@@ -155,7 +156,7 @@ export default function SearchOrderWizard() {
             setServiceHours(new Set([]));
             return;
         }
-        let newSet = new Set(ServiceHourChoices.filter(choice => {
+        let btnChoices = new Set(ServiceHourChoices.filter(choice => {
             switch (filterWord) {
                 case "morning":
                     return choice.name <= "12:00";
@@ -168,7 +169,7 @@ export default function SearchOrderWizard() {
             }
         }).map(hour => hour.id))
         setServiceHours((currentHours) => {
-            const updatedHours = new Set([...newSet, ...currentHours])
+            const updatedHours = new Set([...btnChoices, ...currentHours])
             return updatedHours;
         })
     }
@@ -209,13 +210,13 @@ export default function SearchOrderWizard() {
                 <div>
                     <p className="text-sm text-gray-900">В кои часове искате да са посещенията?</p>
                     <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
-                    <div className="flex justify-between py-3 mx-2">
-                        <button className="inline-flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-gray-700  hover:bg-gray-50 underline active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="morning" onClick={handleServiceHoursMultiple}>преди обяд</button>
-                        <button className="inline-flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-gray-700  hover:bg-gray-50 underline active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="afternoon" onClick={handleServiceHoursMultiple}>след обяд</button>
-                        {/* <button className="text-xs underline" data-id="all" onClick={handleServiceHoursMultiple}>всички</button> */}
-                        <button className="inline-flex items-center rounded-full px-2.5 py-1.5 text-xs font-medium text-gray-700  hover:bg-gray-50 underline active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="clear" onClick={handleServiceHoursMultiple}>изчисти</button>
+                    <div className="flex justify-between py-3 flex-wrap gap-2">
+                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="morning" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1"/> преди обяд</button>
+                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="afternoon" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1"/>след обяд</button>
+                        {/* <button className="text-sm whitespace-nowrap underline" data-id="all" onClick={handleServiceHoursMultiple}>всички</button> */}
+                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="clear" onClick={handleServiceHoursMultiple}><MinusIcon className="h-4 w-4 mt-0.5 -ml-1"/>изчисти</button>
                     </div>
-                    <CardChoice options={ServiceHourChoices} onClick={handleServiceHours} activeId={serviceHours}></CardChoice>
+                    <CardChoice options={ServiceHourChoices} onClick={handleServiceHours} activeId={serviceHours} styles="grid grid-cols-3"></CardChoice>
                 </div>
             </TransitionWrapper>
             <TransitionWrapper visible={active === 6}>
