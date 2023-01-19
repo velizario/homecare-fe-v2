@@ -34,6 +34,9 @@ module.exports = {
     //     900: '#064e3b',
     //   },
     // },
+    screens: {
+      "xs" : '400px'
+    },
     extend: {
       fontFamily: {
         sans: [
