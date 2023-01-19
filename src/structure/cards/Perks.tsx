@@ -13,13 +13,25 @@ export default function Perks() {
         <BoltIcon className="h-[40px] w-[40px] p-1.5 shadow-sm shadow-indigo-200 rounded-full bg-indigo-50 text-indigo-700"></BoltIcon>
       </Tooltip>
       <Tooltip tooltipText="Висока оценка">
-        <SparklesIcon className="h-[40px] w-[40px] p-1.5  shadow-sm shadow-indigo-200 rounded-full bg-indigo-50 text-indigo-700"></SparklesIcon>
+        <div className="drop-shadow-sm">
+          <div className="clip-path-perks">
+            <SparklesIcon className="h-[40px] w-[40px] p-1.5  shadow-indigo-200  bg-indigo-50 text-indigo-700 "></SparklesIcon>
+          </div>
+        </div>
       </Tooltip>
       <Tooltip tooltipText="Потвърден профил">
-        <ShieldCheckIcon className="h-[40px] w-[40px] p-1.5  rounded-full bg-gray-50 text-gray-300"></ShieldCheckIcon>
+        <div className="drop-shadow-sm">
+          <div className="clip-path-perks">
+            <ShieldCheckIcon className="h-[40px] w-[40px] p-1.5 bg-gray-50 text-gray-300"></ShieldCheckIcon>
+          </div>
+        </div>
       </Tooltip>
       <Tooltip tooltipText="Старо куче">
-        <ChartBarIcon className="h-[40px] w-[40px] p-1.5  shadow-sm shadow-indigo-200 rounded-full bg-indigo-50 text-indigo-700"></ChartBarIcon>
+        <div className="drop-shadow-md">
+          <div className="clip-path-perks">
+            <ChartBarIcon className="h-[40px] w-[40px] p-1.5  shadow-indigo-200  bg-indigo-50 text-indigo-700"></ChartBarIcon>
+          </div>
+        </div>
       </Tooltip>
     </div>
   );
