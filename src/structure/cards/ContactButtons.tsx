@@ -5,7 +5,7 @@ import {
 
 export default function ContactButtons() {
   return (
-    <>
+    <div className="flex flex-col gap-[22px] whitespace-nowrap w-full flex-1 ">
       <button
         type="button"
         className="inline-flex items-center justify-center rounded gap-2 border border-transparent bg-indigo-600 px-2.5 py-3 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -20,6 +20,6 @@ export default function ContactButtons() {
         <ChatBubbleBottomCenterIcon className="h-5 w-5 flex-shrink-0"></ChatBubbleBottomCenterIcon>
         Свържи се
       </button>
-    </>
+    </div>
   );
 }

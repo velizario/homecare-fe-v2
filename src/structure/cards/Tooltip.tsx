@@ -12,13 +12,15 @@ import {
   useInteractions,
   FloatingPortal,
 } from "@floating-ui/react";
+import classNames from "../../helpers/classNames";
 
 interface TooltipProps {
   children: React.ReactNode;
   tooltipText: string;
+  styles?: string;
 }
 
-export default function Tooltip({ children, tooltipText }: TooltipProps) {
+export default function Tooltip({ children, tooltipText, styles }: TooltipProps) {
   const [open, setOpen] = useState(false);
 
   const { x, y, refs, strategy, context } = useFloating({
@@ -60,7 +62,7 @@ export default function Tooltip({ children, tooltipText }: TooltipProps) {
       <FloatingPortal>
         {open && (
           <div
-            className="Tooltip max-w-[200px] justify-center text-center shadow-lg ring-1 ring-black ring-opacity-5 rounded-md px-2 py-1 border bg-white text-gray-700 text-xs"
+            className={classNames("Tooltip max-w-[200px] justify-center text-center shadow-lg ring-1 ring-black ring-opacity-5 rounded-md px-2 py-1 border bg-white text-gray-700 text-xs", styles || "")}
             ref={refs.setFloating}
             style={{
               // Positioning styles
