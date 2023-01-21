@@ -17,4 +17,28 @@ html {
 } */
 
 /* Focusing the button with a keyboard will show a dashed black line. */
-:focus-visible{ outline: none }
+:focus-visible {
+    outline: none
+}
+
+.button-wrapper::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    width: 30px;
+}
+
+.button-wrapper-right::before {
+    left: -30px;
+    background: linear-gradient(90deg, transparent,white);
+}
+
+.button-wrapper-left::before {
+    left: 30px;
+    background: linear-gradient(270deg, transparent,white);
+}
+
+.hidden-scrollbar::-webkit-scrollbar{
+    display: none;
+  }

@@ -1,11 +1,11 @@
 import { StarIcon } from "@heroicons/react/20/solid";
-import classNames from "../helpers/classNames";
+import classNames from "../../helpers/classNames";
 
 const userRating = 4;
 
 export default function SingleRating() {
   return (
-    <div className="flex flex-col -mt-28 self-center max-w-[10rem]">
+    <>
       <img
         className="[aspect-ratio:_1_/_1] w-full rounded-md object-cover"
         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -30,6 +30,6 @@ export default function SingleRating() {
           (52 ревюта)
         </p>
       </div>
-    </div>
+    </>
   );
 }
