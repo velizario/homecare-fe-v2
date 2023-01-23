@@ -7,7 +7,7 @@ import Dashboard from './structure/dashboard/Dashboard';
 import PageNotFound from './structure/defaultRoutePage/PageNotFound';
 import SearchOrderWizard from './structure/orderManagement/SearchOrderWizard';
 import VendorCard from './structure/cards/VendorCard';
-import VendorCardBrief from './structure/cards/cardSmall/VendorCardBrief';
+import VendorCardBrief from './structure/cards/VendorCardBrief';
 
 function App() {
 

@@ -3,7 +3,7 @@ import Tooltip from "./Tooltip";
 
 export default function PortfolioTags() {
   return (
-    <div className="flex gap-3 gap-x-1.5 flex-wrap">
+    <div className="flex flex-wrap gap-2">
       <Tooltip tooltipText="Почистване.">
         <Badge styles="bg-indigo-100 text-indigo-800">Основно</Badge>
       </Tooltip>

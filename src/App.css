@@ -39,6 +39,10 @@ html {
     background: linear-gradient(270deg, transparent,white);
 }
 
-.hidden-scrollbar::-webkit-scrollbar{
+.clip-path-photo {
+    position: relative
+}
+
+/* .hidden-scrollbar::-webkit-scrollbar{
     display: none;
-  }
+  } */

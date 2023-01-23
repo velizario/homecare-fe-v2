@@ -5,7 +5,7 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     // fontFamily: {
-    //   display: ['Source Serif Pro', 'Georgia', 'serif'],
+    // display: ['Source Serif Pro', 'Georgia', 'serif'],
     //   body: ['Synonym', 'system-ui', 'sans-serif'],
     // },
     // colors: {
@@ -34,10 +34,10 @@ module.exports = {
     //     900: '#064e3b',
     //   },
     // },
-    screens: {
-      "xs" : '400px'
-    },
     extend: {
+      screens: {
+        "xs": '400px'
+      },
       fontFamily: {
         sans: [
           // "Apple Color Emoji",
@@ -50,6 +50,9 @@ module.exports = {
           "Segoe UI Emoji",
           ...defaultTheme.fontFamily.sans,
         ],
+        serif: [
+          'Roboto Slab'
+        ]
       },
       boxShadow: {
         order: "1px 1px 15px -4px rgba(200,200,200,0.7)",
