@@ -6,11 +6,10 @@ import Contact from './structure/contact/Contact';
 import Dashboard from './structure/dashboard/Dashboard';
 import PageNotFound from './structure/defaultRoutePage/PageNotFound';
 import SearchOrderWizard from './structure/orderManagement/SearchOrderWizard';
+import VendorCardFull from './structure/cards/VendorCardFull';
 import VendorCard from './structure/cards/VendorCard';
-import VendorCardBrief from './structure/cards/VendorCardBrief';
 
 function App() {
-
   return (
     <HashRouter>
       <Routes>
@@ -20,8 +19,8 @@ function App() {
         <Route path='about' element={<Contact/>} />
         <Route path='dashboard/*' element={<Dashboard/>} />
         <Route path='create-order/*' element={<SearchOrderWizard/>} />
-        <Route path='card-vendor/*' element={<VendorCard/>} />
-        <Route path='card-vendor-brief/*' element={<VendorCardBrief/>} />
+        <Route path='vendor-card-full/*' element={<VendorCardFull/>} />
+        <Route path='vendor-card/*' element={<VendorCard/>} />
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
     </HashRouter>

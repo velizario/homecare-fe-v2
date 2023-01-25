@@ -51,12 +51,8 @@ function classNames(...classes: string[]) {
 
 export default function RatingCard() {
   return (
-    <div className="bg-white mx-auto">
+    <div className="mx-auto">
       <div className="">
-        <h2 className="text-xl font-bold tracking-tight text-gray-900">
-          Ревюта от клиенти
-        </h2>
-
         <div className="mt-3 flex items-center">
           <div>
             <div className="flex items-center">

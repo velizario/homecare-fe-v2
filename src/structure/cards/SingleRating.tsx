@@ -5,14 +5,7 @@ const userRating = 4;
 
 export default function SingleRating() {
   return (
-    <>
-      <img
-        className="[aspect-ratio:_1_/_1] w-full rounded-md object-cover"
-        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-        alt=""
-      />
-      <h2 className="font-medium text-lg text-gray-800 mt-2">Велизар saf asf Стоянов</h2>
-      {/* <p className="text-sm text-gray-500">София</p> */}
+      
       <div className="flex flex-col items-center mt-2">
         <div className="flex items-center">
           {[0, 1, 2, 3, 4].map((rating) => (
@@ -30,6 +23,5 @@ export default function SingleRating() {
           (52 ревюта)
         </p>
       </div>
-    </>
   );
 }
