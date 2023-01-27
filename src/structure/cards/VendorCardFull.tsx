@@ -21,7 +21,7 @@ export default function VendorCardFull() {
         <>
             <Header setSidebarOpen={setSidebarOpen} />
             {/* Mobile */}
-            <div className="sm:hidden bg-gradient-to-b m-auto from-fuchsia-50 to-indigo-300">
+            <div className="bg-gradient-to-b m-auto from-fuchsia-50 to-indigo-300">
                 <div className="pt-4 flex justify-between items-center px-4  text-gray-600">
                     <Link to="/vendor-card">
                         <ChevronLeftIcon className="h-6 w-6"></ChevronLeftIcon>
@@ -63,8 +63,9 @@ export default function VendorCardFull() {
             </div>
 
             {/* Larger screen */}
-            <div className="hidden sm:grid grid-cols-[1fr_2fr] gap-3 md:gap-5 max-w-5xl m-auto p-8 bg-white">
-                <div className="bg-gradient-to-b max-w-xs from-fuchsia-50 to-indigo-300 sm:bg-none">
+            <div className="grid sm:grid-cols-[1fr_2fr] gap-x-3 md:gap-x-6 lg:gap-x-9 max-w-5xl m-auto sm:p-8 bg-white">
+                <div className="sm:col-start-1 [grid-row:1/10] bg-gradient-to-b sm:min-w-[13rem] sm:max-w-xs from-fuchsia-50 to-indigo-300 sm:bg-none">
+                    {/* navigation */}
                     <div className="sm:hidden pt-4 flex justify-between items-center px-4 text-gray-600">
                         <Link to="/vendor-card">
                             <ChevronLeftIcon className="h-6 w-6"></ChevronLeftIcon>
@@ -72,9 +73,11 @@ export default function VendorCardFull() {
                         <p className="font-medium">Профил</p>
                         <BellIcon className="h-6 w-6"></BellIcon>
                     </div>
-                    <div className="border-r flex flex-col bg-white rounded-t-3xl gap-8">
+                    <div className="border-r flex flex-col mt-36 sm:mt-0 px-4 sm:px-0 bg-white rounded-t-3xl gap-8">
+
+                        {/* Name, town, photo, rating */}
                         <div className="flex flex-col">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col max-w-[10rem] w-full self-center sm:self-auto -mt-28 sm:mt-0 sm:max-w-full">
                                 <img
                                     className="[aspect-ratio:_1_/_1] w-full rounded-md object-cover"
                                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -87,13 +90,19 @@ export default function VendorCardFull() {
                                 <SingleRating />
                             </div>
                         </div>
+
+                        {/* Perks */}
                         <div className="sm:px-3 md:px-5">
                             <Perks />
                         </div>
+
+                        {/* Contact Buttons */}
                         <div className="sm:px-3 md:px-5">
                             <ContactButtons />
                         </div>
-                        <div className="pt-6 sm:px-3 md:px-5">
+
+                        {/* Portfolio */}
+                        <div className="sm:px-3 md:px-5">
                             <h2 className="text-xl font-semibold tracking-tight text-gray-700 mb-4">
                                 Портфолио
                             </h2>
@@ -102,22 +111,29 @@ export default function VendorCardFull() {
                     </div>
                 </div>
                 {/* right column */}
-                <div className="">
+                <div className="col-start-1 sm:col-start-2 px-4 sm:px-0 mt-8 sm:mt-0 order-1 sm:order-1">
                     <h2 className="text-xl font-semibold tracking-tight text-gray-700 mb-2">
                         За мен
                     </h2>
                     <DetailedInfo />
+                </div>
 
-                    <h2 className="text-xl font-semibold tracking-tight text-gray-700 mt-8 mb-2">
+                <div className="col-start-1 sm:col-start-2 px-4 sm:px-0 mt-8 order-2 sm:order-2">
+                    <h2 className="text-xl font-semibold tracking-tight text-gray-700 mb-2">
                         Цени
                     </h2>
                     <VendorPrices />
-                    <h2 className="text-xl font-semibold tracking-tight text-gray-700 mt-8 mb-3">
+                </div>
+
+                <div className="col-start-1 sm:col-start-2 px-4 sm:px-0 mt-8 order-3 sm:order-3">
+                    <h2 className="text-xl font-semibold tracking-tight text-gray-700 mb-3">
                         Статистика
                     </h2>
                     <ShortInfo />
+                </div>
 
-                    <h2 className="text-xl font-semibold tracking-tight text-gray-700 mt-8 mb-2">
+                <div className="col-start-1 sm:col-start-2 px-4 sm:px-0 mt-8 order-4 sm:order-4">
+                    <h2 className="text-xl font-semibold tracking-tight text-gray-700 mb-2">
                         Ревюта от клиенти
                     </h2>
                     <RatingCard />
@@ -126,14 +142,3 @@ export default function VendorCardFull() {
         </>
     );
 }
-
-
-// Photo
-// Name
-// Ratings
-// Perks
-// 2 Buttons
-// About
-// Portfolio
-// Stats
-// Reviews
