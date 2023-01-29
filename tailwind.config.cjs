@@ -45,7 +45,9 @@ module.exports = {
           // "EmojiOne Color",
           // "Segoe UI Symbol",
           // "Twemoji Mozilla",
-          "Inter var",
+          // "Montserrat",
+          "Raleway",
+          "Nunito",
           "Noto Color Emoji",
           "Segoe UI Emoji",
           ...defaultTheme.fontFamily.sans,
@@ -71,6 +73,6 @@ module.exports = {
       }
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp")],
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp"), require('@headlessui/tailwindcss')],
   variants: {},
 };

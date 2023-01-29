@@ -11,6 +11,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Link } from "react-router-dom";
 
 const solutions = [
   {
@@ -128,17 +129,17 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
         </div>
         {/* Sign in & Sign up buttons desktop */}
         <div className="flex items-center md:ml-12">
-          <a
-            href="#"
+          <Link
+            to="signin"
             className="text-base font-medium text-gray-500 hover:text-gray-900"
           >
-            Sign in
-          </a>
+            Влез
+          </Link>
           <a
             href="#"
             className="ml-8 inline-flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
           >
-            Sign up
+            Регистрирай се
           </a>
         </div>
       </nav>

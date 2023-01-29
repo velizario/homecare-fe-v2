@@ -8,7 +8,7 @@ import Tooltip from "./Tooltip";
 
 export default function Perks() {
   return (
-    <div className="flex justify-between max-w-sm m-auto">
+    <div className="flex justify-between w-full max-w-sm m-auto">
       <Tooltip tooltipText="Отговаря бързо">
         <div className="drop-shadow-sm">
           <div className="clip-path-perks">

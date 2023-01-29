@@ -21,7 +21,7 @@ export default function VendorCardFull() {
         <>
             <Header setSidebarOpen={setSidebarOpen} />
             {/* Mobile */}
-            <div className="bg-gradient-to-b m-auto from-fuchsia-50 to-indigo-300">
+            <div className="sm:hidden bg-gradient-to-b m-auto from-fuchsia-50 to-indigo-300">
                 <div className="pt-4 flex justify-between items-center px-4  text-gray-600">
                     <Link to="/vendor-card">
                         <ChevronLeftIcon className="h-6 w-6"></ChevronLeftIcon>
@@ -65,16 +65,7 @@ export default function VendorCardFull() {
             {/* Larger screen */}
             <div className="grid sm:grid-cols-[1fr_2fr] gap-x-3 md:gap-x-6 lg:gap-x-9 max-w-5xl m-auto sm:p-8 bg-white">
                 <div className="sm:col-start-1 [grid-row:1/10] bg-gradient-to-b sm:min-w-[13rem] sm:max-w-xs from-fuchsia-50 to-indigo-300 sm:bg-none">
-                    {/* navigation */}
-                    <div className="sm:hidden pt-4 flex justify-between items-center px-4 text-gray-600">
-                        <Link to="/vendor-card">
-                            <ChevronLeftIcon className="h-6 w-6"></ChevronLeftIcon>
-                        </Link>
-                        <p className="font-medium">Профил</p>
-                        <BellIcon className="h-6 w-6"></BellIcon>
-                    </div>
                     <div className="border-r flex flex-col mt-36 sm:mt-0 px-4 sm:px-0 bg-white rounded-t-3xl gap-8">
-
                         {/* Name, town, photo, rating */}
                         <div className="flex flex-col">
                             <div className="flex flex-col max-w-[10rem] w-full self-center sm:self-auto -mt-28 sm:mt-0 sm:max-w-full">

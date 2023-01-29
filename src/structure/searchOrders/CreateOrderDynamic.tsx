@@ -1,16 +1,18 @@
 import { MinusIcon, PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
-import TransitionWrapper from "../../utilityComponents/TransitionWrapper";
-import CardChoice from "./CardChoice";
-
+import TransitionWrapperBuildUp from "../../utilityComponents/TransitionWrapperBuildUp";
+import CardChoice from "../../utilityComponents/TagSelectGroup";
+import RadioGroup from "../../utilityComponents/RadioGroup";
+import debounce from 'lodash.debounce'
+import Toggle from "./ToggleInput";
 
 
 const serviceTypeChoices: SelectionOption[] = [
-    { id: "1", name: 'Стандартно почистване' },
-    { id: "3", name: 'Миене на мека мебел' },
-    { id: "4", name: 'Почистване след ремонт' },
+    { id: "1", name: 'Стандартно почистване', description: "Почистване на гъз, глава, и тем подобни" },
+    { id: "2", name: 'Миене на мека мебел', description: "Почистване на фотьойли и изхвърляне на котки" },
+    { id: "3", name: 'Почистване след ремонт', description: "Рязане на кабели и промиване с чист спирт" },
 ]
 
 const additionalServiceChoices: { [key: string]: SelectionOption[] } = {
@@ -95,7 +97,7 @@ const ServiceHourChoices: SelectionOption[] = [
     // More users...
 ]
 
-export default function SearchOrderWizard() {
+export default function CreateOrderDynamic() {
     const [active, setActive] = useState(1);
     const [serviceMode, setServiceMode] = useState<string | undefined>()
     const [additionalServices, setAdditionalServices] = useState<Set<string>>(new Set())
@@ -105,6 +107,8 @@ export default function SearchOrderWizard() {
     const [serviceHours, setServiceHours] = useState<Set<string>>(new Set())
     const [district, setDistrict] = useState<SelectionOption[] | {}[]>([])
 
+
+    const testRef = useRef<null | HTMLParagraphElement>(null);
     // useEffect(() => {
     //     nextStep()
     // }, [serviceMode, serviceType, areaSize, serviceDays, serviceHours, district])
@@ -119,7 +123,13 @@ export default function SearchOrderWizard() {
     }
 
     const nextStep = () => {
+        let scrollToStep = active + 1;
         setActive((current) => current + 1)
+        // setTimeout(() => {
+        //     document.querySelector(`#step-${scrollToStep.toString()}`)?.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+        // }, 500);
+        debounce(() => document.querySelector(`#step-${scrollToStep.toString()}`)?.scrollIntoView({ behavior: "smooth" }), 100)()
+
     }
 
     const handleServiceMode: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -127,12 +137,17 @@ export default function SearchOrderWizard() {
         nextStep()
     }
 
-    const handleAdditionalServices: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const handleAdditionalServices: React.MouseEventHandler<HTMLElement> = (e) => {
         toggleSelection(e.currentTarget.dataset.id, setAdditionalServices)
+        nextStep()
     }
 
-    const handleServiceType: React.MouseEventHandler<HTMLDivElement> = (e) => {
-        setServiceType(e.currentTarget.dataset.id)
+    const handleAdditionalServices2 = (id: string) => {
+        toggleSelection(id, setAdditionalServices)
+    }
+
+    const handleServiceType = (e: string) => {
+        setServiceType(e)
         nextStep()
     }
 
@@ -176,61 +191,63 @@ export default function SearchOrderWizard() {
 
     const handleDistrict: React.Dispatch<React.SetStateAction<SelectionOption[] | {}[]>> = (e) => {
         // setDistrict(e.currentTarget.dataset.id)
-        nextStep()
     }
 
     return (
-        <div className="relative flex flex-col my-10 py-2 px-4 border-t">
-            <TransitionWrapper visible={active === 1}>
+        <div className="flex flex-col items-center relative my-10 py-2 px-4 border-t max-w-2xl mx-auto">
+            <Toggle options={additionalServiceChoices[serviceType || "1"]} onClick={handleAdditionalServices} activeId={additionalServices} />
+
+            <TransitionWrapperBuildUp visible={active >= 1}>
                 <div>
-                    <p className="block text-sm font-normal text-gray-900">Каква услуга търсите?</p>
-                    <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice>
+                    <p ref={testRef} id="step-1" className="text-2xl font-light text-gray-900 pb-8">Каква услуга търсите?</p>
+                    {/* <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice> */}
+                    <RadioGroup options={serviceTypeChoices} activeId={serviceType} onClick={handleServiceType} />
                 </div>
-            </TransitionWrapper>
-            <TransitionWrapper visible={active === 2} btnNext={nextStep}>
+            </TransitionWrapperBuildUp>
+            <TransitionWrapperBuildUp visible={active >= 2} >
                 <div>
-                    <p className="block text-sm font-normal text-gray-900">Ще имате ли нужда от?</p>
+                    <p id="step-2" className="text-2xl font-light text-gray-900 pb-8">Ще имате ли нужда от?</p>
                     <CardChoice options={additionalServiceChoices[serviceType || "1"]} onClick={handleAdditionalServices} activeId={additionalServices} styles="grid"></CardChoice>
                 </div>
-            </TransitionWrapper>
-            <TransitionWrapper visible={active === 3}>
+            </TransitionWrapperBuildUp>
+            <TransitionWrapperBuildUp visible={active >= 3} >
                 <div>
-                    <p className="block text-sm text-gray-900">Колко често ще са посещенията?</p>
+                    <p id="step-3" className="text-2xl font-light text-gray-900 pb-8">Колко често ще са посещенията?</p>
                     <CardChoice options={serviceModeChoices} onClick={handleServiceMode} activeId={serviceMode} styles="grid"></CardChoice>
                 </div>
-            </TransitionWrapper>
-            <TransitionWrapper visible={active === 4} btnNext={nextStep}>
+            </TransitionWrapperBuildUp>
+            <TransitionWrapperBuildUp visible={active >= 4} btnNext={nextStep}>
                 <div>
-                    <p className="block text-sm text-gray-900">В кои дни искате да са посещенията?</p>
+                    <p id="step-4" className="text-2xl font-light text-gray-900 pb-8">В кои дни искате да са посещенията?</p>
                     <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
                     <CardChoice options={serviceDayChoices} onClick={handleServiceDays} activeId={serviceDays} styles="grid grid-cols-2"></CardChoice>
                 </div>
-            </TransitionWrapper>
-            <TransitionWrapper visible={active === 5} btnNext={nextStep}>
+            </TransitionWrapperBuildUp>
+            <TransitionWrapperBuildUp visible={active >= 5} btnNext={nextStep}>
                 <div>
-                    <p className="text-sm text-gray-900">В кои часове искате да са посещенията?</p>
+                    <p id="step-5" className="text-2xl font-light text-gray-900 pb-8">В кои часове искате да са посещенията?</p>
                     <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
                     <div className="flex justify-between py-3 flex-wrap gap-2">
-                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="morning" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1"/> преди обяд</button>
-                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="afternoon" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1"/>след обяд</button>
+                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="morning" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1" /> преди обяд</button>
+                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="afternoon" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1" />след обяд</button>
                         {/* <button className="text-sm whitespace-nowrap underline" data-id="all" onClick={handleServiceHoursMultiple}>всички</button> */}
-                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="clear" onClick={handleServiceHoursMultiple}><MinusIcon className="h-4 w-4 mt-0.5 -ml-1"/>изчисти</button>
+                        <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="clear" onClick={handleServiceHoursMultiple}><MinusIcon className="h-4 w-4 mt-0.5 -ml-1" />изчисти</button>
                     </div>
                     <CardChoice options={ServiceHourChoices} onClick={handleServiceHours} activeId={serviceHours} styles="grid grid-cols-3"></CardChoice>
                 </div>
-            </TransitionWrapper>
-            <TransitionWrapper visible={active === 6}>
+            </TransitionWrapperBuildUp>
+            <TransitionWrapperBuildUp visible={active >= 6} >
                 <div>
-                    <p className="block text-sm font-normal text-gray-900">Каква площ ще почистваме (кв. м.)?</p>
+                    <p id="step-6" className="text-2xl font-light text-gray-900 pb-8">Каква площ ще почистваме (кв. м.)?</p>
                     <CardChoice options={areaSizeChoices} onClick={handleAreaSize} activeId={areaSize} styles="grid grid-cols-2"></CardChoice>
                 </div>
-            </TransitionWrapper>
-            <TransitionWrapper visible={active === 7}>
+            </TransitionWrapperBuildUp>
+            <TransitionWrapperBuildUp visible={active >= 7} btnNext={nextStep}>
                 <div>
-                    <p className="block text-sm font-normal text-gray-900">Къде ще почистваме?</p>
+                    <p id="step-7" className="text-2xl font-light text-gray-900 pb-8">Къде ще почистваме?</p>
                     <p className="text-xs text-gray-600">(Ориентировъчна локация)</p>
                     <ComboSelect options={districtChoices} selection={district} handleChange={handleDistrict}></ComboSelect>
                 </div>
-            </TransitionWrapper>
+            </TransitionWrapperBuildUp>
         </div>)
 }

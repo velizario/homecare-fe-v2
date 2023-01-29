@@ -1,4 +1,4 @@
-import { SelectionOption } from "../../helpers/types";
+import { SelectionOption } from "../helpers/types";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -15,7 +15,7 @@ export default function UserTypeSelection({ activeId, onClick, options, styles }
 
 
   return (
-    <div className={classNames("sm:col-span-4 mt-2 flex flex-wrap gap-3 whitespace-nowrap", styles || "")}>
+    <div className={classNames("sm:col-span-4 flex flex-wrap gap-3 whitespace-nowrap max-w-md mt-3", styles || "")}>
       {options.map((option) => (
         <div
           key={option.id}
@@ -23,9 +23,9 @@ export default function UserTypeSelection({ activeId, onClick, options, styles }
           onClick={onClick}
           className={classNames(
             (activeId === option.id || (activeId instanceof Set && activeId.has(option.id)))
-              ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
-              : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-            'border rounded-full py-3 px-5 flex justify-center text-sm gap-1 cursor-pointer shadow-order flex-1'
+              ? 'bg-sky-200 border-transparent text-sky-700 bg-'
+              : 'bg-white border-gray-200 text-gray-600 hover:bg-sky-50',
+            'border rounded-full py-3 px-5 flex justify-center text-sm gap-1 cursor-pointer shadow-order flex-1 '
           )
           }
         >

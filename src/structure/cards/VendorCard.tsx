@@ -11,9 +11,9 @@ export default function VendorCard() {
     const tagsRef = useRef<null | HTMLDivElement>(null)
     return (
         <div>
-            <div className="p-4 bg-white border-b-2 gap-x-2 sm:gap-x-4 grid grid-cols-[min-content_1fr] ">
+            <div className="shadow-order hover:shadow-order-hover p-4 bg-white rounded-md gap-x-2 sm:gap-x-4 grid grid-cols-[min-content_1fr]">
                 {/* photo */}
-                <div className="w-20 sm:w-48 col-start-1 row-start-1 row-span-2 drop-shadow-xl">
+                <div className="w-20 sm:w-48 col-start-1 row-start-1 sm:row-span-2 drop-shadow-xl">
                     <img
                         className="[aspect-ratio:_1_/_1] w-full object-cover rounded-sm clip-path-photo "
                         src="https://st1.photogallery.ind.sh/wp-content/uploads/indiacom/zozibini-tunzi-top-20-most-beautiful-women-in-the-world-2022-202003-1655117381.jpg"
@@ -48,12 +48,12 @@ export default function VendorCard() {
                 <div className="mt-4 col-start-1 row-start-3 col-span-2">
                     <p className="text-gray-800 text-sm leading-normal line-clamp-4">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
                 </div>
+                {/* more info */}
                 {/* prices */}
                 <VendorPrices />
-                {/* more info */}
                 <Link
                     to="/vendor-card-full"
-                    className="col-start-1 col-span-2"
+                    className="col-start-1 col-span-2 order-last row-start-[10]"
                 >
                     <div className="flex items-center text-indigo-600 mt-1">
                         <p className="text-sm font-serif">Още информация и услуги</p>
