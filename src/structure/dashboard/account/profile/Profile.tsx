@@ -7,8 +7,6 @@ import ProfilePhoto from "./ProfilePhoto";
 import RegionSelection from "./RegionSelection";
 import UserTypeSelection from "./UserTypeSelection";
 
-
-
 const profileInputValues = {
   firstName: {
     scope: "provider-private, client",
@@ -57,18 +55,11 @@ const profileInputValues = {
   },
 };
 
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-
-
 export default function Profile() {
 
   const [scrolledPosition, setScrolledPosition] = useState<number | null>(null)
 
-  window.addEventListener("scroll", () => setScrolledPosition(window.scrollY));
+  window.addEventListener("scroll", () => { setScrolledPosition(window.scrollY); });
 
 
   useEffect(() => {
@@ -81,20 +72,20 @@ export default function Profile() {
       <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
         <form className="space-y-8 max-w-3xl">
           <p className="text-sm text-gray-500">
-            Информацията ще бъде използвана за да съставим вашата "Визитка".
+            Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.
           </p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <UserTypeSelection />
             <ProfilePhoto />
-            <InputFieldProfileToggler children={<InputField {...profileInputValues.firstName} />} scope={profileInputValues.firstName.scope} />
-            <InputFieldProfileToggler children={<InputField {...profileInputValues.lastName} />} scope={profileInputValues.lastName.scope} />
-            <InputFieldProfileToggler children={<InputField {...profileInputValues.companyName} />} scope={profileInputValues.companyName.scope} />
-            <InputFieldProfileToggler children={<ProfileAbout />} scope="client, provider-private, provider-company" />
-            <InputFieldProfileToggler children={<InputField {...profileInputValues.facebook} />} scope={profileInputValues.facebook.scope} />
-            <InputFieldProfileToggler children={<InputField {...profileInputValues.url} />} scope={profileInputValues.url.scope} />
-            <InputFieldProfileToggler children={<InputField {...profileInputValues.phone} />} scope={profileInputValues.phone.scope} />
-            <InputFieldProfileToggler children={<RegionSelection />} scope="client" />
-            <InputFieldProfileToggler children={<ComboSelectBox />} scope="provider-private, provider-company" />
+            <InputFieldProfileToggler scope={profileInputValues.firstName.scope}><InputField {...profileInputValues.firstName} /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={profileInputValues.lastName.scope}><InputField {...profileInputValues.lastName} /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={profileInputValues.companyName.scope}><InputField {...profileInputValues.companyName} /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope="client, provider-private, provider-company"><ProfileAbout /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={profileInputValues.facebook.scope}><InputField {...profileInputValues.facebook} /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={profileInputValues.url.scope}><InputField {...profileInputValues.url} /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={profileInputValues.phone.scope}><InputField {...profileInputValues.phone} /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope="client"><RegionSelection /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope="provider-private, provider-company"><ComboSelectBox /></InputFieldProfileToggler>
           </div>
           <div className="flex justify-end pt-8 gap-4">
             <button

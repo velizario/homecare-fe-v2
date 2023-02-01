@@ -1,12 +1,9 @@
-import classNames from "../../../helpers/classNames";
 import {
-  HomeIcon,
-  ChatBubbleBottomCenterTextIcon,
-  UserIcon,
-  ClipboardDocumentListIcon,
+  ChatBubbleBottomCenterTextIcon, ClipboardDocumentListIcon, HomeIcon, UserIcon
 } from "@heroicons/react/24/outline";
-import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import classNames from "../../../helpers/classNames";
 
 export const sideNavigation = [
   {
@@ -46,15 +43,7 @@ interface SidebarProps {
 
 export default function Sidebar({ setSidebarOpen }: SidebarProps) {
 
-  const navigate = useNavigate();
-
   const [activeMenuItem, setActiveMenuItem] = useState(1)
-
-
-  const routeTo = (to?: string) => {
-    if (!to) return;
-    navigate(to);
-  }
 
   const handleMenuItemClick = (selectedMenuItemId:number) => {
     setActiveMenuItem(selectedMenuItemId)
@@ -76,7 +65,7 @@ export default function Sidebar({ setSidebarOpen }: SidebarProps) {
             <Link
               key={item.name}
               data-id={item.id}
-              onClick={() => handleMenuItemClick(item.id)}
+              onClick={() => { handleMenuItemClick(item.id); }}
               to={item.route}
               className={classNames(
                 item.id === activeMenuItem
@@ -97,7 +86,7 @@ export default function Sidebar({ setSidebarOpen }: SidebarProps) {
               />
               {/* no mt-2; flex-1 */}
               <span className="mt-2 lg:mt-0">{item.name}</span>
-              {item.count ? (
+              {item.count > 0 ? (
                 <span
                   className={classNames(
                     item.id === activeMenuItem ? 'bg-indigo-600' : 'bg-indigo-800',

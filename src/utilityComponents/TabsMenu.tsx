@@ -5,11 +5,11 @@ function classNames(...classes: string[]) {
 }
 
 interface TabsMenuProps {
-  tabs: {
+  tabs: Array<{
     id: number;
     name: string;
     href: string;
-  }[];
+  }>;
   defaultTab: string;
 }
 
@@ -30,7 +30,7 @@ export default function TabsMenu({ tabs, defaultTab }: TabsMenuProps) {
             <a
               key={tab.id}
               href={tab.href}
-              onClick={() => setCurrent(tab.name)}
+              onClick={() => { setCurrent(tab.name); }}
               className={classNames(
                 tab.name === current
                   ? 'border-indigo-500 text-indigo-600'

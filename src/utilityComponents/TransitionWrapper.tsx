@@ -1,6 +1,4 @@
 import { Transition } from '@headlessui/react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
-import { Fragment, useState } from 'react'
 import classNames from '../helpers/classNames';
 
 interface TransitionWrapperProps {
@@ -30,7 +28,7 @@ export default function TransitionWrapper({ children, visible, btnNext }: Transi
                     <button
                         type="button"
                         onClick={btnNext}
-                        className={classNames("inline-flex justify-center w-full max-w-sm sm:max-w-xs items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2", !btnNext && "hidden" || "")}
+                        className={classNames("inline-flex justify-center w-full max-w-sm sm:max-w-xs items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2", (btnNext == null) ? "hidden" : "")}
                     >
                         Напред
                     </button>

@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { Switch } from '@headlessui/react'
 import classNames from '../../helpers/classNames';
-import { SelectionOption } from '../../helpers/types';
+import { type SelectionOption } from '../../helpers/types';
 
 interface ToggleInputProps {
   options: SelectionOption[];
@@ -14,9 +13,9 @@ export default function ToggleInput({ options, activeId, onClick }: ToggleInputP
     <div className='flex flex-col gap-6 max-w-md mt-3'>
       {
         options.map(option => {
-          let enabled = (activeId === option.id || (activeId instanceof Set && activeId.has(option.id)));
+          const enabled = (activeId === option.id || (activeId instanceof Set && activeId.has(option.id)));
           return (
-            <div className='flex gap-2'>
+            <div key={option.id} className='flex gap-2'>
               <Switch.Group>
                 <Switch
                   key={option.id}
@@ -32,7 +31,7 @@ export default function ToggleInput({ options, activeId, onClick }: ToggleInputP
                       } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                   />
                 </Switch>
-                {option.name && <Switch.Label className={classNames("cursor-pointer", enabled ? "text-indigo-800" : "text-gray-500")}>{option.name}</Switch.Label>}
+                <Switch.Label className={classNames("cursor-pointer", enabled ? "text-indigo-800" : "text-gray-500")}>{option.name}</Switch.Label>
               </Switch.Group>
             </div>)
         }

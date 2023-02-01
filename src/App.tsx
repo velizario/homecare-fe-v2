@@ -16,6 +16,9 @@ import CreateOrder from './structure/searchOrders/CreateOrder';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // TODO: do something with this var
+  console.log(sidebarOpen);
+
   return (
     <HashRouter>
       <Header setSidebarOpen={setSidebarOpen}/>

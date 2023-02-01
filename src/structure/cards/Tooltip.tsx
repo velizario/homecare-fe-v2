@@ -62,7 +62,7 @@ export default function Tooltip({ children, tooltipText, styles }: TooltipProps)
       <FloatingPortal>
         {open && (
           <div
-            className={classNames("Tooltip max-w-[200px] justify-center text-center shadow-lg ring-1 ring-black ring-opacity-5 rounded-md px-2 py-1 border bg-white text-gray-700 text-xs", styles || "")}
+            className={classNames("Tooltip max-w-[200px] justify-center text-center shadow-lg ring-1 ring-black ring-opacity-5 rounded-md px-2 py-1 border bg-white text-gray-700 text-xs", styles ?? "")}
             ref={refs.setFloating}
             style={{
               // Positioning styles

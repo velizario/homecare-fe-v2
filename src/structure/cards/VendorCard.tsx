@@ -1,14 +1,11 @@
-import { StarIcon } from "@heroicons/react/20/solid";
+import { StarIcon , ChevronRightIcon } from "@heroicons/react/20/solid";
 import classNames from "../../helpers/classNames";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 import VendorPrices from "./VendorPrices";
 
 const userRating = 5;
 
 export default function VendorCard() {
-    const tagsRef = useRef<null | HTMLDivElement>(null)
     return (
         <div>
             <div className="shadow-order hover:shadow-order-hover p-4 bg-white rounded-md gap-x-2 sm:gap-x-4 grid grid-cols-[min-content_1fr]">
@@ -46,7 +43,7 @@ export default function VendorCard() {
                 </div>
                 {/* about */}
                 <div className="mt-4 col-start-1 row-start-3 col-span-2">
-                    <p className="text-gray-800 text-sm leading-normal line-clamp-4">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                    <p className="text-gray-800 text-sm leading-normal line-clamp-4">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don&apos;t look even slightly believable.</p>
                 </div>
                 {/* more info */}
                 {/* prices */}

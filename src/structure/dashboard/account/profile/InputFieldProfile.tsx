@@ -5,7 +5,7 @@ export interface InputFieldProfileType {
     children: JSX.Element;
   }
 
-const InputFieldProfileToggler: React.FC<InputFieldProfileType> = ({scope, children}) => {
+const InputFieldProfileToggler = ({scope, children}: InputFieldProfileType) => {
     const serviceType = userServiceType();
     const providerType = userProviderType();
 

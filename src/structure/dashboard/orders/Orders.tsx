@@ -9,12 +9,12 @@ const tabs = [
 ]
 
 export default function Orders() {
-    let location = useLocation();
+    const location = useLocation();
 
     const defaultTab = tabs.find(tab => tab.href.includes(location.pathname))?.name
     return (
         <div className="px-2 md:px-6 lg:px-8">
-            <TabsMenu tabs={tabs} defaultTab={defaultTab || "График"} />
+            <TabsMenu tabs={tabs} defaultTab={defaultTab ?? "График"} />
             <Routes>
                 <Route path="/" element={<OrderSchedule/>}/>
                 <Route path="schedule" element={<OrderSchedule />} />

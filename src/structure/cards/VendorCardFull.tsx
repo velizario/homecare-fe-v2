@@ -16,7 +16,8 @@ import VendorPrices from "./VendorPrices";
 
 export default function VendorCardFull() {
     const [sidebarOpen, setSidebarOpen] = useState(false)
-
+    // TODO do something with this var
+    console.log(sidebarOpen)
     return (
         <>
             <Header setSidebarOpen={setSidebarOpen} />

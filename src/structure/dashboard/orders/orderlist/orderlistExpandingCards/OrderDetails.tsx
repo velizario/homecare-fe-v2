@@ -1,7 +1,8 @@
 import { Transition } from '@headlessui/react'
-import { ClockIcon, MapPinIcon, ChevronRightIcon, ChevronUpIcon, EnvelopeIcon, ChatBubbleBottomCenterTextIcon, CalendarDaysIcon, CalendarIcon, ListBulletIcon, HomeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
-import { Fragment, useState } from 'react'
-import { Order } from './Orderlist';
+import { ClockIcon, MapPinIcon, ChatBubbleBottomCenterTextIcon, CalendarIcon, ListBulletIcon, HomeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react'
+import classNames from '../../../../../helpers/classNames';
+import { type Order } from './Orderlist';
 
 interface OrderDetailsProps {
     order: Order;
@@ -15,8 +16,8 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
         <div className="relative ring-1 ring-indigo-50 w-full max-w-xl shadow-order hover:shadow-order-hover hover:transition-shadow  rounded-md overflow-hidden">
             {/* Order summary */}
             {/* <div className="absolute top-0 bottom-0 left-0 h-full w-2 bg-indigo-200 z-20"></div> */}
-            <div onClick={() => setIsExpanded((isExpanded) => !isExpanded)} className="relative z-30 flex flex-col gap-3 p-3 pb-4 pl-5 pr-7 cursor-pointer ">
-                <div className={`" absolute bottom-0 left-6 right-4 bg-gray-200 h-px " ${!isExpanded && 'hidden'}`}></div>
+            <div onClick={() => { setIsExpanded((isExpanded) => !isExpanded); }} className="relative z-30 flex flex-col gap-3 p-3 pb-4 pl-5 pr-7 cursor-pointer ">
+                <div className={classNames(" absolute bottom-0 left-6 right-4 bg-gray-200 h-px ", !isExpanded ? 'hidden' : "")}></div>
                 <div className="flex gap-3 rounded-2xl">
                     <div className="flex flex-row gap-1 text-gray-500 items-center">
                         <ClockIcon className="h-5 w-5" />
@@ -36,7 +37,7 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
                         </span>
                     </div>
                 </div>
-                <ChevronDownIcon className={`${isExpanded && '-rotate-180'} 'p-1  text-blue-700 cursor-pointer h-6 w-6 rounded-full flex-shrink-0 z-1 absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 transition-all duration-200 rotate-0'`} />
+                <ChevronDownIcon className={classNames("p-1  text-blue-700 cursor-pointer h-6 w-6 rounded-full flex-shrink-0 z-1 absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 transition-all duration-200 rotate-0", isExpanded ? '-rotate-180' : "" )} />
             </div>
             {/* Order details */}
             <div className="ml-6 mr-4 overflow-hidden">
@@ -96,7 +97,7 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
                         </button>
                         <button
                             type="button"
-                            onClick={() => setIsExpanded((isExpanded) => !isExpanded)}
+                            onClick={() => { setIsExpanded((isExpanded) => !isExpanded); }}
                             className="inline-flex items-center rounded   bg-white px-2.5 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900"
                         >
                             Затвори

@@ -11,11 +11,6 @@ import Chat from './chat/Chat';
 import Orders from './orders/Orders';
 import Account from './account/Account';
 
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
-}
-
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -62,7 +57,7 @@ export default function Dashboard() {
                       <button
                         type="button"
                         className="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        onClick={() => setSidebarOpen(false)}
+                        onClick={() => { setSidebarOpen(false); }}
                       >
                         <span className="sr-only">Close sidebar</span>
                         <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />

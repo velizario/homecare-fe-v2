@@ -1,6 +1,4 @@
-import Filters from "../../utilityComponents/Filters";
 import VendorCard from "../cards/VendorCard";
-import Header from "../header/Header";
 
 // Filters should be:
 // Район
@@ -121,7 +119,7 @@ export default function VendorList() {
                                         <button
                                             type="button"
                                             className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                                            onClick={() => setMobileFiltersOpen(false)}
+                                            onClick={() => { setMobileFiltersOpen(false); }}
                                         >
                                             <span className="sr-only">Close menu</span>
                                             <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -245,7 +243,7 @@ export default function VendorList() {
                             <button
                                 type="button"
                                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-                                onClick={() => setMobileFiltersOpen(true)}
+                                onClick={() => { setMobileFiltersOpen(true); }}
                             >
                                 <span className="sr-only">Filters</span>
                                 <FunnelIcon className="h-5 w-5" aria-hidden="true" />

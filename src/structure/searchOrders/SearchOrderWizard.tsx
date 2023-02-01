@@ -1,10 +1,10 @@
-import { MinusIcon, PlusCircleIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { SelectionOption } from "../../helpers/types";
+import { type SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
-import TransitionWrapper from "../../utilityComponents/TransitionWrapper";
-import CardChoice from "../../utilityComponents/TagSelectGroup";
 import RadioGroup from "../../utilityComponents/RadioGroup";
+import CardChoice from "../../utilityComponents/TagSelectGroup";
+import TransitionWrapper from "../../utilityComponents/TransitionWrapper";
 
 
 
@@ -14,7 +14,7 @@ const serviceTypeChoices: SelectionOption[] = [
     { id: "3", name: 'Почистване след ремонт', description: "Рязане на кабели и промиване с чист спирт" },
 ]
 
-const additionalServiceChoices: { [key: string]: SelectionOption[] } = {
+const additionalServiceChoices: Record<string, SelectionOption[]> = {
     "1": [
         { id: "1", name: 'Миене на печка' },
         { id: "4", name: 'Миене на хладилник' },
@@ -104,14 +104,14 @@ export default function SearchOrderWizard() {
     const [areaSize, setareaSize] = useState<string | undefined>()
     const [serviceDays, setServiceDays] = useState<Set<string>>(new Set())
     const [serviceHours, setServiceHours] = useState<Set<string>>(new Set())
-    const [district, setDistrict] = useState<SelectionOption[] | {}[]>([])
+    const [district, setDistrict] = useState<SelectionOption[] | Array<Record<string, any>>>([])
 
     // useEffect(() => {
     //     nextStep()
     // }, [serviceMode, serviceType, areaSize, serviceDays, serviceHours, district])
 
     const toggleSelection = (selection: string | undefined, setSelection: React.Dispatch<React.SetStateAction<Set<string>>>) => {
-        if (!selection) return;
+        if (selection == null) return;
         setSelection((current) => {
             const updated = new Set(current)
             updated.has(selection) ? updated.delete(selection) : updated.add(selection)
@@ -154,7 +154,7 @@ export default function SearchOrderWizard() {
             setServiceHours(new Set([]));
             return;
         }
-        let btnChoices = new Set(ServiceHourChoices.filter(choice => {
+        const btnChoices = new Set(ServiceHourChoices.filter(choice => {
             switch (filterWord) {
                 case "morning":
                     return choice.name <= "12:00";
@@ -172,8 +172,8 @@ export default function SearchOrderWizard() {
         })
     }
 
-    const handleDistrict: React.Dispatch<React.SetStateAction<SelectionOption[] | {}[]>> = (e) => {
-        // setDistrict(e.currentTarget.dataset.id)
+    const handleDistrict: React.Dispatch<React.SetStateAction<SelectionOption[] | Array<Record<string, any>>>> = (e) => {
+        setDistrict(e)
     }
 
     return (
@@ -188,7 +188,7 @@ export default function SearchOrderWizard() {
             <TransitionWrapper visible={active === 2} btnNext={nextStep}>
                 <div>
                     <p className="text-2xl font-light text-gray-900 pb-8">Ще имате ли нужда от?</p>
-                    <CardChoice options={additionalServiceChoices[serviceType || "1"]} onClick={handleAdditionalServices} activeId={additionalServices} styles="grid"></CardChoice>
+                    <CardChoice options={additionalServiceChoices[serviceType ?? "1"]} onClick={handleAdditionalServices} activeId={additionalServices} styles="grid"></CardChoice>
                 </div>
             </TransitionWrapper>
             <TransitionWrapper visible={active === 3} btnNext={nextStep}>

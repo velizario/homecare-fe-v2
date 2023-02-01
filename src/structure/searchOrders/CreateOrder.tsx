@@ -1,16 +1,12 @@
 import {
-    MinusIcon,
-    PlusCircleIcon,
     PlusIcon,
-    XMarkIcon,
+    XMarkIcon
 } from "@heroicons/react/24/outline";
-import { useEffect, useRef, useState } from "react";
-import { SelectionOption } from "../../helpers/types";
+import { useState } from "react";
+import { type SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
-import TransitionWrapperBuildUp from "../../utilityComponents/TransitionWrapperBuildUp";
-import CardChoice from "../../utilityComponents/TagSelectGroup";
 import RadioGroup from "../../utilityComponents/RadioGroup";
-import debounce from "lodash.debounce";
+import CardChoice from "../../utilityComponents/TagSelectGroup";
 import Toggle from "./ToggleInput";
 
 const serviceTypeChoices: SelectionOption[] = [
@@ -31,7 +27,7 @@ const serviceTypeChoices: SelectionOption[] = [
     },
 ];
 
-const additionalServiceChoices: { [key: string]: SelectionOption[] } = {
+const additionalServiceChoices: Record<string, SelectionOption[]> = {
     "1": [
         { id: "1", name: "Миене на печка" },
         { id: "4", name: "Миене на хладилник" },
@@ -112,7 +108,6 @@ const ServiceHourChoices: SelectionOption[] = [
 ];
 
 export default function CreateOrder() {
-    const [active, setActive] = useState(1);
     const [serviceMode, setServiceMode] = useState<string | undefined>();
     const [additionalServices, setAdditionalServices] = useState<Set<string>>(
         new Set()
@@ -121,13 +116,13 @@ export default function CreateOrder() {
     const [areaSize, setareaSize] = useState<string | undefined>();
     const [serviceDays, setServiceDays] = useState<Set<string>>(new Set());
     const [serviceHours, setServiceHours] = useState<Set<string>>(new Set());
-    const [district, setDistrict] = useState<SelectionOption[] | {}[]>([]);
+    const [district, setDistrict] = useState<SelectionOption[] | Array<Record<string, any>>>([]);
 
     const toggleSelection = (
         selection: string | undefined,
         setSelection: React.Dispatch<React.SetStateAction<Set<string>>>
     ) => {
-        if (!selection) return;
+        if (typeof selection === "undefined") return;
         setSelection((current) => {
             const updated = new Set(current);
             updated.has(selection)
@@ -145,10 +140,6 @@ export default function CreateOrder() {
         e
     ) => {
         toggleSelection(e.currentTarget.dataset.id, setAdditionalServices);
-    };
-
-    const handleAdditionalServices2 = (id: string) => {
-        toggleSelection(id, setAdditionalServices);
     };
 
     const handleServiceType = (e: string) => {
@@ -176,7 +167,7 @@ export default function CreateOrder() {
             setServiceHours(new Set([]));
             return;
         }
-        let btnChoices = new Set(
+        const btnChoices = new Set(
             ServiceHourChoices.filter((choice) => {
                 switch (filterWord) {
                     case "morning":
@@ -197,9 +188,9 @@ export default function CreateOrder() {
     };
 
     const handleDistrict: React.Dispatch<
-        React.SetStateAction<SelectionOption[] | {}[]>
+        React.SetStateAction<SelectionOption[] | Array<Record<string, any>>>
     > = (e) => {
-        // setDistrict(e.currentTarget.dataset.id)
+        setDistrict(e)
     };
 
     return (
@@ -217,7 +208,7 @@ export default function CreateOrder() {
                 Ще имате ли нужда от?
             </h2>
             <Toggle
-                options={additionalServiceChoices[serviceType || "1"]}
+                options={additionalServiceChoices[serviceType ?? "1"]}
                 onClick={handleAdditionalServices}
                 activeId={additionalServices}
             />

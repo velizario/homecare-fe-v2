@@ -1,4 +1,4 @@
-import { LegacyRef, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Combobox } from '@headlessui/react'
 import Badge from '../../../../utilityComponents/Badge';
@@ -34,7 +34,7 @@ function classNames(...classes: string[]) {
 
 export default function ComboSelectBox() {
     const [query, setQuery] = useState('')
-    const [selectedPerson, setSelectedPerson] = useState<Person[] | {}[]>([])
+    const [selectedPerson, setSelectedPerson] = useState<Person[] | Array<Record<string, any>>>([])
     const [value, setValue] = useState("")
 
 
@@ -47,7 +47,7 @@ export default function ComboSelectBox() {
 
     const scrollDropdownIntoView = (behavior: "auto" | "smooth" = "auto") => {
         const el = comboRef.current;
-        if (!el) return
+        if (el == null) return
         const scrollGap = el.getBoundingClientRect().bottom - window.innerHeight
         if (scrollGap > 0)
             comboRef.current?.scrollIntoView({ block: "end", inline: "nearest", behavior })
@@ -65,15 +65,12 @@ export default function ComboSelectBox() {
 
 
         <Combobox as="div" value={selectedPerson} onChange={setSelectedPerson} multiple nullable className="sm:col-span-3 coverage-combo-box">
-
-            {({ open }) => (
-
                 <>
                     <div className='flex flex-col md:flex-row gap-2 items-start md:justify-between md:items-center'>
                         <p className="block text-sm font-normal text-gray-900">Квартали, в които работите</p>
                         <button
                             type="button"
-                            onClick={() => setSelectedPerson(selected => selected.length !== people.length ? people : [])}
+                            onClick={() => { setSelectedPerson(selected => selected.length !== people.length ? people : []); }}
                             className="inline-flex underline items-center h-full text-xs font-medium text-gray-600  hover:text-black "
                         >
                             Избирам всички
@@ -82,10 +79,10 @@ export default function ComboSelectBox() {
                     <div className="relative mb-2">
                         <Combobox.Input
                             className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                            onChange={(event) => setQuery(event.target.value)}
-                            onBlur={() => setValue("")}
+                            onChange={(event) => { setQuery(event.target.value); }}
+                            onBlur={() => { setValue(""); }}
                             displayValue={() => value}
-                            onFocus={() => setQuery("")}
+                            onFocus={() => { setQuery(""); }}
                         />
                         <Combobox.Button onClick={() => setTimeout(() => {
                             scrollDropdownIntoView("smooth")
@@ -129,8 +126,6 @@ export default function ComboSelectBox() {
                         {selectedPerson.map((person) => "name" in person && <Badge key={person.id} styles="whitespace-nowrap">{person?.name}</Badge>)}
                     </Combobox.Label>
                 </>
-            )
-            }
         </Combobox >
     )
 }

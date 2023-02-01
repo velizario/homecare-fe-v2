@@ -1,4 +1,4 @@
-import { SelectionOption } from "../helpers/types";
+import { type SelectionOption } from "../helpers/types";
 
 interface RadioGroupProps {
   options: SelectionOption[];

@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import { ArrowLongUpIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { ArrowLongDownIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import DatePicker from '../structure/dashboard/orders/orderschedule/DatePicker'
 
 const sortOptions = [
@@ -93,7 +93,7 @@ export default function Filters() {
                   <button
                     type="button"
                     className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                    onClick={() => setOpen(false)}
+                    onClick={() => { setOpen(false); }}
                   >
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -213,7 +213,7 @@ export default function Filters() {
             <button
               type="button"
               className="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
-              onClick={() => setOpen(true)}
+              onClick={() => { setOpen(true); }}
             >
               Filters
             </button>
@@ -221,7 +221,7 @@ export default function Filters() {
             <div className="hidden sm:block">
               <div className="flow-root">
                 <Popover.Group className="-mx-4 flex items-center divide-x divide-gray-200">
-                  {filters.map((section, sectionIdx) => (
+                  {filters.map((section) => (
                     <Popover key={section.name} className="relative inline-block px-4 text-left">
                       <Popover.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                         <span>{section.name}</span>
@@ -246,7 +246,7 @@ export default function Filters() {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Popover.Panel className={classNames(section.id !== 'date' && "max-h-64 overflow-y-auto" || "", "border absolute right-0 z-20 mt-2 origin-top-right rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none")}>
+                        <Popover.Panel className={classNames(section.id !== 'date' ? "max-h-64 overflow-y-auto" : "", "border absolute right-0 z-20 mt-2 origin-top-right rounded-md bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none")}>
                           {({ close }) => (
 
                             <form className="space-y-4 relative">

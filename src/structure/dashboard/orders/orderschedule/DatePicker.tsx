@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import 'react-day-picker/dist/style.css';
 import './DatePicker.css'
-import { addDays, format } from 'date-fns';
-import { DateRange, DayPicker } from 'react-day-picker';
+import { type DateRange, DayPicker } from 'react-day-picker';
 
 const pastMonth = new Date();
 
@@ -39,15 +38,15 @@ export default function DatePicker({ close }: DatePickerProps) {
       <div className="flex justify-between pl-2">
         <button
           type="button"
-          onClick={() => close()}
-          disabled={!range?.from}
+          onClick={() => { close(); }}
+          disabled={(range?.from) == null}
           className="inline-flex disabled:text-gray-400 items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:[&:not(:disabled)]:bg-gray-50 focus:outline-none"
         >
           Избери
         </button>
         <button
           type="button"
-          disabled={!range?.from}
+          disabled={(range?.from) == null}
           className="inline-flex items-center rounded  border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-500 hover:[&:not(:disabled)]:text-indigo-500 focus:outline-none"
         >
           Изчисти

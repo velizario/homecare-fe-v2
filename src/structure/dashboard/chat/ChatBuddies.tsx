@@ -40,10 +40,10 @@ const chatBuddies = [
   },
 ];
 
-type ChatBuddiesProps = {
+interface ChatBuddiesProps {
     toggleChat: () => void;
     chatIsActive: boolean;
-};
+}
 
 export default function ChatBuddies({ toggleChat, chatIsActive }: ChatBuddiesProps) {
   const [active, setActive] = useState(1);
@@ -60,7 +60,7 @@ export default function ChatBuddies({ toggleChat, chatIsActive }: ChatBuddiesPro
           {chatBuddies.map((person) => (
             <li
               key={person.id}
-              onClick={() => handleBuddySelect(person.id)}
+              onClick={() => { handleBuddySelect(person.id); }}
               className={classNames(
                 person.id === active ? "bg-indigo-50" : "",
                 "group hover:bg-indigo-50 flex justify-between cursor-pointer border-b border-indigo-100  px-4"
@@ -85,7 +85,7 @@ export default function ChatBuddies({ toggleChat, chatIsActive }: ChatBuddiesPro
                   </a>
                 </div>
               </div>
-              {person.unread ? (
+              {person.unread > 0 ? (
                 <span
                   className={classNames(
                     person.id === active ? "bg-indigo-200" : "bg-indigo-50",

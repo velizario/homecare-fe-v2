@@ -1,4 +1,4 @@
-import { UserProviders, UserServices, userServiceType, userProviderType } from '../../../../store/userTypeStore'
+import { type UserProviders, type UserServices, userServiceType, userProviderType } from '../../../../store/userTypeStore'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -27,7 +27,7 @@ export default function UserTypeSelection() {
             {serviceMode.map((option) => (
               <div
                 key={option.id}
-                onClick={() => userServiceType.setState(option.id as UserServices)}
+                onClick={() => { userServiceType.setState(option.id as UserServices); }}
                 className={classNames(
                   serviceType === option.id
                     ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
@@ -48,7 +48,7 @@ export default function UserTypeSelection() {
           {providerMode.map((option, selectionId) => (
             <div
               key={option.id}
-              onClick={() => userProviderType.setState(option.id as UserProviders)}
+              onClick={() => { userProviderType.setState(option.id as UserProviders); }}
               className={classNames(
                 selectionId === 0 ? 'rounded-tl-md rounded-tr-md' : '',
                 selectionId === providerMode.length - 1

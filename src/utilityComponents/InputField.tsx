@@ -12,7 +12,7 @@ interface InputFieldProps {
 
 export default function InputField({ label, name, id, autoComplete, className, defaultValue, include }: InputFieldProps) {
     return (
-        <div className={classNames(!include && (typeof include !== "undefined") ? "hidden" : "", className)}>
+        <div className={classNames(include === undefined && (typeof include !== "undefined") ? "hidden" : "", className)}>
             <label htmlFor={name} className="block text-sm font-normal text-gray-900">
                 {label}
             </label>

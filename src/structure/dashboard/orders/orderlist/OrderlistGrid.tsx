@@ -2,9 +2,9 @@ import OrderItem from "./OrderItem";
 import classNames from "../../../../helpers/classNames";
 import ContextMenu from "../../../../utilityComponents/ContextMenu";
 import Filters from "../../../../utilityComponents/Filters";
-import { ClipboardDocumentCheckIcon, HomeIcon, UserIcon } from "@heroicons/react/24/outline";
+import { ClipboardDocumentCheckIcon, HomeIcon, UserIcon , MapPinIcon } from "@heroicons/react/24/outline";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { MapPinIcon } from "@heroicons/react/24/outline";
+
 
 const people = [
   {
@@ -105,9 +105,6 @@ const people = [
   },
   // More people...
 ];
-
-const numCols = 6;
-const numRows = people.length / numCols + (people.length % numCols > 0 ? 1 : 0);
 
 export default function OrderlistGrid() {
   return (

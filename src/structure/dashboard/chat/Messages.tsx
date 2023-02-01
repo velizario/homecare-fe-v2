@@ -1,11 +1,11 @@
 import { FaceSmileIcon, ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import classNames from "../../../helpers/classNames";
 import data from '@emoji-mart/data/sets/14/native.json'
 import Picker from '@emoji-mart/react'
 import throttle from 'lodash.throttle'
-import React from "react";
+
 
 const messages = [
   {
@@ -79,10 +79,10 @@ const messages = [
   },
 ];
 
-type MessagesProps = {
+interface MessagesProps {
   toggleChat: () => void;
   chatIsActive: boolean;
-};
+}
 
 interface Emojis {
   id: string;
@@ -98,15 +98,14 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
   
   const [emojiActive, setEmojiActive] = useState(false);
   const [messageText, setMessageText] = useState("");
-  const [messageAdded, setMessageAdded] = useState(1);
   const [chatContent, setChatContent] = useState(messages);
   const inputRef = useRef<null | HTMLTextAreaElement>(null);
   const formRef = useRef<null | HTMLFormElement>(null);
   const chatRef = useRef<null | HTMLUListElement>(null);
-  let emojiRE = /(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji_Presentation}|\u{FE0F}|\u{200d})/gu;
+  const emojiRE = /(\p{Emoji_Presentation}|\p{Extended_Pictographic}|\p{Emoji_Presentation}|\u{FE0F}|\u{200d})/gu;
   
   const scrollChatToBottom = () => {
-    if (!chatRef.current) return;
+    if (chatRef.current == null) return;
     chatRef.current.scrollTo({
       left: 0,
       top: chatRef.current.scrollHeight,
@@ -134,15 +133,15 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
   
   useLayoutEffect(() => {
     // adjust automatically chat input height and keep chat window scrolled at the end
-    if (!inputRef.current || !chatRef.current) return;
+    if ((inputRef.current == null) || (chatRef.current == null)) return;
     let scrollTo;
     // detect scrolled position of chat window 
-    let atBottom = chatRef.current?.scrollHeight - chatRef.current?.clientHeight - chatRef.current?.scrollTop
+    const atBottom = chatRef.current?.scrollHeight - chatRef.current?.clientHeight - chatRef.current?.scrollTop
     // save chatwindow height if it is scrolled at the bottom
     if (atBottom < 10) scrollTo = chatRef.current?.scrollHeight
     // set automatically input height based on the text inside. Minimum height is 36px
     inputRef.current.style.height = '36px';
-    inputRef.current.style.height = inputRef.current.scrollHeight + 'px';;
+    inputRef.current.style.height = inputRef.current.scrollHeight.toString() + 'px';;
     // push chat window if it was at the bottom, in case input height has changed
     if (atBottom < 10)
       chatRef.current.scrollTo({
@@ -157,7 +156,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
 
   const addMessage = () => {
     if (messageText.length === 0) return;
-    let newId = chatContent[chatContent.length - 1].id + 1;
+    const newId = chatContent[chatContent.length - 1].id + 1;
     setChatContent(chat =>
       [...chat, {
         id: newId,
@@ -166,7 +165,6 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         type: "in",
       }]);
     setMessageText("")
-    setMessageAdded(count => count + 1)
   }
 
   const toggleEmoji = throttle((toggle: "on" | "off" | "toggle") => {
@@ -251,7 +249,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
       </ul>
       {/* Chat input */}
       <div className="flex items-end gap-2 px-4">
-        <form ref={formRef} onSubmit={() => addMessage()} className="flex w-full gap-2 items-end">
+        <form ref={formRef} onSubmit={() => { addMessage(); }} className="flex w-full gap-2 items-end">
           <div className="h-10 flex items-center relative">
             <FaceSmileIcon onClick={() => toggleEmoji("toggle")} className="cursor-pointer h-7 w-7 text-indigo-500" />
             <div className={classNames(emojiActive ? "block" : "hidden", "absolute transform bottom-0 -translate-y-11")} >
@@ -270,7 +268,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
             />
           </div>
           <button type="submit" className="h-10">
-            <PaperAirplaneIcon onClick={() => addMessage()} className="h-9 w-9 p-1 text-indigo-500 cursor-pointer"></PaperAirplaneIcon>
+            <PaperAirplaneIcon onClick={() => { addMessage(); }} className="h-9 w-9 p-1 text-indigo-500 cursor-pointer"></PaperAirplaneIcon>
           </button>
         </form>
       </div>

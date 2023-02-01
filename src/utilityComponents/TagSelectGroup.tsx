@@ -1,4 +1,4 @@
-import { SelectionOption } from "../helpers/types";
+import { type SelectionOption } from "../helpers/types";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -15,7 +15,7 @@ export default function UserTypeSelection({ activeId, onClick, options, styles }
 
 
   return (
-    <div className={classNames("sm:col-span-4 flex flex-wrap gap-3 whitespace-nowrap max-w-md mt-3", styles || "")}>
+    <div className={classNames("sm:col-span-4 flex flex-wrap gap-3 whitespace-nowrap max-w-md mt-3", styles ?? "")}>
       {options.map((option) => (
         <div
           key={option.id}
