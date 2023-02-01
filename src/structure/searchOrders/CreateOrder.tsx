@@ -1,12 +1,10 @@
-import {
-    PlusIcon,
-    XMarkIcon
-} from "@heroicons/react/24/outline";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { type SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
 import RadioGroup from "../../utilityComponents/RadioGroup";
 import CardChoice from "../../utilityComponents/TagSelectGroup";
+import RangeSlider from "./RangeSlider";
 import Toggle from "./ToggleInput";
 
 const serviceTypeChoices: SelectionOption[] = [
@@ -116,7 +114,9 @@ export default function CreateOrder() {
     const [areaSize, setareaSize] = useState<string | undefined>();
     const [serviceDays, setServiceDays] = useState<Set<string>>(new Set());
     const [serviceHours, setServiceHours] = useState<Set<string>>(new Set());
-    const [district, setDistrict] = useState<SelectionOption[] | Array<Record<string, any>>>([]);
+    const [district, setDistrict] = useState<
+        SelectionOption[] | Array<Record<string, any>>
+    >([]);
 
     const toggleSelection = (
         selection: string | undefined,
@@ -190,7 +190,7 @@ export default function CreateOrder() {
     const handleDistrict: React.Dispatch<
         React.SetStateAction<SelectionOption[] | Array<Record<string, any>>>
     > = (e) => {
-        setDistrict(e)
+        setDistrict(e);
     };
 
     return (
@@ -273,11 +273,13 @@ export default function CreateOrder() {
             <h2 id="step-6" className="mt-10 text-xl text-gray-900">
                 Каква площ ще почистваме (кв. м.)?
             </h2>
-            <RadioGroup
+            <RangeSlider/>
+
+            {/* <RadioGroup
                 options={areaSizeChoices}
                 onClick={handleAreaSize}
                 activeId={areaSize}
-            ></RadioGroup>
+            ></RadioGroup> */}
             <h2 id="step-7" className="mt-10 text-xl text-gray-900">
                 Къде ще почистваме?
             </h2>

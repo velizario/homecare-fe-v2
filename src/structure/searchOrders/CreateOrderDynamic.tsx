@@ -226,7 +226,6 @@ export default function CreateOrderDynamic() {
                 onClick={handleAdditionalServices}
                 activeId={additionalServices}
             />
-
             <TransitionWrapperBuildUp visible={active >= 1}>
                 <div>
                     <p
