@@ -237,6 +237,7 @@ export default function CreateOrderDynamic() {
                     </p>
                     {/* <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice> */}
                     <RadioGroup
+                        name="service-type"
                         options={serviceTypeChoices}
                         activeId={serviceType}
                         onClick={handleServiceType}

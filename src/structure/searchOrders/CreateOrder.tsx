@@ -1,9 +1,10 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type SelectionOption } from "../../helpers/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
 import RadioGroup from "../../utilityComponents/RadioGroup";
 import CardChoice from "../../utilityComponents/TagSelectGroup";
+import Footer from "../footer/Footer";
 import RangeSlider from "./RangeSlider";
 import Toggle from "./ToggleInput";
 
@@ -52,13 +53,17 @@ const serviceDayChoices: SelectionOption[] = [
 ];
 
 const areaSizeChoices: SelectionOption[] = [
-    { id: "1", name: "< 50 кв/м" },
-    { id: "2", name: "51 - 70 кв/м" },
-    { id: "3", name: "71 - 90 кв/м" },
-    { id: "4", name: "91 - 110 кв/м" },
-    { id: "5", name: "111 - 130 кв/м" },
-    { id: "6", name: "131 - 150 кв/м" },
-    { id: "7", name: "> 150 кв/м" },
+    { id: "1", name: "0" },
+    { id: "2", name: "20" },
+    { id: "3", name: "40" },
+    { id: "4", name: "60" },
+    { id: "5", name: "80" },
+    { id: "6", name: "100" },
+    { id: "7", name: "120" },
+    { id: "8", name: "140" },
+    { id: "9", name: "160" },
+    { id: "10", name: "180" },
+    { id: "11", name: "200" },
 ];
 
 const districtChoices: SelectionOption[] = [
@@ -111,7 +116,7 @@ export default function CreateOrder() {
         new Set()
     );
     const [serviceType, setServiceType] = useState<string | undefined>();
-    const [areaSize, setareaSize] = useState<string | undefined>();
+    const [areaSize, setareaSize] = useState<string>("0");
     const [serviceDays, setServiceDays] = useState<Set<string>>(new Set());
     const [serviceHours, setServiceHours] = useState<Set<string>>(new Set());
     const [district, setDistrict] = useState<
@@ -146,10 +151,6 @@ export default function CreateOrder() {
         setServiceType(e);
     };
 
-    const handleAreaSize = (e: string) => {
-        setareaSize(e);
-    };
-
     const handleServiceDays: React.MouseEventHandler<HTMLDivElement> = (e) => {
         toggleSelection(e.currentTarget.dataset.id, setServiceDays);
     };
@@ -174,8 +175,6 @@ export default function CreateOrder() {
                         return choice.name <= "12:00";
                     case "afternoon":
                         return choice.name >= "12:30";
-                    // case "all":
-                    //     return true;
                     default:
                         return false;
                 }
@@ -194,15 +193,16 @@ export default function CreateOrder() {
     };
 
     return (
-        <div className="relative my-10 mx-auto flex max-w-2xl flex-col border-t py-2 px-4">
+        <div className="relative my-10 mx-auto flex w-full max-w-md flex-col border-t py-2 px-4">
             <h2 id="step-1" className="mt-10 text-xl text-gray-900">
                 Каква услуга търсите?
             </h2>
-            {/* <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice> */}
             <RadioGroup
+                name="service-type"
                 options={serviceTypeChoices}
                 activeId={serviceType}
                 onClick={handleServiceType}
+                styles=""
             />
             <h2 id="step-2" className="mt-10 text-xl text-gray-900">
                 Ще имате ли нужда от?
@@ -211,14 +211,17 @@ export default function CreateOrder() {
                 options={additionalServiceChoices[serviceType ?? "1"]}
                 onClick={handleAdditionalServices}
                 activeId={additionalServices}
+                styles=""
             />
             <h2 id="step-3" className="mt-10 text-xl text-gray-900">
                 Колко често ще са посещенията?
             </h2>
             <RadioGroup
+                name="service-mode"
                 options={serviceModeChoices}
                 onClick={handleServiceMode}
                 activeId={serviceMode}
+                styles=""
             ></RadioGroup>
             <h2 id="step-4" className="mt-10 text-xl text-gray-900">
                 В кои дни искате да са посещенията?
@@ -230,7 +233,7 @@ export default function CreateOrder() {
                 options={serviceDayChoices}
                 onClick={handleServiceDays}
                 activeId={serviceDays}
-                styles="grid grid-cols-2"
+                styles="grid grid-cols-2 "
             ></CardChoice>
             <h2 id="step-5" className="mt-10 text-xl text-gray-900">
                 В кои часове искате да са посещенията?
@@ -238,7 +241,7 @@ export default function CreateOrder() {
             <p className="text-xs text-gray-600">
                 (Изберете повече варианти, ако ви устройват)
             </p>
-            <div className="mt-3 flex max-w-md justify-between px-2">
+            <div className="mt-3 flex justify-between px-2">
                 <button
                     className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
                     data-id="morning"
@@ -268,27 +271,35 @@ export default function CreateOrder() {
                 options={ServiceHourChoices}
                 onClick={handleServiceHours}
                 activeId={serviceHours}
-                styles="grid grid-cols-3"
+                styles="grid grid-cols-3 "
             ></CardChoice>
-            <h2 id="step-6" className="mt-10 text-xl text-gray-900">
-                Каква площ ще почистваме (кв. м.)?
-            </h2>
-            <RangeSlider/>
-
-            {/* <RadioGroup
+            <div className="mt-10 flex items-center justify-between">
+                <h2 id="step-6" className="text-xl text-gray-900">
+                    Каква площ ще почистваме?
+                </h2>
+                <p className="mb-1 inline-block w-max rounded bg-gray-50 px-2 text-sm text-gray-700">
+                    <span>{areaSize}</span> кв. км
+                </p>
+            </div>
+            <RangeSlider
                 options={areaSizeChoices}
-                onClick={handleAreaSize}
                 activeId={areaSize}
-            ></RadioGroup> */}
+                onClick={setareaSize}
+                styles=""
+            />
+
             <h2 id="step-7" className="mt-10 text-xl text-gray-900">
                 Къде ще почистваме?
             </h2>
             <p className="text-xs text-gray-600">(Ориентировъчна локация)</p>
+            <input type="text" name="example" list="exampleList" />
             <ComboSelect
                 options={districtChoices}
                 selection={district}
                 handleChange={handleDistrict}
+                styles=""
             ></ComboSelect>
+            <Footer />
         </div>
     );
 }

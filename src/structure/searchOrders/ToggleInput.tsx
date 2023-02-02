@@ -6,11 +6,12 @@ interface ToggleInputProps {
   options: SelectionOption[];
   activeId: string | Set<string> | undefined;
   onClick: React.MouseEventHandler<HTMLElement>
+  styles? :string;
 }
 
-export default function ToggleInput({ options, activeId, onClick }: ToggleInputProps) {
+export default function ToggleInput({ options, activeId, onClick, styles }: ToggleInputProps) {
   return (
-    <div className='flex flex-col gap-6 max-w-md mt-3'>
+    <div className={classNames('flex flex-col gap-6 max-w-md mt-3', styles ?? "")}>
       {
         options.map(option => {
           const enabled = (activeId === option.id || (activeId instanceof Set && activeId.has(option.id)));

@@ -182,7 +182,7 @@ export default function SearchOrderWizard() {
                 <div>
                     <p className="text-2xl font-light text-gray-900 pb-8">Каква услуга търсите?</p>
                     {/* <CardChoice options={serviceTypeChoices} onClick={handleServiceType} activeId={serviceType} styles="grid"></CardChoice> */}
-                    <RadioGroup options={serviceTypeChoices} activeId={serviceType} onClick={handleServiceType}/>
+                    <RadioGroup name="service-type" options={serviceTypeChoices} activeId={serviceType} onClick={handleServiceType}/>
                 </div>
             </TransitionWrapper>
             <TransitionWrapper visible={active === 2} btnNext={nextStep}>
