@@ -13,6 +13,7 @@ import Header from './structure/header/Header';
 import { useState } from 'react';
 import SignIn from './structure/login/SignIn';
 import CreateOrder from './structure/searchOrders/CreateOrder';
+import Register from './structure/register/Register';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,6 +27,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route index element={<HomePage />} />
         <Route path='signin' element={<SignIn/>} />
+        <Route path='register' element={<Register/>} />
         <Route path='about' element={<About/>} />
         <Route path='contact' element={<Contact/>} />
         <Route path='dashboard/*' element={<Dashboard/>} />

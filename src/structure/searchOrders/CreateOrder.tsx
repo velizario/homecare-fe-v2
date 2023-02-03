@@ -209,7 +209,6 @@ export default function CreateOrder() {
                 options={serviceTypeChoices}
                 activeId={serviceType}
                 onClick={handleServiceType}
-                styles=""
             />
             <h2 id="step-2" className="mt-10 text-xl text-gray-900">
                 Ще имате ли нужда от?
@@ -228,7 +227,6 @@ export default function CreateOrder() {
                 options={serviceModeChoices}
                 onClick={handleServiceMode}
                 activeId={serviceMode}
-                styles=""
             ></RadioGroup>
             <h2 id="step-4" className="mt-10 text-xl text-gray-900">
                 В кои дни искате да са посещенията?

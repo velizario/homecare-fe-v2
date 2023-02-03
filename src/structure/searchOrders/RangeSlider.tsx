@@ -17,7 +17,7 @@ export default function RangeSlider({
 }: RangeSliderProps) {
     return (
         <div className={classNames("mt-1", styles ?? "")}>
-            <div className="flex justify-end whitespace-nowrap rounded px-2 text-sm font-medium leading-4 text-indigo-700">
+            <div className="flex justify-end whitespace-nowrap rounded px-2 font-medium leading-4 text-indigo-700">
                 <span>{activeId}</span>&nbsp;кв.км
             </div>
             <input
