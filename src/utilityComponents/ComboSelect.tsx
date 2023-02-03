@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Combobox } from "@headlessui/react";
-import Badge from "./Badge";
-import { type SelectionOption } from "../helpers/types";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { useRef, useState } from "react";
 import classNames from "../helpers/classNames";
+import { type SelectionOption } from "../helpers/types";
+import Badge from "./Badge";
 
 interface ComboSelectBoxProps {
     options: SelectionOption[];
@@ -47,7 +48,6 @@ export default function ComboSelect({
             });
     };
 
-
     // Mobile autoscroll fix
     const listener = () => {
         if (!window.visualViewport) return;
@@ -70,6 +70,7 @@ export default function ComboSelect({
     };
 
     const comboRef = useRef<null | HTMLUListElement>(null);
+    const comboInputRef = useRef<null | HTMLInputElement>(null);
 
     return (
         <Combobox
@@ -85,8 +86,23 @@ export default function ComboSelect({
         >
             {({ open }) => (
                 <>
-                    <div className="relative mb-2">
+                    <button>click me!</button>
+                    <div
+                        className={classNames(
+                            "relative mb-2 ui-open:fixed ui-open:top-0 ui-open:left-0 ui-open:z-20 ui-open:h-[100dvh] ui-open:w-full ui-open:bg-white ui-open:px-2",
+                            opened ? "absolute top-0 left-0" : ""
+                        )}
+                    >
+                        {open && (
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-xl text-gray-900">
+                                    Къде ще почистваме?
+                                </h2>
+                                <ChevronLeftIcon className="my-2 mr-2 h-5 w-5 cursor-pointer" />
+                            </div>
+                        )}
                         <Combobox.Input
+                            ref={comboInputRef}
                             className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                             onClick={() => setOpened(true)}
                             onChange={(event) => {
@@ -101,12 +117,8 @@ export default function ComboSelect({
                             }}
                         />
                         <Combobox.Button
-                            onClick={() => triggerMobileResize()
-                                // setTimeout(() => {
-                                //     scrollDropdownIntoView("smooth");
-                                // }, 100)
-                            }
-                            className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+
+                            className="absolute ui-open:hidden inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
                         >
                             <ChevronUpDownIcon
                                 className="h-5 w-5 text-gray-500"
@@ -170,8 +182,17 @@ export default function ComboSelect({
                             (person) =>
                                 "name" in person && (
                                     <Badge
+                                        onClick={() =>
+                                            handleChange(
+                                                selection.filter(
+                                                    (item) =>
+                                                        item.id !== person.id
+                                                )
+                                            )
+                                        }
                                         key={person.id}
                                         styles="whitespace-nowrap"
+                                        xMark={true}
                                     >
                                         {person?.name}
                                     </Badge>

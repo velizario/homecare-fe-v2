@@ -1,10 +1,10 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { type SelectionOption } from "../../helpers/types";
-import ComboSelect from "../../utilityComponents/ComboSelect";
 import RadioGroup from "../../utilityComponents/RadioGroup";
 import CardChoice from "../../utilityComponents/TagSelectGroup";
 import Footer from "../footer/Footer";
+import ComboSelectFullScreen from "./ComboSelectFullscreen";
 import RangeSlider from "./RangeSlider";
 import Toggle from "./ToggleInput";
 
@@ -67,21 +67,21 @@ const areaSizeChoices: SelectionOption[] = [
 ];
 
 const districtChoices: SelectionOption[] = [
-    { id: "1", name: "Leslie Alexander" },
-    { id: "2", name: "saf Alexander" },
-    { id: "3", name: "Lessaglie Alefjxander" },
-    { id: "4", name: "edfh Alexander" },
-    { id: "5", name: "Ledsadie Alefjxander" },
-    { id: "6", name: "Ledfhsljie Alexander" },
-    { id: "7", name: "Ledfhstfjjslie Alexander" },
-    { id: "8", name: "Ledfhssdglie Alexander" },
-    { id: "9", name: "Ledfhslie Alexander" },
-    { id: "10", name: "Ledfhdjslie Alexanjfder" },
-    { id: "11", name: "Ledfhslie Alexandfer" },
-    { id: "12", name: "Ledfhfgdjslie Alexander" },
-    { id: "13", name: "Ledfhfgjfslie Alejxandfgjer" },
-    { id: "14", name: "Ledfhslie Alefgjxander" },
-    { id: "15", name: "Ledfhslie Alexander" },
+    { id: "1", name: "Надежда 1" },
+    { id: "2", name: "Дружба" },
+    { id: "3", name: "Младост 1" },
+    { id: "4", name: "Младост 2" },
+    { id: "5", name: "Младост 3" },
+    { id: "6", name: "Младост 4" },
+    { id: "7", name: "Хладилника" },
+    { id: "8", name: "Овча Купел" },
+    { id: "9", name: "Витоша" },
+    { id: "10", name: "Лозенец" },
+    { id: "11", name: "Център" },
+    { id: "12", name: "Бояна" },
+    { id: "13", name: "Надежда 2" },
+    { id: "14", name: "Надежда 3" },
+    { id: "15", name: "Надежда 4" },
     // More users...
 ];
 
@@ -119,9 +119,9 @@ export default function CreateOrder() {
     const [areaSize, setareaSize] = useState<string>("0");
     const [serviceDays, setServiceDays] = useState<Set<string>>(new Set());
     const [serviceHours, setServiceHours] = useState<Set<string>>(new Set());
-    const [district, setDistrict] = useState<
-        SelectionOption[] | Array<Record<string, any>>
-    >([]);
+    const [district, setDistrict] = useState<SelectionOption[]>([]);
+
+    const cleaningRef = useRef<HTMLHeadingElement | null>(null)
 
     const toggleSelection = (
         selection: string | undefined,
@@ -186,10 +186,17 @@ export default function CreateOrder() {
         });
     };
 
-    const handleDistrict: React.Dispatch<
-        React.SetStateAction<SelectionOption[] | Array<Record<string, any>>>
-    > = (e) => {
-        setDistrict(e);
+    const handleDistrict = (selected: SelectionOption) => {
+        // if (newValue === undefined) {
+        //     setDistrict(districtChoices);
+        // } else
+        setDistrict((currentDistrict) => {
+            // if (!currentDistrict) return [newValue];
+            let itemFound = currentDistrict.find((item) => item.id === selected.id);
+            if (itemFound !== undefined)
+                return currentDistrict.filter((item) => item.id !== selected.id);
+            else return [...currentDistrict, selected];
+        });
     };
 
     return (
@@ -273,13 +280,10 @@ export default function CreateOrder() {
                 activeId={serviceHours}
                 styles="grid grid-cols-3 "
             ></CardChoice>
-            <div className="mt-10 flex items-center justify-between">
+            <div className="mt-10  items-center justify-between text-gray-100">
                 <h2 id="step-6" className="text-xl text-gray-900">
                     Каква площ ще почистваме?
                 </h2>
-                <p className="mb-1 inline-block w-max rounded bg-gray-50 px-2 text-sm text-gray-700">
-                    <span>{areaSize}</span> кв. км
-                </p>
             </div>
             <RangeSlider
                 options={areaSizeChoices}
@@ -288,17 +292,24 @@ export default function CreateOrder() {
                 styles=""
             />
 
-            <h2 id="step-7" className="mt-10 text-xl text-gray-900">
+            <h2 ref={cleaningRef} id="step-7" className="mt-10 text-xl text-gray-900">
                 Къде ще почистваме?
             </h2>
             <p className="text-xs text-gray-600">(Ориентировъчна локация)</p>
-            <input type="text" name="example" list="exampleList" />
-            <ComboSelect
+            {/* <ComboSelect
                 options={districtChoices}
                 selection={district}
                 handleChange={handleDistrict}
                 styles=""
-            ></ComboSelect>
+            ></ComboSelect> */}
+            <ComboSelectFullScreen
+                options={districtChoices}
+                selection={district}
+                handleChange={handleDistrict}
+                scrollToElement={cleaningRef}
+            />
+            <Footer />
+            <Footer />
             <Footer />
         </div>
     );

@@ -32,7 +32,7 @@ export default function ToggleInput({ options, activeId, onClick, styles }: Togg
                       } inline-block h-4 w-4 transform rounded-full bg-white transition`}
                   />
                 </Switch>
-                <Switch.Label className={classNames("cursor-pointer", enabled ? "text-indigo-800" : "text-gray-500")}>{option.name}</Switch.Label>
+                <Switch.Label className={classNames("cursor-pointer", enabled ? "text-indigo-700 font-medium" : "text-gray-500")}>{option.name}</Switch.Label>
               </Switch.Group>
             </div>)
         }

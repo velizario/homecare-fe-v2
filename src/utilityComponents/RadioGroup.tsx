@@ -39,10 +39,10 @@ export default function RadioGroup({ options, activeId, onClick, styles, name }:
               />
             </div>
             <div className="ml-3">
-              <label htmlFor={`${name}-${option.id}`} onClick={stopPrapagate} className="text-gray-800 cursor-pointer">
+              <label htmlFor={`${name}-${option.id}`} onClick={stopPrapagate} className={classNames("text-gray-800 cursor-pointer", activeId === option.id ? "text-indigo-700 font-medium" : "")}>
                 {option.name}
               </label>
-              <p className="text-gray-500 font-light text-sm mt-1.5 cursor-pointer">
+              <p  className="text-gray-500 font-light text-sm mt-1.5 cursor-pointer">
                 {option.description}
               </p>
             </div>

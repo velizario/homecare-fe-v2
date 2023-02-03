@@ -23,8 +23,8 @@ export default function UserTypeSelection({ activeId, onClick, options, styles }
           onClick={onClick}
           className={classNames(
             (activeId === option.id || (activeId instanceof Set && activeId.has(option.id)))
-              ? 'bg-sky-200 border-transparent text-sky-700 bg-'
-              : 'bg-white border-gray-200 text-gray-600 hover:bg-sky-50',
+              ? 'bg-indigo-600 border-transparent text-white'
+              : 'bg-white border-gray-200 text-gray-600 hover:bg-indigo-50',
             'border rounded-full py-3 px-5 flex justify-center text-sm gap-1 cursor-pointer shadow-order flex-1 '
           )
           }
