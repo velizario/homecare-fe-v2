@@ -1,47 +1,52 @@
-import { ArrowSmallRightIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
-import RadioGroup from "../../utilityComponents/RadioGroup";
+import UserTypeSelection from "../dashboard/account/profile/UserTypeSelection";
+import { userProviderType, userServiceType } from "../../store/userTypeStore";
+import classNames from "../../helpers/classNames";
 
 export default function Register() {
+    const serviceType = userServiceType();
+    const providerType = userProviderType();
+
+    console.log("rerendered")
+
     return (
         <>
-            {/*
-          This example requires updating your template:
-  
-          ```
-          <html class="h-full bg-gray-50">
-          <body class="h-full">
-          ```
-        */}
             <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                    <img
-                        className="mx-auto h-12 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
-                    />
-                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+                <div className="px-4 sm:mx-auto sm:w-full sm:max-w-md">
+                    <h2 className="mt-2 text-center text-3xl font-bold tracking-tight text-gray-900">
                         Регистрирай се
                     </h2>
                 </div>
 
-                <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
-                    <div className="bg-white pt-4 pb-8 px-4 shadow sm:rounded-lg sm:px-10">
-                        <p className="group mb-8 text-center text-xs text-indigo-700 hover:text-indigo-500 flex items-center justify-end">
-                            <Link to="">За доставчици</Link><ChevronRightIcon className="w-3 h-3 transition-transform group-hover:translate-x-1"/>
-                        </p>
-                        <RadioGroup
-                            options={[
-                                { id: "1", name: "Клиент" },
-                                { id: "2", name: "Доставчик" },
-                            ]}
-                            activeId="1"
-                            onClick={() => {}}
-                            name="register-as"
-                            styles="flex flex-row justify-between mb-6 gap-2 [&>div]:flex-1"
-                        />
-                        <form className="space-y-6" action="#" method="POST">
-                            <div className="flex flex-col space-y-6 sm:flex-row sm:justify-between sm:space-y-0 sm:space-x-4">
+                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                    <div className="bg-white px-4 pt-4 pb-8 shadow sm:rounded-lg sm:px-10">
+                        <h4 className="mb-6 block text-sm text-gray-900">
+                            1. Предоставяте или търсите услуги за почистване?
+                        </h4>
+                        <UserTypeSelection />
+
+                        <form
+                            className={classNames(
+                                "space-y-6 animate-register-form",
+                                providerType || serviceType === "client"
+                                    ? "block"
+                                    : "hidden"
+                            )}
+                            action="#"
+                            method="POST"
+                        >
+                            <h4 className="mt-10 block text-sm text-gray-900">
+                                2. Въведете вашите данни
+                            </h4>
+                            <div
+                                className={classNames(
+                                    "flex-col space-y-6 sm:flex-row sm:justify-between sm:space-y-0 sm:space-x-4",
+                                    serviceType === "client" ||
+                                        providerType === "private"
+                                        ? "flex"
+                                        : "hidden"
+                                )}
+                            >
                                 <div>
                                     <label
                                         htmlFor="given-name"
@@ -78,6 +83,31 @@ export default function Register() {
                                             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                         />
                                     </div>
+                                </div>
+                            </div>
+
+                            <div
+                                className={classNames(
+                                    "flex-col",
+                                        (serviceType==="provider" && providerType === "company")
+                                        ? "flex"
+                                        : "hidden"
+                                )}
+                            >
+                                <label
+                                    htmlFor="company-name"
+                                    className="block text-sm font-medium text-gray-700"
+                                >
+                                    Име на фирма
+                                </label>
+                                <div className="mt-1">
+                                    <input
+                                        id="company-name"
+                                        name="company-name"
+                                        type="text"
+                                        required
+                                        className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    />
                                 </div>
                             </div>
 
@@ -143,12 +173,24 @@ export default function Register() {
                                     type="submit"
                                     className="flex w-full justify-center rounded-md border border-transparent bg-indigo-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                 >
-                                    Регистрирай се като клиент
+                                    Регистрирай се като{" "}
+                                    {serviceType === "client"
+                                        ? "клиент"
+                                        : providerType
+                                        ? "доставчик"
+                                        : ""}
                                 </button>
                             </div>
                         </form>
 
-                        <div className="mt-6">
+                        <div
+                            className={classNames(
+                                "mt-6",
+                                serviceType === "client" || providerType
+                                    ? "block"
+                                    : "hidden"
+                            )}
+                        >
                             <div className="relative">
                                 <div className="absolute inset-0 flex items-center">
                                     <div className="w-full border-t border-gray-300" />

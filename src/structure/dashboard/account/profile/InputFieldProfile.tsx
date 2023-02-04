@@ -10,6 +10,7 @@ const InputFieldProfileToggler = ({scope, children}: InputFieldProfileType) => {
     const providerType = userProviderType();
 
     const isMatchingScope = (scope: string) => {
+        if (!serviceType) return false;
         const matchingArray = scope.replaceAll(",","").split(" ")
         return (matchingArray.includes(serviceType) || matchingArray.includes(`${serviceType}-${providerType}`))
     }

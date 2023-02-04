@@ -1,8 +1,8 @@
 import create from 'zustand'
 
-export type UserServices = "client" | "provider"
-export type UserProviders = "private" | "company"
+export type UserServices = "client" | "provider" | null
+export type UserProviders = "private" | "company" | null
 
-export const userServiceType = create<"client" | "provider">(() => "client")
-export const userProviderType = create<"private" | "company">(() => "private")
+export const userServiceType = create<UserServices>(() => null)
+export const userProviderType = create<UserProviders>(() => null )
 

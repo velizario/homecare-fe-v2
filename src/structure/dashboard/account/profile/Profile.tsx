@@ -5,7 +5,6 @@ import InputFieldProfileToggler from "./InputFieldProfile";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
 import RegionSelection from "./RegionSelection";
-import UserTypeSelection from "./UserTypeSelection";
 
 const profileInputValues = {
   firstName: {
@@ -75,7 +74,6 @@ export default function Profile() {
             Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.
           </p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-            <UserTypeSelection />
             <ProfilePhoto />
             <InputFieldProfileToggler scope={profileInputValues.firstName.scope}><InputField {...profileInputValues.firstName} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.lastName.scope}><InputField {...profileInputValues.lastName} /></InputFieldProfileToggler>

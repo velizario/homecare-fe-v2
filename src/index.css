@@ -41,6 +41,15 @@
 
   .clip-path-photo {
     clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%, 0 80%);
+  }
 
+  @keyframes animate-register-form {
+    from {opacity: 0}
+    to {opacity: 1}
+  }
+
+  .animate-register-form {
+    animation-name: animate-register-form;
+    animation-duration: 500ms;
   }
 }
