@@ -20,7 +20,6 @@ export default function VendorCardFull() {
     console.log(sidebarOpen)
     return (
         <>
-            <Header setSidebarOpen={setSidebarOpen} />
             {/* Mobile */}
             <div className="sm:hidden bg-gradient-to-b m-auto from-fuchsia-50 to-indigo-300">
                 <div className="pt-4 flex justify-between items-center px-4  text-gray-600">

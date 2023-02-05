@@ -70,12 +70,13 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                     >
                         Влез
                     </Link>
-                    <a
-                        href="register"
+                    <Link
+                        type="button"
+                        to="register"
                         className="ml-8 inline-flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                     >
                         Регистрирай се
-                    </a>
+                    </Link>
                 </div>
             </nav>
         </div>

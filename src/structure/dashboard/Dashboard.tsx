@@ -16,7 +16,6 @@ export default function Dashboard() {
 
   return (
     <>
-      <Header setSidebarOpen={setSidebarOpen} />
       <div className="flex max-w-7xl  bg-white">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
