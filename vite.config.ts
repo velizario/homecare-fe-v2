@@ -5,7 +5,7 @@ import {} from 'tailwindcss';
 // https://vitejs.dev/config/
 export default defineConfig({
   // Add for deployment to Github
-  base: '/homecare-fe-v2/',
+  base: '/',
   plugins: [react()],
 })
  

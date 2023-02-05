@@ -1,19 +1,19 @@
-import './App.css'
-import { Routes, Route, HashRouter } from "react-router-dom";
-import HomePage from './structure/homepage/HomePage';
+import { useState } from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import './App.css';
 import About from './structure/about/About';
+import VendorCard from './structure/cards/VendorCard';
+import VendorCardFull from './structure/cards/VendorCardFull';
 import Contact from './structure/contact/Contact';
 import Dashboard from './structure/dashboard/Dashboard';
 import PageNotFound from './structure/defaultRoutePage/PageNotFound';
-import SearchOrderWizard from './structure/searchOrders/SearchOrderWizard';
-import VendorCardFull from './structure/cards/VendorCardFull';
-import VendorCard from './structure/cards/VendorCard';
-import VendorList from './structure/searchOrders/VendorList';
 import Header from './structure/header/Header';
-import { useState } from 'react';
+import HomePage from './structure/homepage/HomePage';
 import SignIn from './structure/login/SignIn';
-import CreateOrder from './structure/searchOrders/CreateOrder';
 import Register from './structure/register/Register';
+import CreateOrder from './structure/searchOrders/CreateOrder';
+import SearchOrderWizard from './structure/searchOrders/SearchOrderWizard';
+import VendorList from './structure/searchOrders/VendorList';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,7 +21,7 @@ function App() {
   console.log(sidebarOpen);
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Header setSidebarOpen={setSidebarOpen}/>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -38,7 +38,7 @@ function App() {
         <Route path='vendor-list/*' element={<VendorList/>} />
         <Route path='*' element={<PageNotFound/>} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 
