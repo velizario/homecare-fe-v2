@@ -33,18 +33,34 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
             {/* Navigation */}
             <nav className="hidden md:flex md:flex-1 md:items-center md:justify-between">
                 <div className="flex space-x-10">
-                    <a
-                        href="#"
+                    <Link
+                        to="dashboard"
+                        className="text-base font-medium text-gray-500
+                        hover:text-gray-900"
+                    >
+                        Dashboard
+                    </Link>
+                    <Link
+                        to="vendor-card-full"
+                        className="text-base font-medium text-gray-500
+                        hover:text-gray-900"
+                    >
+                        Vendor card
+                    </Link>
+                    <Link
+                        to="create-order"
+                        className="text-base font-medium
+                        text-gray-500 hover:text-gray-900"
+                    >
+                        {" "}
+                        Create order
+                    </Link>
+                    <Link
+                        to="vendor-list"
                         className="text-base font-medium text-gray-500 hover:text-gray-900"
                     >
-                        Pricing
-                    </a>
-                    <a
-                        href="#"
-                        className="text-base font-medium text-gray-500 hover:text-gray-900"
-                    >
-                        Docs
-                    </a>
+                        Vendor list
+                    </Link>
                 </div>
                 {/* Sign in & Sign up buttons desktop */}
                 <div className="flex items-center md:ml-12">
@@ -55,7 +71,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                         Влез
                     </Link>
                     <a
-                        href="#"
+                        href="register"
                         className="ml-8 inline-flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                     >
                         Регистрирай се
