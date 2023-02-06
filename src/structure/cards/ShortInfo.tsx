@@ -2,7 +2,7 @@ import Tooltip from "./Tooltip";
 
 export default function ShortInfo() {
   return (
-    <div className="flex justify-between max-w-md md:gap-20">
+    <div className="flex justify-between max-w-md">
       <Tooltip tooltipText="Брой уникални клиенти">
         <div className="rounded-full bg-gradient-to-r p-[2px] from-indigo-200 via-sky-200 to-indigo-500 shadow-md">
           <div className="flex flex-col items-center bg-white justify-center h-[70px] w-[70px] rounded-full">

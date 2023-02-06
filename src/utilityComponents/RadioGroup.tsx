@@ -24,7 +24,7 @@ export default function RadioGroup({ options, activeId, onClick, styles, name }:
   return (
     <fieldset className={classNames("mt-3")}>
       <legend className="sr-only">Plan</legend>
-      <div className={classNames(styles ?? "space-y-5 max-w-md flex flex-col")} >
+      <div className={classNames(styles ?? "space-y-5 flex flex-col")} >
         {options.map((option) => (
           <div id={name} key={option.id} data-id={option.id} onClick={onSelect} className="relative flex items-start cursor-pointer">
             <div className="flex h-5 items-center">
