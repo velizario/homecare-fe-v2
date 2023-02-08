@@ -31,7 +31,6 @@ function App() {
         <Route path='about' element={<About/>} />
         <Route path='contact' element={<Contact/>} />
         <Route path='dashboard/*' element={<Dashboard/>} />
-        <Route path='create-order/*' element={<CreateOrder/>} />
         <Route path='search-wizard/*' element={<SearchOrderWizard/>} />
         <Route path='vendor-card-full/*' element={<VendorCardFull/>} />
         <Route path='vendor-card/*' element={<VendorCard/>} />

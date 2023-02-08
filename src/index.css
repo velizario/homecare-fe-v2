@@ -50,6 +50,20 @@
 
   .animate-register-form {
     animation-name: animate-register-form;
-    animation-duration: 500ms;
+    animation-duration: 200ms;
+    animation-fill-mode: forwards;
   }
+
+  @keyframes animate-backdrop {
+    from {opacity: 0}
+    to {opacity: 0.6}
+  }
+
+  .animate-backdrop {
+    animation-name: animate-backdrop;
+    animation-duration: 200ms;
+    animation-fill-mode: forwards;
+  }
+
+
 }

@@ -9,6 +9,10 @@ import ComboSelectFullScreen from "./ComboSelectFullscreen";
 import RangeSlider from "./RangeSlider";
 import Toggle from "./ToggleInput";
 
+interface CreateOrderInputProps {
+    openInputModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 const serviceTypeChoices: SelectionOption[] = [
     {
         id: "1",
@@ -111,7 +115,9 @@ const ServiceHourChoices: SelectionOption[] = [
     // More users...
 ];
 
-export default function CreateOrderInput() {
+export default function CreateOrderInput({
+    openInputModal,
+}: CreateOrderInputProps) {
     const [serviceMode, setServiceMode] = useState<string | undefined>();
     const [additionalServices, setAdditionalServices] = useState<Set<string>>(
         new Set()
@@ -123,6 +129,11 @@ export default function CreateOrderInput() {
     const [district, setDistrict] = useState<SelectionOption[]>([]);
 
     const cleaningRef = useRef<HTMLHeadingElement | null>(null);
+
+    const submitForm = () => {
+        // Do something with the form
+        openInputModal(false);
+    };
 
     const toggleSelection = (
         selection: string | undefined,
@@ -315,13 +326,13 @@ export default function CreateOrderInput() {
                 handleChange={handleDistrict}
                 scrollToElement={cleaningRef}
             />
-            <Link
+            <button
                 type="button"
-                to="register"
+                onClick={submitForm}
                 className="mt-10 flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
             >
                 Изпрати заявка
-            </Link>
+            </button>
         </div>
     );
 }
