@@ -1,27 +1,18 @@
-import { userProviderType, userServiceType } from "../../../../store/userTypeStore";
+import { UserType } from "../../../../helpers/types";
+import { userState } from "../../../../store/userState";
 
 export interface InputFieldProfileType {
-    scope: string;
-    children: JSX.Element;
-  }
-
-const InputFieldProfileToggler = ({scope, children}: InputFieldProfileType) => {
-    const serviceType = userServiceType();
-    const providerType = userProviderType();
-
-    const isMatchingScope = (scope: string) => {
-        if (!serviceType) return false;
-        const matchingArray = scope.replaceAll(",","").split(" ")
-        return (matchingArray.includes(serviceType) || matchingArray.includes(`${serviceType}-${providerType}`))
-    }
-    
-    const isVisible = isMatchingScope(scope)
-
-    return (
-        <>
-            {isVisible && children }
-        </>
-    )
+  scope: UserType[];
+  children: JSX.Element;
 }
+
+const InputFieldProfileToggler = ({
+  scope,
+  children,
+}: InputFieldProfileType) => {
+  const roles = userState(state => state.roles);
+  const isVisible = roles.length === 0 ? false : scope.find(item => roles.includes(item));
+  return <>{isVisible && children}</>;
+};
 
 export default InputFieldProfileToggler;

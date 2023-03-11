@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
+import { UserType } from "../../../../helpers/types";
 import InputField from "../../../../utilityComponents/InputField";
 import ComboSelectBox from "./ComboSelectBox";
-import InputFieldProfileToggler from "./InputFieldProfile";
+import InputFieldProfileToggler from "./InputFieldProfileToggler";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
 import RegionSelection from "./RegionSelection";
 
 const profileInputValues = {
   firstName: {
-    scope: "provider-private, client",
+    scope: [UserType.CLIENT, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "first-name",
     id: "first-name",
@@ -16,7 +17,7 @@ const profileInputValues = {
     autoComplete: "given-name",
   },
   lastName: {
-    scope: "provider-private, client",
+    scope: [UserType.CLIENT, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "last-name",
     id: "last-name",
@@ -24,28 +25,28 @@ const profileInputValues = {
     autoComplete: "family-name",
   },
   companyName: {
-    scope: "provider-company",
+    scope: [UserType.VENDOR_COMPANY],
     className: "sm:col-span-6",
     name: "company",
     id: "company",
     label: "Име на фирма*",
   },
   url: {
-    scope: "provider-private, provider-company",
+    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "url",
     id: "url",
     label: "Уеб сайт",
   },
   facebook: {
-    scope: "provider-private, provider-company",
+    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "facebook",
     id: "facebook",
     label: "Фейсбук",
   },
   phone: {
-    scope: "client, provider-private, provider-company",
+    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL, UserType.CLIENT],
     className: "sm:col-span-3",
     name: "phone-number",
     id: "phone-number",
@@ -78,12 +79,12 @@ export default function Profile() {
             <InputFieldProfileToggler scope={profileInputValues.firstName.scope}><InputField {...profileInputValues.firstName} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.lastName.scope}><InputField {...profileInputValues.lastName} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.companyName.scope}><InputField {...profileInputValues.companyName} /></InputFieldProfileToggler>
-            <InputFieldProfileToggler scope="client, provider-private, provider-company"><ProfileAbout /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={[UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL, UserType.CLIENT]}><ProfileAbout /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.facebook.scope}><InputField {...profileInputValues.facebook} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.url.scope}><InputField {...profileInputValues.url} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.phone.scope}><InputField {...profileInputValues.phone} /></InputFieldProfileToggler>
-            <InputFieldProfileToggler scope="client"><RegionSelection /></InputFieldProfileToggler>
-            <InputFieldProfileToggler scope="provider-private, provider-company"><ComboSelectBox /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={[UserType.CLIENT]}><RegionSelection /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={[UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]}><ComboSelectBox /></InputFieldProfileToggler>
           </div>
           <div className="flex justify-end pt-8 gap-4">
             <button

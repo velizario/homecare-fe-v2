@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
 import UserTypeSelection from "../dashboard/account/profile/UserTypeSelection";
-import { userProviderType, userServiceType } from "../../store/userTypeStore";
+import { userState } from "../../store/userState";
 import classNames from "../../helpers/classNames";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
-import { createLoginUser, userSignup } from "../../model/userModel";
+import { userSignup } from "../../model/userModel";
 import { isLoggedIn } from "../../store/loggedInUser";
 import { useState } from "react";
 import { UserType } from "../../helpers/types";
@@ -48,24 +48,19 @@ let DefaultValidationSchema = BaseValidationSchema.omit({
   path: ["passwordConfirm"],
 });
 
-let CompanyValidationSchema = BaseValidationSchema.omit({
-  firstName: true,
-  lastName: true,
-}).refine((data) => data.password === data.passwordConfirm, {
+let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.password === data.passwordConfirm, {
   message: "Passwords don't match",
   path: ["passwordConfirm"],
 });
 
 export default function Register() {
-  const serviceType = userServiceType();
-  const providerType = userProviderType();
+  const roles = userState((state) => state.roles);
   const navigate = useNavigate();
   const [errorMessageAPI, setErrorMessageAPI] = useState(null);
 
-  const ActiveValidationSchema =
-    providerType === "company"
-      ? CompanyValidationSchema
-      : DefaultValidationSchema;
+  const ActiveValidationSchema = roles.includes(UserType.VENDOR_COMPANY)
+    ? CompanyValidationSchema
+    : DefaultValidationSchema;
 
   const {
     register,
@@ -78,17 +73,17 @@ export default function Register() {
   const submitFormHandler = async (data: RegistrationForm) => {
     console.log(data);
     // add role to the request. Should be of UserType. Cannot be ADMIN
-    const role = serviceType === "client" ? UserType.CLIENT
-    const dataHydrated = {...data, role}
+    const dataHydrated = { ...data, roles };
     // reset error message
-    setErrorMessageAPI(null)
+    setErrorMessageAPI(null);
     const createAttempt = await userSignup(dataHydrated);
     if (createAttempt.status === "success") {
-      isLoggedIn.setState(true)
-      navigate("/dashboard");
+      isLoggedIn.setState(true);
+      // navigate("/dashboard");
     }
-    console.log(createAttempt)
-    if (createAttempt.status === "fail") setErrorMessageAPI(createAttempt.message);
+    console.log(createAttempt);
+    if (createAttempt.status === "fail")
+      setErrorMessageAPI(createAttempt.message);
   };
 
   return (
@@ -110,7 +105,7 @@ export default function Register() {
               onSubmit={handleSubmit(submitFormHandler)}
               className={classNames(
                 "animate-register-form space-y-6",
-                providerType || serviceType === "client" ? "block" : "hidden"
+                roles.length > 0 ? "block" : "hidden"
               )}
             >
               <h4 className="mt-10 block text-sm text-gray-900">
@@ -118,10 +113,7 @@ export default function Register() {
               </h4>
               <div
                 className={classNames(
-                  "flex-col space-y-6 sm:flex-row sm:justify-between sm:space-y-0 sm:space-x-4",
-                  serviceType === "client" || providerType === "private"
-                    ? "flex"
-                    : "hidden"
+                  "flex flex-col space-y-6 sm:flex-row sm:justify-between sm:space-y-0 sm:space-x-4"
                 )}
               >
                 <div>
@@ -139,7 +131,9 @@ export default function Register() {
                       autoComplete="given-name"
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     />
-                    <InputErrorMessage>{errors.firstName?.message}</InputErrorMessage>
+                    <InputErrorMessage>
+                      {errors.firstName?.message}
+                    </InputErrorMessage>
                   </div>
                 </div>
 
@@ -159,7 +153,9 @@ export default function Register() {
                       autoComplete="family-name"
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     />
-                    <InputErrorMessage>{errors.lastName?.message}</InputErrorMessage>
+                    <InputErrorMessage>
+                      {errors.lastName?.message}
+                    </InputErrorMessage>
                   </div>
                 </div>
               </div>
@@ -167,9 +163,7 @@ export default function Register() {
               <div
                 className={classNames(
                   "flex-col",
-                  serviceType === "provider" && providerType === "company"
-                    ? "flex"
-                    : "hidden"
+                  roles.includes(UserType.VENDOR_COMPANY) ? "flex" : "hidden"
                 )}
               >
                 <label
@@ -186,7 +180,9 @@ export default function Register() {
                     type="text"
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   />
-                  <InputErrorMessage>{errors.companyName?.message}</InputErrorMessage>
+                  <InputErrorMessage>
+                    {errors.companyName?.message}
+                  </InputErrorMessage>
                 </div>
               </div>
 
@@ -227,7 +223,9 @@ export default function Register() {
                     autoComplete="new-password"
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   />
-                  <InputErrorMessage>{errors.password?.message}</InputErrorMessage>
+                  <InputErrorMessage>
+                    {errors.password?.message}
+                  </InputErrorMessage>
                 </div>
               </div>
 
@@ -247,7 +245,9 @@ export default function Register() {
                     autoComplete="new-password"
                     className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   />
-                  <InputErrorMessage>{errors.passwordConfirm?.message}</InputErrorMessage>
+                  <InputErrorMessage>
+                    {errors.passwordConfirm?.message}
+                  </InputErrorMessage>
                 </div>
               </div>
 
@@ -257,9 +257,10 @@ export default function Register() {
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Регистрирай се като{" "}
-                  {serviceType === "client"
+                  {roles.includes(UserType.CLIENT)
                     ? "клиент"
-                    : providerType
+                    : roles.includes(UserType.VENDOR_COMPANY) ||
+                      roles.includes(UserType.VENDOR_INDIVIDUAL)
                     ? "доставчик"
                     : ""}
                 </button>
@@ -269,7 +270,7 @@ export default function Register() {
             <div
               className={classNames(
                 "mt-6",
-                serviceType === "client" || providerType ? "block" : "hidden"
+                roles.length > 0 ? "block" : "hidden"
               )}
             >
               <div className="relative">

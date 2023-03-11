@@ -1,10 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import { createLoginUser } from "../../model/userModel";
 import { useForm } from "react-hook-form";
 import { isLoggedIn } from "../../store/loggedInUser";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
+import { userLogin } from "../../model/userModel";
 
 /*
   This example requires some changes to your config:
@@ -46,7 +46,7 @@ export default function SignIn() {
 
   const submitFormHandler = async (data: LoginForm) => {
     console.log(data)
-    const createAttempt = await createLoginUser(data, "login");
+    const createAttempt = await userLogin(data);
     if (createAttempt.status === "success") {
       isLoggedIn.setState(true)
       navigate("/dashboard");
