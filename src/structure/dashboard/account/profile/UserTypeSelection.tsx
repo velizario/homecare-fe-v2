@@ -32,13 +32,16 @@ const providerMode = [
   },
 ];
 
-export default function UserTypeSelection() {
-  const [roles, setRoles, deleteRoles] = userState((state) => [state.roles, state.setRoles, state.deleteRoles]);
+type UserTypeSelectionProps = {
+  roles: UserType[];
+  setRoles: (roles: UserType[]) => void;
+};
+
+export default function UserTypeSelection({ roles, setRoles }: UserTypeSelectionProps) {
   const [selection, setSelection] = useState<number | null>(null);
 
   return (
     <>
-      {selection};{roles}
       <div className="">
         <div className="">
           <div className="grid grid-cols-2 gap-3">
@@ -48,7 +51,7 @@ export default function UserTypeSelection() {
                 onClick={() => {
                   setSelection(option.id);
                   option.id === 0 && setRoles([UserType.CLIENT]);
-                  option.id === 1 && deleteRoles();
+                  option.id === 1 && setRoles([]);
                 }}
                 className={classNames(
                   selection === option.id

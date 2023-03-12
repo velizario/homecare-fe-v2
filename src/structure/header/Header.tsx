@@ -1,11 +1,16 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import classNames from "../../helpers/classNames";
+import { userState } from "../../store/userState";
 
 interface HeaderProps {
     setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Header({ setSidebarOpen }: HeaderProps) {
+    const [isLoggedIn, userName] = userState((state) => [state.isLoggedIn, state.userData.firstName]);
+
+    console.log(userName)
     return (
         <div className="relative z-20 flex items-center  justify-between bg-white px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
             {/* burger menu icon in mobile */}
@@ -66,17 +71,18 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                 <div className="flex items-center md:ml-12">
                     <Link
                         to="signin"
-                        className="text-base font-medium text-gray-500 hover:text-gray-900"
+                        className={classNames("text-base font-medium text-gray-500 hover:text-gray-900", isLoggedIn ? "hidden" : "block")}
                     >
                         Влез
                     </Link>
                     <Link
                         type="button"
                         to="register"
-                        className="ml-8 inline-flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                        className={classNames("ml-8 inline-flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700", isLoggedIn ? "hidden" : "block")}
                     >
                         Регистрирай се
                     </Link>
+                    <p className={classNames(isLoggedIn ? "block" : "hidden")}>Здравей, {userName}</p>
                 </div>
             </nav>
         </div>

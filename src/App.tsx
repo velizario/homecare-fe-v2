@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './App.css';
+import { userState } from './store/userState';
 import About from './structure/about/About';
 import VendorCard from './structure/cards/VendorCard';
 import VendorCardFull from './structure/cards/VendorCardFull';
@@ -11,14 +12,16 @@ import Header from './structure/header/Header';
 import HomePage from './structure/homepage/HomePage';
 import SignIn from './structure/login/SignIn';
 import Register from './structure/register/Register';
-import CreateOrder from './structure/searchOrders/CreateOrder';
 import SearchOrderWizard from './structure/searchOrders/SearchOrderWizard';
 import VendorList from './structure/searchOrders/VendorList';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isLoggedIn = userState(state => state.isLoggedIn)
+
   // TODO: do something with this var
-  console.log(sidebarOpen);
+
+  console.log(isLoggedIn);
 
   return (
     <BrowserRouter>

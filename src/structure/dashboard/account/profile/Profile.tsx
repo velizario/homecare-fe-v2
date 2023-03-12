@@ -79,7 +79,7 @@ export default function Profile() {
             <InputFieldProfileToggler scope={profileInputValues.firstName.scope}><InputField {...profileInputValues.firstName} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.lastName.scope}><InputField {...profileInputValues.lastName} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.companyName.scope}><InputField {...profileInputValues.companyName} /></InputFieldProfileToggler>
-            <InputFieldProfileToggler scope={[UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL, UserType.CLIENT]}><ProfileAbout /></InputFieldProfileToggler>
+            <InputFieldProfileToggler scope={[UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]}><ProfileAbout /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.facebook.scope}><InputField {...profileInputValues.facebook} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.url.scope}><InputField {...profileInputValues.url} /></InputFieldProfileToggler>
             <InputFieldProfileToggler scope={profileInputValues.phone.scope}><InputField {...profileInputValues.phone} /></InputFieldProfileToggler>

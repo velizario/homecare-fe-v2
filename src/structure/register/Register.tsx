@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
 import { userSignup } from "../../model/userModel";
-import { isLoggedIn } from "../../store/loggedInUser";
 import { useState } from "react";
 import { UserType } from "../../helpers/types";
 
@@ -48,15 +47,19 @@ let DefaultValidationSchema = BaseValidationSchema.omit({
   path: ["passwordConfirm"],
 });
 
-let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.password === data.passwordConfirm, {
-  message: "Passwords don't match",
-  path: ["passwordConfirm"],
-});
+let CompanyValidationSchema = BaseValidationSchema.refine(
+  (data) => data.password === data.passwordConfirm,
+  {
+    message: "Passwords don't match",
+    path: ["passwordConfirm"],
+  }
+);
 
 export default function Register() {
-  const roles = userState((state) => state.roles);
+  const [setIsLoggedIn, setUserData] = userState((state) => [state.setIsLoggedIn, state.setUserData]);
   const navigate = useNavigate();
   const [errorMessageAPI, setErrorMessageAPI] = useState(null);
+  const [roles, setRoles] = useState<UserType[]>([])
 
   const ActiveValidationSchema = roles.includes(UserType.VENDOR_COMPANY)
     ? CompanyValidationSchema
@@ -71,17 +74,16 @@ export default function Register() {
   });
 
   const submitFormHandler = async (data: RegistrationForm) => {
-    console.log(data);
     // add role to the request. Should be of UserType. Cannot be ADMIN
     const dataHydrated = { ...data, roles };
     // reset error message
     setErrorMessageAPI(null);
     const createAttempt = await userSignup(dataHydrated);
     if (createAttempt.status === "success") {
-      isLoggedIn.setState(true);
+      setIsLoggedIn(true);
+      setUserData(createAttempt.data);
       // navigate("/dashboard");
     }
-    console.log(createAttempt);
     if (createAttempt.status === "fail")
       setErrorMessageAPI(createAttempt.message);
   };
@@ -99,7 +101,7 @@ export default function Register() {
             <h4 className="mb-6 block text-sm text-gray-900">
               1. Предоставяте или търсите услуги за почистване?
             </h4>
-            <UserTypeSelection />
+            <UserTypeSelection roles={roles} setRoles={setRoles}/>
 
             <form
               onSubmit={handleSubmit(submitFormHandler)}

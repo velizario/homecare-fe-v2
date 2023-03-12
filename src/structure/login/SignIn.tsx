@@ -1,25 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { isLoggedIn } from "../../store/loggedInUser";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
 import { userLogin } from "../../model/userModel";
-
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+import { userState } from "../../store/userState";
 
 type LoginForm = {
   email: string;
@@ -34,7 +19,7 @@ let validationSchema = z.object({
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const userLoggedIn = isLoggedIn();
+  const [setIsLoggedIn, setUserData] = userState((state) => [state.setIsLoggedIn, state.setUserData]);
 
   const {
     register,
@@ -48,7 +33,8 @@ export default function SignIn() {
     console.log(data)
     const createAttempt = await userLogin(data);
     if (createAttempt.status === "success") {
-      isLoggedIn.setState(true)
+      setIsLoggedIn(true)
+      setUserData(createAttempt.data);
       navigate("/dashboard");
     }
   };
@@ -57,7 +43,6 @@ export default function SignIn() {
     <>
       
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-        {userLoggedIn ? "loggedin" : "not logged in"}
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
             className="mx-auto h-12 w-auto"
