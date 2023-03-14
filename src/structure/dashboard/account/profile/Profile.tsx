@@ -9,6 +9,7 @@ import ComboSelectBox from "./ComboSelectBox";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
+import { userState } from "../../../../store/userState";
 
 const profileInputValues = {
   firstName: {
@@ -81,6 +82,8 @@ export type ProfileForm = {
   userImage: string;
 };
 
+let test: keyof ProfileForm;
+
 let BaseValidationSchema = z.object({
   firstName: z
     .string({ required_error: "Required field" })
@@ -117,21 +120,44 @@ let CompanyValidationSchema = BaseValidationSchema.refine(
   }
 );
 
+let userDataFlat = {} as ProfileForm;
 
 export default function Profile() {
   const [scrolledPosition, setScrolledPosition] = useState<number | null>(null);
-  const [roles, setRoles] = useState<UserType[]>([]);
+  const userData = userState((state) => state.userData);
 
-  const ActiveValidationSchema = roles.includes(UserType.VENDOR_COMPANY)
+  const ActiveValidationSchema = userData.roles.includes(
+    UserType.VENDOR_COMPANY
+  )
     ? CompanyValidationSchema
     : DefaultValidationSchema;
+
+  useEffect(() => {
+    const { vendor, client, ...rest } = { ...userData };
+    Object.assign(userDataFlat, rest, vendor, client);
+    reset(userDataFlat);
+  }, []);
 
   const {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ProfileForm>({
+    // defaultValues: userDataFlat,
+    // {
+    //   firstName: userData.firstName || "",
+    //   lastName: userData.lastName || "",
+    //   phone: userData.phone || "",
+    //   companyName: userData.vendor?.companyName || "",
+    //   district: "",
+    //   facebook: "",
+    //   instagram: "",
+    //   url: "",
+    //   userImage: "",
+    // },
+    // values: userDataFlat,
     // resolver: zodResolver(ActiveValidationSchema),
   });
 
@@ -145,12 +171,9 @@ export default function Profile() {
     console.log(data);
   };
 
-  
-
   return (
     <>
       <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
-
         <form
           className="max-w-3xl space-y-8"
           encType="multipart/form-data"
@@ -161,11 +184,12 @@ export default function Profile() {
             &quot;Визитка&quot;.
           </p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-            <ProfilePhoto/>
+            <ProfilePhoto />
             {checkIfVisible(profileInputValues.firstName.scope) && (
               <InputField
                 {...profileInputValues.firstName}
                 {...register("firstName")}
+                defaultValue={userDataFlat.firstName}
                 control={control}
               />
             )}
@@ -173,6 +197,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.lastName}
                 {...register("lastName")}
+                defaultValue={userDataFlat.lastName}
                 control={control}
               />
             )}
@@ -180,6 +205,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.companyName}
                 {...register("companyName")}
+                defaultValue={userDataFlat.companyName}
                 control={control}
               />
             )}
@@ -187,21 +213,23 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.phone}
                 {...register("phone")}
+                defaultValue={userDataFlat.phone}
                 control={control}
               />
             )}
             {checkIfVisible([
               UserType.VENDOR_COMPANY,
               UserType.VENDOR_INDIVIDUAL,
-            ]) && <ComboSelectBox />}
+            ]) && <ComboSelectBox defaultValue={userDataFlat.districtsServed} />}
             {checkIfVisible([
               UserType.VENDOR_COMPANY,
               UserType.VENDOR_INDIVIDUAL,
-            ]) && <ProfileAbout />}
+            ]) && <ProfileAbout defaultValue={userDataFlat.about} />}
             {checkIfVisible(profileInputValues.facebook.scope) && (
               <InputField
                 {...profileInputValues.facebook}
                 {...register("facebook")}
+                defaultValue={userDataFlat.facebook}
                 control={control}
               />
             )}
@@ -209,6 +237,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.instagram}
                 {...register("instagram")}
+                defaultValue={userDataFlat.instagram}
                 control={control}
               />
             )}
@@ -219,7 +248,9 @@ export default function Profile() {
                 control={control}
               />
             )}
-            {checkIfVisible([UserType.CLIENT]) && <RegionSelection />}
+            {checkIfVisible([UserType.CLIENT]) && (
+              <RegionSelection defaultValue={userDataFlat.district} />
+            )}
           </div>
           <div className="flex justify-end gap-4 pt-8">
             <button

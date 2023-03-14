@@ -37,7 +37,7 @@ const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
 export const logger = loggerImpl as unknown as Logger;
 
 export const userState = create<UserState>()(
-    persist(
+    logger(persist(
       (set) => ({
         isLoggedIn: false,
         userData: {} as User,
@@ -45,8 +45,8 @@ export const userState = create<UserState>()(
         setUserData: (data) => set({ userData: data }),
       }),
       {
-        name: "food-storage", // name of the item in the storage (must be unique)
+        name: "user", // name of the item in the storage (must be unique)
         // storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
       }
     )
-);
+));

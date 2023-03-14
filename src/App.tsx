@@ -17,11 +17,20 @@ import VendorList from "./structure/searchOrders/VendorList";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const userLoggedIn = userState((state) => state.userData);
+  const [userLoggedIn, setUserData] = userState((state) => [state.userData, state.setUserData]);
 
-  // TODO: do something with this var
+  // do I need to refresh user? How is data lost?
+  // const refreshUser = async () => {
+  //   const user = await userDataRefresh();
+  //   if (user) {
+  //     setUserData(user)
+  //   }
+  // }
 
-  console.log("logged in:", userLoggedIn);
+
+  // useEffect(() => {
+  //   refreshUser()
+  // },[])
 
   return (
     <BrowserRouter>

@@ -38,7 +38,6 @@ export default function ProfilePhoto() {
     })
       .then(async (res) => {
         const newUser = await userDataRefresh();
-        2;
         setUserData(newUser);
         return res.json();
       })
