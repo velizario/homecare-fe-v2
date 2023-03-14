@@ -66,8 +66,8 @@ export default function ComboSelectBox() {
 
         <Combobox as="div" value={selectedPerson} onChange={setSelectedPerson} multiple nullable className="sm:col-span-3 coverage-combo-box">
                 <>
-                    <div className='flex flex-col md:flex-row gap-2 items-start md:justify-between md:items-center'>
-                        <p className="block text-sm font-normal text-gray-900">Квартали, в които работите</p>
+                    <div className='flex flex-row gap-2 justify-between '>
+                        <p className="block text-sm font-normal text-gray-900">Квартали на покритие</p>
                         <button
                             type="button"
                             onClick={() => { setSelectedPerson(selected => selected.length !== people.length ? people : []); }}
@@ -122,7 +122,7 @@ export default function ComboSelectBox() {
                             </Combobox.Options>
                         )}
                     </div>
-                    <Combobox.Label className="flex flex-wrap line-clamp-3 leading-relaxed">
+                    <Combobox.Label className="flex flex-wrap line-clamp-2 leading-relaxed">
                         {selectedPerson.map((person) => "name" in person && <Badge key={person.id} styles="whitespace-nowrap">{person?.name}</Badge>)}
                     </Combobox.Label>
                 </>

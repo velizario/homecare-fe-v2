@@ -9,8 +9,6 @@ interface HeaderProps {
 
 export default function Header({ setSidebarOpen }: HeaderProps) {
     const [isLoggedIn, userName] = userState((state) => [state.isLoggedIn, state.userData.firstName]);
-
-    console.log(userName)
     return (
         <div className="relative z-20 flex items-center  justify-between bg-white px-4 py-6 sm:px-6 md:justify-start md:space-x-10">
             {/* burger menu icon in mobile */}

@@ -1,9 +1,10 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { UserType } from "../helpers/types";
+import { User } from "../helpers/types";
+import { userState } from "../store/userState";
 
-type EndpointName = "userSignup" | "userEdit" | "userLogin";
+type EndpointName = "userSignup" | "userEdit" | "userLogin" | "userGet";
 
-const sendRequest = async (data: {}, endpoint: EndpointName) => {
+const sendRequest = async (endpoint: EndpointName, data?: {}) => {
   const resData = await requestToAPI(`users/${endpoint}`, "POST", data);
 
   if (resData.status === "success")
@@ -12,6 +13,11 @@ const sendRequest = async (data: {}, endpoint: EndpointName) => {
   return resData;
 };
 
-export const userSignup  = async (data: {}) => sendRequest(data, "userSignup");
-export const userLogin  = async (data: {}) => sendRequest(data, "userLogin");
-export const userEdit  = async (data: {}) => sendRequest(data, "userEdit");
+export const userDataRefresh = async () => {
+  const res = await requestToAPI(`users/userGet`, "GET");
+ return await res.data.user;
+};
+
+export const userSignup = async (data: {}) => sendRequest("userSignup", data);
+export const userLogin = async (data: {}) => sendRequest("userLogin", data);
+export const userEdit = async (data: {}) => sendRequest("userEdit", data);
