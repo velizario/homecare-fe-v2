@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "./envVariables";
+
 export const getToken = () => {
     const token = localStorage.getItem("token");
     const bearerString = token ? `Bearer ${token}` : null;
@@ -22,7 +24,7 @@ export const getToken = () => {
     // if (bearerString)
     //   reqObject.headers = { ...reqObject.headers, Authorization: bearerString };
   
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/${addrPath}`, reqObject);
+    const response = await fetch(`${BACKEND_URL}/${addrPath}`, reqObject);
     const data = await response.json();
     console.log("Returned data from API:", data);
     return data;

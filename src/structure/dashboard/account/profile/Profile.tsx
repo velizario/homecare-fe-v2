@@ -1,16 +1,14 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, FormEventHandler, useEffect, useState } from "react";
+import { useEffect} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import checkIfVisible from "../../../../helpers/checkIfVisible";
-import { UserType } from "../../../../helpers/types";
 import InputField from "../../../../utilityComponents/InputField";
 import ComboSelectBox, { District } from "./ComboSelectBox";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
 import { userState } from "../../../../store/userState";
-import { userEdit } from "../../../../model/userModel";
+import { User, userEdit, UserType } from "../../../../model/userModel";
 
 const profileInputValues = {
   firstName: {
@@ -150,9 +148,7 @@ export default function Profile() {
     : DefaultValidationSchema;
 
   useEffect(() => {
-    const { vendor, client, imageUrl, isSuspended, id, ...rest } = {
-      ...userData,
-    };
+    const { vendor, client, imageUrl, isSuspended, id, ...rest } = userData;
     Object.assign(userDataFlat, rest, vendor, client);
     reset(userDataFlat);
   }, [userData]);

@@ -6,9 +6,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
-import { userSignup } from "../../model/userModel";
+import { userSignup, UserType } from "../../model/userModel";
 import { useState } from "react";
-import { UserType } from "../../helpers/types";
 
 export type RegistrationForm = {
   firstName: string;

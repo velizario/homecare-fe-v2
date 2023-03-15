@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import loadingImage from "../../../../assets/loading.gif";
+import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { getToken } from "../../../../helpers/helperFunctions";
 import { userDataRefresh } from "../../../../model/userModel";
 import { userState } from "../../../../store/userState";
@@ -29,7 +30,7 @@ export default function ProfilePhoto() {
     file.append("file", userImage, userImage.name);
 
     setUploadingImage(true);
-    fetch(`${import.meta.env.VITE_BACKEND_URL}/users/upload`, {
+    fetch(`${BACKEND_URL}/users/upload`, {
       method: "POST",
       headers: {
         Authorization: getToken() || "",
@@ -61,7 +62,7 @@ export default function ProfilePhoto() {
         <div className="mt-1 flex items-center">
           <img
             className="inline-block h-12 w-12 rounded-full"
-            src={`${import.meta.env.VITE_BACKEND_URL}/users/public/${imageUrl || "defaultImage.png"}`}
+            src={`${BACKEND_URL}/users/public/${imageUrl || "defaultImage.png"}`}
             alt=""
           />
           <div className="ml-4 flex items-center">

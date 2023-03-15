@@ -45,7 +45,7 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="dashboard/*" element={<Dashboard />} />
         <Route path="search-wizard/*" element={<SearchOrderWizard />} />
-        <Route path="vendor-card-full/*" element={<VendorCardFull />} />
+        <Route path="vendor-card-full/*" element={<VendorCardFull vendorId="1"/>} />
         <Route path="vendor-card/*" element={<VendorCard />} />
         <Route path="vendor-list/*" element={<VendorList />} />
         <Route path="*" element={<PageNotFound />} />

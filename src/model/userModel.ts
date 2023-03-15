@@ -1,6 +1,28 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { User } from "../helpers/types";
 import { ProfileForm } from "../structure/dashboard/account/profile/Profile";
+import { Vendor } from "./vendorModel";
+
+export enum UserType {
+  ADMIN,
+  CLIENT,
+  VENDOR_COMPANY,
+  VENDOR_INDIVIDUAL,
+}
+
+export interface User {
+  id: string;
+  createdAt: Date;
+  firstName: string;
+  lastName: string;
+  email: string;
+  imageUrl: string;
+  isSuspended: boolean;
+  roles: UserType[];
+  phone: string;
+  client?: { userId: string; id: string; address: string; district: string; city: string };
+  vendor?: Vendor
+}
+
 
 // endpoints = "userSignup" | "userEdit/:id" | "userLogin" | "userGet";
 
@@ -17,9 +39,8 @@ export const userDataRefresh = async () => {
   return await res.data as User;
 };
 
-
-
 export const userSignup = async (data: {}) => sendRequest("userSignup", data);
+
 export const userLogin = async (data: {}) => sendRequest("userLogin", data);
 
 export const userEdit = async (data: ProfileForm) => {
