@@ -14,7 +14,7 @@ const Badge = ({ children, styles, xMark, onClick }: BadgeProps) => {
         <span
         onClick={onClick}
             className={classNames(
-                "group mr-2 mt-2 inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-800 last:mr-0",
+                "group mr-2 inline-flex items-center gap-0.5 rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-800 last:mr-0",
                 styles ?? "",
                 xMark ? "cursor-pointer transition-colors" : ""
             )}

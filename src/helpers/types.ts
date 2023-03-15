@@ -22,5 +22,5 @@ export interface User {
   roles: UserType[];
   phone: string;
   client?: { userId: string; id: string; address: string; district: string; city: string };
-  vendor?: { companyName: string; webSite: string; instagram: string; facebook: string, id: string };
+  vendor?: { companyName: string; webSite: string; instagram: string; facebook: string, id: string, about: string };
 }

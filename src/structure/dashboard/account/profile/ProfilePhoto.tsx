@@ -61,7 +61,7 @@ export default function ProfilePhoto() {
         <div className="mt-1 flex items-center">
           <img
             className="inline-block h-12 w-12 rounded-full"
-            src={`${import.meta.env.VITE_BACKEND_URL}/users/public/${imageUrl}`}
+            src={`${import.meta.env.VITE_BACKEND_URL}/users/public/${imageUrl || "defaultImage.png"}`}
             alt=""
           />
           <div className="ml-4 flex items-center">

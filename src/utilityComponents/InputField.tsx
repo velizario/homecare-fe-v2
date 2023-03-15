@@ -8,7 +8,6 @@ import {
 } from "react-hook-form";
 import classNames from "../helpers/classNames";
 import { userState } from "../store/userState";
-import { ProfileForm } from "../structure/dashboard/account/profile/Profile";
 
 interface InputFieldProps<T extends FieldValues> {
   control: Control<T, object>;
@@ -37,8 +36,6 @@ function InputFieldInner<K extends FieldValues>(
 ) {
   const { errors } = useFormState({ control });
   const errorMessage = errors[name]?.message?.toString();
-  const userData = userState((state) => state.userData);
-
 
   return (
     <div

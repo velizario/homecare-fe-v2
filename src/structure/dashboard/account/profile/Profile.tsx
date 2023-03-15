@@ -5,11 +5,12 @@ import { z } from "zod";
 import checkIfVisible from "../../../../helpers/checkIfVisible";
 import { UserType } from "../../../../helpers/types";
 import InputField from "../../../../utilityComponents/InputField";
-import ComboSelectBox from "./ComboSelectBox";
+import ComboSelectBox, { District } from "./ComboSelectBox";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
 import { userState } from "../../../../store/userState";
+import { userEdit } from "../../../../model/userModel";
 
 const profileInputValues = {
   firstName: {
@@ -35,11 +36,11 @@ const profileInputValues = {
     id: "company",
     label: "Име на фирма*",
   },
-  url: {
+  website: {
     scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
-    name: "url",
-    id: "url",
+    name: "website",
+    id: "website",
     label: "Уеб сайт",
   },
   facebook: {
@@ -68,9 +69,25 @@ const profileInputValues = {
     label: "Телефонен номер*",
     autoComplete: "tel",
   },
+  address: {
+    scope: [UserType.CLIENT],
+    className: "sm:col-span-3",
+    name: "address",
+    id: "address",
+    label: "Адрес",
+    autoComplete: "street-address",
+  },
+  city: {
+    scope: [UserType.CLIENT],
+    className: "sm:col-span-3",
+    name: "city",
+    id: "city",
+    label: "Град",
+  },
 };
 
 export type ProfileForm = {
+  id: string;
   firstName: string;
   lastName: string;
   phone: string;
@@ -78,11 +95,12 @@ export type ProfileForm = {
   companyName: string;
   facebook: string;
   instagram: string;
-  url: string;
-  userImage: string;
+  website: string;
+  about: string;
+  city: string;
+  address: string;
+  servedDistrict: District[];
 };
-
-let test: keyof ProfileForm;
 
 let BaseValidationSchema = z.object({
   firstName: z
@@ -123,7 +141,6 @@ let CompanyValidationSchema = BaseValidationSchema.refine(
 let userDataFlat = {} as ProfileForm;
 
 export default function Profile() {
-  const [scrolledPosition, setScrolledPosition] = useState<number | null>(null);
   const userData = userState((state) => state.userData);
 
   const ActiveValidationSchema = userData.roles.includes(
@@ -133,16 +150,19 @@ export default function Profile() {
     : DefaultValidationSchema;
 
   useEffect(() => {
-    const { vendor, client, ...rest } = { ...userData };
+    const { vendor, client, imageUrl, isSuspended, id, ...rest } = {
+      ...userData,
+    };
     Object.assign(userDataFlat, rest, vendor, client);
     reset(userDataFlat);
-  }, []);
+  }, [userData]);
 
   const {
     control,
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<ProfileForm>({
     // defaultValues: userDataFlat,
@@ -161,14 +181,11 @@ export default function Profile() {
     // resolver: zodResolver(ActiveValidationSchema),
   });
 
-  window.addEventListener("scroll", () => {
-    setScrolledPosition(window.scrollY);
-  });
 
-  useEffect(() => {}, [scrolledPosition]);
 
   const submitFormHandler = (data: ProfileForm) => {
-    console.log(data);
+    console.log("Data to insert", data);
+    userEdit(data);
   };
 
   return (
@@ -217,14 +234,50 @@ export default function Profile() {
                 control={control}
               />
             )}
+            {checkIfVisible(profileInputValues.city.scope) && (
+              <InputField
+                {...profileInputValues.city}
+                {...register("city")}
+                defaultValue={userDataFlat.city}
+                control={control}
+              />
+            )}
+            {checkIfVisible([UserType.CLIENT]) && (
+              <RegionSelection
+                {...register("district")}
+                defaultValue={userDataFlat.district}
+                control={control}
+              />
+            )}
+            {checkIfVisible(profileInputValues.address.scope) && (
+              <InputField
+                {...profileInputValues.address}
+                {...register("address")}
+                defaultValue={userDataFlat.address}
+                control={control}
+              />
+            )}
             {checkIfVisible([
               UserType.VENDOR_COMPANY,
               UserType.VENDOR_INDIVIDUAL,
-            ]) && <ComboSelectBox defaultValue={userDataFlat.districtsServed} />}
+            ]) && (
+              <ProfileAbout
+                {...register("about")}
+                defaultValue={userDataFlat.about}
+                control={control}
+              />
+            )}
             {checkIfVisible([
               UserType.VENDOR_COMPANY,
               UserType.VENDOR_INDIVIDUAL,
-            ]) && <ProfileAbout defaultValue={userDataFlat.about} />}
+            ]) && (
+              <ComboSelectBox
+                defaultValue={userDataFlat.servedDistrict}
+                // {...register("servedDistrict")}
+                // control={control}
+                setValue={setValue}
+              />
+            )}
             {checkIfVisible(profileInputValues.facebook.scope) && (
               <InputField
                 {...profileInputValues.facebook}
@@ -241,15 +294,13 @@ export default function Profile() {
                 control={control}
               />
             )}
-            {checkIfVisible(profileInputValues.url.scope) && (
+            {checkIfVisible(profileInputValues.website.scope) && (
               <InputField
-                {...profileInputValues.url}
-                {...register("url")}
+                {...profileInputValues.website}
+                {...register("website")}
+                defaultValue={userDataFlat.website}
                 control={control}
               />
-            )}
-            {checkIfVisible([UserType.CLIENT]) && (
-              <RegionSelection defaultValue={userDataFlat.district} />
             )}
           </div>
           <div className="flex justify-end gap-4 pt-8">
