@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { userDataRefresh } from "./model/userModel";
+import { userDataRefresh } from "./model/clientModel";
 import { userState } from "./store/userState";
 import About from "./structure/about/About";
 import VendorCard from "./structure/cards/VendorCard";
@@ -18,7 +18,7 @@ import VendorList from "./structure/searchOrders/VendorList";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userLoggedIn, setUserData] = userState((state) => [state.userData, state.setUserData]);
+  const [setUserData] = userState((state) => [state.setUserData]);
 
   // do I need to refresh user? How is data lost? Added only for development purposes
   const refreshUser = async () => {

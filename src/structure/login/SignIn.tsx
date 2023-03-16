@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
-import { userLogin } from "../../model/userModel";
+import { userLogin } from "../../model/clientModel";
 import { userState } from "../../store/userState";
 
 type LoginForm = {

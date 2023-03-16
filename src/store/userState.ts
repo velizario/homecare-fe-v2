@@ -1,6 +1,7 @@
 import create, { StateCreator, StoreMutatorIdentifier } from "zustand";
-import { User } from "../helpers/types";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { persist  } from "zustand/middleware";
+import { User } from "../model/userModel";
+
 
 type UserState = {
   isLoggedIn: boolean;

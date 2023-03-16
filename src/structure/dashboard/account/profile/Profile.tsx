@@ -1,4 +1,4 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import checkIfVisible from "../../../../helpers/checkIfVisible";
@@ -8,7 +8,8 @@ import ProfilePhoto from "./ProfilePhoto";
 import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
 import { userState } from "../../../../store/userState";
-import { User, userEdit, UserType } from "../../../../model/userModel";
+import { userEdit } from "../../../../model/clientModel";
+import { UserType } from "../../../../helpers/types";
 
 const profileInputValues = {
   firstName: {
@@ -22,8 +23,8 @@ const profileInputValues = {
   lastName: {
     scope: [UserType.CLIENT, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
-    name: "last-name",
-    id: "last-name",
+    name: "last-name", 
+    id: "last-name", 
     label: "Фамилия*",
     autoComplete: "family-name",
   },
@@ -136,11 +137,9 @@ let CompanyValidationSchema = BaseValidationSchema.refine(
   }
 );
 
-let userDataFlat = {} as ProfileForm;
-
 export default function Profile() {
   const userData = userState((state) => state.userData);
-
+  console.log(userData)
   const ActiveValidationSchema = userData.roles.includes(
     UserType.VENDOR_COMPANY
   )
@@ -148,9 +147,7 @@ export default function Profile() {
     : DefaultValidationSchema;
 
   useEffect(() => {
-    const { vendor, client, imageUrl, isSuspended, id, ...rest } = userData;
-    Object.assign(userDataFlat, rest, vendor, client);
-    reset(userDataFlat);
+    reset(userData);
   }, [userData]);
 
   const {
@@ -161,7 +158,7 @@ export default function Profile() {
     setValue,
     formState: { errors },
   } = useForm<ProfileForm>({
-    // defaultValues: userDataFlat,
+    // defaultValues: userData,
     // {
     //   firstName: userData.firstName || "",
     //   lastName: userData.lastName || "",
@@ -173,16 +170,15 @@ export default function Profile() {
     //   url: "",
     //   userImage: "",
     // },
-    // values: userDataFlat,
+    // values: userData,
     // resolver: zodResolver(ActiveValidationSchema),
   });
-
-
 
   const submitFormHandler = (data: ProfileForm) => {
     console.log("Data to insert", data);
     userEdit(data);
   };
+
 
   return (
     <>
@@ -202,7 +198,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.firstName}
                 {...register("firstName")}
-                defaultValue={userDataFlat.firstName}
+                defaultValue={userData.firstName}
                 control={control}
               />
             )}
@@ -210,7 +206,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.lastName}
                 {...register("lastName")}
-                defaultValue={userDataFlat.lastName}
+                defaultValue={userData.lastName}
                 control={control}
               />
             )}
@@ -218,7 +214,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.companyName}
                 {...register("companyName")}
-                defaultValue={userDataFlat.companyName}
+                defaultValue={userData.companyName}
                 control={control}
               />
             )}
@@ -226,7 +222,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.phone}
                 {...register("phone")}
-                defaultValue={userDataFlat.phone}
+                defaultValue={userData.phone}
                 control={control}
               />
             )}
@@ -234,14 +230,14 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.city}
                 {...register("city")}
-                defaultValue={userDataFlat.city}
+                defaultValue={userData.city}
                 control={control}
               />
             )}
             {checkIfVisible([UserType.CLIENT]) && (
               <RegionSelection
                 {...register("district")}
-                defaultValue={userDataFlat.district}
+                defaultValue={userData.district}
                 control={control}
               />
             )}
@@ -249,7 +245,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.address}
                 {...register("address")}
-                defaultValue={userDataFlat.address}
+                defaultValue={userData.address}
                 control={control}
               />
             )}
@@ -259,7 +255,7 @@ export default function Profile() {
             ]) && (
               <ProfileAbout
                 {...register("about")}
-                defaultValue={userDataFlat.about}
+                defaultValue={userData.about}
                 control={control}
               />
             )}
@@ -268,7 +264,7 @@ export default function Profile() {
               UserType.VENDOR_INDIVIDUAL,
             ]) && (
               <ComboSelectBox
-                defaultValue={userDataFlat.servedDistrict}
+                defaultValue={userData.servedDistrict}
                 // {...register("servedDistrict")}
                 // control={control}
                 setValue={setValue}
@@ -278,7 +274,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.facebook}
                 {...register("facebook")}
-                defaultValue={userDataFlat.facebook}
+                defaultValue={userData.facebook}
                 control={control}
               />
             )}
@@ -286,7 +282,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.instagram}
                 {...register("instagram")}
-                defaultValue={userDataFlat.instagram}
+                defaultValue={userData.instagram}
                 control={control}
               />
             )}
@@ -294,7 +290,7 @@ export default function Profile() {
               <InputField
                 {...profileInputValues.website}
                 {...register("website")}
-                defaultValue={userDataFlat.website}
+                defaultValue={userData.website}
                 control={control}
               />
             )}
