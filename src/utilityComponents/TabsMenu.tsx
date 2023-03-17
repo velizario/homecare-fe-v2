@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -27,9 +28,9 @@ export default function TabsMenu({ tabs, defaultTab }: TabsMenuProps) {
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8" aria-label="Tabs">
           {tabs.map((tab) => (
-            <a
+            <Link
               key={tab.id}
-              href={tab.href}
+              to={tab.href}
               onClick={() => { setCurrent(tab.name); }}
               className={classNames(
                 tab.name === current
@@ -40,7 +41,7 @@ export default function TabsMenu({ tabs, defaultTab }: TabsMenuProps) {
               aria-current={tab.name === current ? 'page' : undefined}
             >
               {tab.name}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>

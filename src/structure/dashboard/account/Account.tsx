@@ -5,9 +5,9 @@ import AccountSettings from "./settings/AccountSettings";
 import Security from "./security/Security";
 
 const tabs = [
-  { id: 1, name: "Профил", href: "#/dashboard/account/profile" },
-  { id: 2, name: "Сигурност", href: "#/dashboard/account/security" },
-  { id: 3, name: "Нотификации", href: "#/dashboard/account/settings" },
+  { id: 1, name: "Профил", href: "/dashboard/account/profile" },
+  { id: 2, name: "Сигурност", href: "/dashboard/account/security" },
+  { id: 3, name: "Нотификации", href: "/dashboard/account/settings" },
 ];
 
 export default function Account() {

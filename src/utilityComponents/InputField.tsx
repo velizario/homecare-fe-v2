@@ -1,4 +1,4 @@
-import { forwardRef, HTMLInputTypeAttribute } from "react";
+import { forwardRef } from "react";
 import {
   Control,
   Controller,
@@ -7,7 +7,6 @@ import {
   useFormState,
 } from "react-hook-form";
 import classNames from "../helpers/classNames";
-import { userState } from "../store/userState";
 
 interface InputFieldProps<T extends FieldValues> {
   control: Control<T, object>;
@@ -18,6 +17,7 @@ interface InputFieldProps<T extends FieldValues> {
   className: string;
   include?: boolean;
   defaultValue?: string;
+  type?: string;
 }
 
 function InputFieldInner<K extends FieldValues>(
@@ -30,6 +30,7 @@ function InputFieldInner<K extends FieldValues>(
     className,
     include,
     defaultValue,
+    type="text",
     ...props
   }: InputFieldProps<K>,
   _ref: React.ForwardedRef<HTMLInputElement>
@@ -52,12 +53,12 @@ function InputFieldInner<K extends FieldValues>(
         name={name}
         render={({ field: { onChange, value, ref } }) => (
           <input
-            {...props}
             defaultValue={defaultValue}
             className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            type="text"
+            type={type}
             id={id}
             autoComplete={autoComplete}
+            {...props}
             ref={ref}
             onChange={onChange}
           />
