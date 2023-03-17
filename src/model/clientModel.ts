@@ -40,6 +40,8 @@ export const userLogin = async (data: {}) => sendRequest("userLogin", data);
 
 export const userEdit = async (data: ProfileForm) => {
   const resData = await requestToAPI(`users/${data.id}`, "PATCH", data);
-  return await resData.data as Client;
+  // if (resData.status === 'success') 
+  return await resData.data as User;
+
 }
 

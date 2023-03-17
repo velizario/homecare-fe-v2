@@ -21,17 +21,18 @@ function App() {
   const [setUserData] = userState((state) => [state.setUserData]);
 
   // do I need to refresh user? How is data lost? Added only for development purposes
-  const refreshUser = async () => {
-    const user = await userDataRefresh();
-    if (user) {
-      setUserData(user)
-    }
-  }
+  // const refreshUser = async () => {
+  //   const user = await userDataRefresh();
+  //   if (user) {
+  //     setUserData(user)
+  //   }
+  // }
 
 
-  useEffect(() => {
-    refreshUser()
-  },[])
+  // useEffect(() => {
+  //   refreshUser()
+  //   console.log("App.tsx user refreshed")
+  // },[])
 
   return (
     <BrowserRouter>

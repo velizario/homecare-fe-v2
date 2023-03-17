@@ -138,8 +138,8 @@ let CompanyValidationSchema = BaseValidationSchema.refine(
 );
 
 export default function Profile() {
-  const userData = userState((state) => state.userData);
-  console.log(userData)
+  console.log("Profile Rendered")
+  const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const ActiveValidationSchema = userData.roles.includes(
     UserType.VENDOR_COMPANY
   )
@@ -149,6 +149,7 @@ export default function Profile() {
   useEffect(() => {
     reset(userData);
   }, [userData]);
+
 
   const {
     control,
@@ -174,9 +175,10 @@ export default function Profile() {
     // resolver: zodResolver(ActiveValidationSchema),
   });
 
-  const submitFormHandler = (data: ProfileForm) => {
-    console.log("Data to insert", data);
-    userEdit(data);
+  const submitFormHandler = async (data: ProfileForm) => {
+    const editedUser = await userEdit(data);
+    if (editedUser.hasOwnProperty("id")) setUserData(editedUser) 
+    else console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.")
   };
 
 
