@@ -9,6 +9,49 @@ import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
 import { userSignup } from "../../model/clientModel";
 import { useState } from "react";
 import { UserType } from "../../types/types";
+import InputField from "../../utilityComponents/InputField";
+
+const RegisterInputValues = {
+  firstName: {
+    className: "",
+    name: "firstName",
+    id: "first-name",
+    label: "Име*",
+    autoComplete: "given-name",
+  },
+  lastName: {
+    className: "",
+    name: "last-name",
+    id: "last-name",
+    label: "Фамилия",
+    autoComplete: "family-name",
+  },
+  companyName: {
+    className: "",
+    name: "company",
+    id: "company",
+    label: "Име на фирма*",
+  },
+  email: {
+    className: "",
+    name: "email-address",
+    id: "email-address",
+    label: "Имейл адрес*",
+    autoComplete: "email",
+  },
+  password: {
+    className: "",
+    name: "password",
+    id: "password",
+    label: "Парола*",
+  },
+  passwordConfirm: {
+    className: "",
+    name: "passwordConfirm",
+    id: "passwordConfirm",
+    label: "Потвърди парола*",
+  },
+};
 
 export type RegistrationForm = {
   firstName: string;
@@ -46,7 +89,6 @@ let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.passwor
 export default function Register() {
   const [setIsLoggedIn, setUserData] = userState((state) => [state.setIsLoggedIn, state.setUserData]);
   const navigate = useNavigate();
-  const [errorMessageAPI, setErrorMessageAPI] = useState(null);
   const [roles, setRoles] = useState<UserType[]>([]);
 
   const ActiveValidationSchema = roles.includes(UserType.VENDOR_COMPANY)
@@ -56,7 +98,9 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
+    setError
   } = useForm<RegistrationForm>({
     resolver: zodResolver(ActiveValidationSchema),
   });
@@ -65,14 +109,13 @@ export default function Register() {
     // add role to the request. Should be of UserType. Cannot be ADMIN
     const dataHydrated = { ...data, roles };
     // reset error message
-    setErrorMessageAPI(null);
     const createAttempt = await userSignup(dataHydrated);
     if (createAttempt.status === "success") {
       setIsLoggedIn(true);
       setUserData(createAttempt.data);
       // navigate("/dashboard");
     }
-    if (createAttempt.status === "fail") setErrorMessageAPI(createAttempt.message);
+    if (createAttempt.status === "fail" && createAttempt.message.includes("email")) setError("email", {message: createAttempt.message}) 
   };
 
   return (
@@ -96,107 +139,26 @@ export default function Register() {
                   "flex flex-col space-y-6 sm:flex-row sm:justify-between sm:space-y-0 sm:space-x-4"
                 )}
               >
-                <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                    Име*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register("firstName")}
-                      id="firstName"
-                      type="text"
-                      autoComplete="given-name"
-                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                    />
-                    <InputErrorMessage>{errors.firstName?.message}</InputErrorMessage>
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                    Фамилия
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      {...register("lastName")}
-                      id="lastName"
-                      name="lastName"
-                      type="text"
-                      autoComplete="family-name"
-                      className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                    />
-                    <InputErrorMessage>{errors.lastName?.message}</InputErrorMessage>
-                  </div>
-                </div>
+                <InputField {...RegisterInputValues.firstName} {...register("firstName")} control={control} />
+                <InputField {...RegisterInputValues.lastName} {...register("lastName")} control={control} />
               </div>
+              <InputField {...RegisterInputValues.companyName} {...register("companyName")} control={control} className={roles.includes(UserType.VENDOR_COMPANY) ? 'block' : 'hidden'}/>
+              <InputField {...RegisterInputValues.email} {...register("email")} control={control} />
 
-              <div className={classNames("flex-col", roles.includes(UserType.VENDOR_COMPANY) ? "flex" : "hidden")}>
-                <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
-                  Име на фирма*
-                </label>
-                <div className="mt-1">
-                  <input
-                    {...register("companyName")}
-                    id="companyName"
-                    name="companyName"
-                    type="text"
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                  <InputErrorMessage>{errors.companyName?.message}</InputErrorMessage>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Имейл адрес*
-                </label>
-                <div className="mt-1">
-                  <input
-                    {...register("email")}
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                  <InputErrorMessage>{errors.email?.message}</InputErrorMessage>
-                  <InputErrorMessage>{errorMessageAPI}</InputErrorMessage>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Парола*
-                </label>
-                <div className="mt-1">
-                  <input
-                    {...register("password")}
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                  <InputErrorMessage>{errors.password?.message}</InputErrorMessage>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700">
-                  Потвърди парола*
-                </label>
-                <div className="mt-1">
-                  <input
-                    {...register("passwordConfirm")}
-                    id="passwordConfirm"
-                    name="passwordConfirm"
-                    type="password"
-                    autoComplete="new-password"
-                    className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                  />
-                  <InputErrorMessage>{errors.passwordConfirm?.message}</InputErrorMessage>
-                </div>
-              </div>
+              <InputField
+                {...RegisterInputValues.password}
+                {...register("password")}
+                defaultValue={""}
+                control={control}
+                type="password"
+              />
+              <InputField
+                {...RegisterInputValues.passwordConfirm}
+                {...register("passwordConfirm")}
+                defaultValue={""}
+                control={control}
+                type="password"
+              />
 
               <div>
                 <button

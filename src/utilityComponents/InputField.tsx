@@ -1,12 +1,7 @@
 import { forwardRef } from "react";
-import {
-  Control,
-  Controller,
-  FieldPath,
-  FieldValues,
-  useFormState,
-} from "react-hook-form";
+import { Control, Controller, FieldPath, FieldValues, useFormState } from "react-hook-form";
 import classNames from "../helpers/classNames";
+import InputErrorMessage from "./InputErrorMessage";
 
 interface InputFieldProps<T extends FieldValues> {
   control: Control<T, object>;
@@ -30,7 +25,7 @@ function InputFieldInner<K extends FieldValues>(
     className,
     include,
     defaultValue,
-    type="text",
+    type = "text",
     ...props
   }: InputFieldProps<K>,
   _ref: React.ForwardedRef<HTMLInputElement>
@@ -39,12 +34,7 @@ function InputFieldInner<K extends FieldValues>(
   const errorMessage = errors[name]?.message?.toString();
 
   return (
-    <div
-      className={classNames(
-        include === undefined && typeof include !== "undefined" ? "hidden" : "",
-        className
-      )}
-    >
+    <div className={classNames(include === undefined && typeof include !== "undefined" ? "hidden" : "", className)}>
       <label htmlFor={name} className="block text-sm font-normal text-gray-900">
         {label}
       </label>
@@ -52,16 +42,19 @@ function InputFieldInner<K extends FieldValues>(
         control={control}
         name={name}
         render={({ field: { onChange, value, ref } }) => (
-          <input
-            defaultValue={defaultValue}
-            className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            type={type}
-            id={id}
-            autoComplete={autoComplete}
-            {...props}
-            ref={ref}
-            onChange={onChange}
-          />
+          <>
+            <input
+              defaultValue={defaultValue}
+              className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              type={type}
+              id={id}
+              autoComplete={autoComplete}
+              {...props}
+              ref={ref}
+              onChange={onChange}
+            />
+            <InputErrorMessage>{errorMessage}</InputErrorMessage>
+          </>
         )}
       />
     </div>

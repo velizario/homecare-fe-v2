@@ -6,6 +6,7 @@ import { userPasswordChange } from "../../../../model/clientModel";
 import { userState } from "../../../../store/userState";
 import InputField from "../../../../utilityComponents/InputField";
 import InputErrorMessage from "../../../../utilityComponents/InputErrorMessage";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const ProfileInputValues = {
   email: {
@@ -56,7 +57,7 @@ export default function Security() {
     reset,
     formState: { errors },
     setError,
-  } = useForm<SecurityForm>();
+  } = useForm<SecurityForm>({ resolver: zodResolver(ValidationSchema) });
 
   const submitFormHandler = async (data: SecurityForm) => {
     const { passwordConfirm, ...dataStripped } = data;
@@ -84,19 +85,23 @@ export default function Security() {
         <form onSubmit={handleSubmit(submitFormHandler)} className="max-w-3xl space-y-8 divide-y">
           <div className="flex flex-col gap-4">
             <p className="text-sm text-gray-500 sm:col-span-6">Промяна на мейл, парола и т.н.</p>
-            <div>
-              <InputField
-                {...ProfileInputValues.email}
-                {...register("email")}
-                control={control}
-                defaultValue={userData.email}
-              />
-              <InputErrorMessage>{errors.email?.message}</InputErrorMessage>
-            </div>
-            <InputField {...ProfileInputValues.password} {...register("password")} control={control} type="password" />
+            <InputField
+              {...ProfileInputValues.email}
+              {...register("email")}
+              control={control}
+              defaultValue={userData.email}
+            />
+            <InputField
+              {...ProfileInputValues.password}
+              {...register("password")}
+              defaultValue={""}
+              control={control}
+              type="password"
+            />
             <InputField
               {...ProfileInputValues.passwordConfirm}
               {...register("passwordConfirm")}
+              defaultValue={""}
               control={control}
               type="password"
             />

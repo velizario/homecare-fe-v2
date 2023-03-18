@@ -10,6 +10,7 @@ import RegionSelection from "./RegionSelection";
 import { userState } from "../../../../store/userState";
 import { userEdit } from "../../../../model/clientModel";
 import { UserType } from "../../../../types/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const profileInputValues = {
   firstName: {
@@ -23,8 +24,8 @@ const profileInputValues = {
   lastName: {
     scope: [UserType.CLIENT, UserType.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
-    name: "last-name", 
-    id: "last-name", 
+    name: "last-name",
+    id: "last-name",
     label: "Фамилия*",
     autoComplete: "family-name",
   },
@@ -57,11 +58,7 @@ const profileInputValues = {
     label: "Инстаграм",
   },
   phone: {
-    scope: [
-      UserType.VENDOR_COMPANY,
-      UserType.VENDOR_INDIVIDUAL,
-      UserType.CLIENT,
-    ],
+    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL, UserType.CLIENT],
     className: "sm:col-span-3",
     name: "phone-number",
     id: "phone-number",
@@ -86,7 +83,7 @@ const profileInputValues = {
 };
 
 export type ProfileForm = {
-  id: string;
+  // id: string;
   firstName: string;
   lastName: string;
   phone: string;
@@ -103,22 +100,22 @@ export type ProfileForm = {
 
 let BaseValidationSchema = z.object({
   firstName: z
-    .string({ required_error: "Required field" })
+    .string({ required_error: "Required field" }).nonempty({message: "Required field"})
     .min(2, { message: "Minimum allowed characters are 2" })
     .max(40, { message: "Maximum allowed characters are 40" }),
-  lastName: z
-    .string({ required_error: "Required field" })
-    .max(40, "Maximum allowed characters are 40"),
-  companyName: z
-    .string()
-    .max(40, "Maximum allowed characters are 40")
-    .nonempty({ message: "Required field" }),
-  email: z
-    .string({ required_error: "Required field" })
-    .email({ message: "Invalid email address" }),
-  password: z
-    .string({ required_error: "Required field" })
-    .min(8, "Password should be at least 8 characters long"),
+  lastName: z.string().nonempty({ message: "Required field" }).max(40, "Maximum allowed characters are 40"),
+  phone: z.string().max(15, "Maximum allowed characters are 15"),
+  district: z.string(),
+  facebook: z.string(),
+  website: z.string(),
+  instagram: z.string(),
+  about: z.string(),
+  city: z.string(),
+  address: z.string(),
+  servedDistrict: z.string(),
+  companyName: z.string().max(40, "Maximum allowed characters are 40").nonempty({ message: "Required field" }),
+  email: z.string({ required_error: "Required field" }).email({ message: "Invalid email address" }),
+  password: z.string({ required_error: "Required field" }).min(8, "Password should be at least 8 characters long"),
   passwordConfirm: z.string({ required_error: "Required field" }),
 });
 
@@ -129,27 +126,21 @@ let DefaultValidationSchema = BaseValidationSchema.omit({
   path: ["passwordConfirm"],
 });
 
-let CompanyValidationSchema = BaseValidationSchema.refine(
-  (data) => data.password === data.passwordConfirm,
-  {
-    message: "Passwords don't match",
-    path: ["passwordConfirm"],
-  }
-);
+let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.password === data.passwordConfirm, {
+  message: "Passwords don't match",
+  path: ["passwordConfirm"],
+});
 
 export default function Profile() {
-  console.log("Profile Rendered")
+  console.log("Profile Rendered");
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
-  const ActiveValidationSchema = userData.roles.includes(
-    UserType.VENDOR_COMPANY
-  )
+  const ActiveValidationSchema = userData.roles.includes(UserType.VENDOR_COMPANY)
     ? CompanyValidationSchema
     : DefaultValidationSchema;
 
   useEffect(() => {
     reset(userData);
   }, [userData]);
-
 
   const {
     control,
@@ -158,7 +149,7 @@ export default function Profile() {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<ProfileForm>({
+  } = useForm<ProfileForm>({resolver: zodResolver(ActiveValidationSchema)
     // defaultValues: userData,
     // {
     //   firstName: userData.firstName || "",
@@ -177,22 +168,16 @@ export default function Profile() {
 
   const submitFormHandler = async (data: ProfileForm) => {
     const editedUser = await userEdit(data);
-    if (editedUser.hasOwnProperty("id")) setUserData(editedUser) 
-    else console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.")
+    if (editedUser.hasOwnProperty("id")) setUserData(editedUser);
+    else console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.");
   };
-
 
   return (
     <>
       <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
-        <form
-          className="max-w-3xl space-y-8"
-          encType="multipart/form-data"
-          onSubmit={handleSubmit(submitFormHandler)}
-        >
+        <form className="max-w-3xl space-y-8" encType="multipart/form-data" onSubmit={handleSubmit(submitFormHandler)}>
           <p className="text-sm text-gray-500">
-            Информацията ще бъде използвана за да съставим вашата
-            &quot;Визитка&quot;.
+            Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.
           </p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <ProfilePhoto />
@@ -237,11 +222,7 @@ export default function Profile() {
               />
             )}
             {checkIfVisible([UserType.CLIENT]) && (
-              <RegionSelection
-                {...register("district")}
-                defaultValue={userData.district}
-                control={control}
-              />
+              <RegionSelection {...register("district")} defaultValue={userData.district} control={control} />
             )}
             {checkIfVisible(profileInputValues.address.scope) && (
               <InputField
@@ -251,20 +232,10 @@ export default function Profile() {
                 control={control}
               />
             )}
-            {checkIfVisible([
-              UserType.VENDOR_COMPANY,
-              UserType.VENDOR_INDIVIDUAL,
-            ]) && (
-              <ProfileAbout
-                {...register("about")}
-                defaultValue={userData.about}
-                control={control}
-              />
+            {checkIfVisible([UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]) && (
+              <ProfileAbout {...register("about")} defaultValue={userData.about} control={control} />
             )}
-            {checkIfVisible([
-              UserType.VENDOR_COMPANY,
-              UserType.VENDOR_INDIVIDUAL,
-            ]) && (
+            {checkIfVisible([UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]) && (
               <ComboSelectBox
                 defaultValue={userData.servedDistrict}
                 // {...register("servedDistrict")}
