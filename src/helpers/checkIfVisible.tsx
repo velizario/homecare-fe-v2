@@ -1,4 +1,4 @@
-import { UserType } from "./types";
+import { UserType } from "../types/types";
 import { userState } from "../store/userState";
 
 const checkIfVisible = ( scope : UserType[]) => {

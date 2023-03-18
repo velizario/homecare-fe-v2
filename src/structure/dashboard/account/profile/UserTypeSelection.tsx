@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserType } from "../../../../helpers/types";
+import { UserType } from "../../../../types/types";
 import { userState } from "../../../../store/userState";
 
 function classNames(...classes: string[]) {

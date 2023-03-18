@@ -1,5 +1,5 @@
 import classNames from "../helpers/classNames";
-import { type SelectionOption } from "../helpers/types";
+import { type SelectionOption } from "../types/types";
 
 interface RadioGroupProps {
   options: SelectionOption[];

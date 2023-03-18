@@ -1,6 +1,6 @@
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { type SelectionOption } from "../../helpers/types";
+import { type SelectionOption } from "../../types/types";
 import ComboSelect from "../../utilityComponents/ComboSelect";
 import RadioGroup from "../../utilityComponents/RadioGroup";
 import CardChoice from "../../utilityComponents/TagSelectGroup";

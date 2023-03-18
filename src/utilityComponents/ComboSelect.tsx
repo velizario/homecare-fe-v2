@@ -3,7 +3,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 import classNames from "../helpers/classNames";
-import { type SelectionOption } from "../helpers/types";
+import { type SelectionOption } from "../types/types";
 import Badge from "./Badge";
 
 interface ComboSelectBoxProps {

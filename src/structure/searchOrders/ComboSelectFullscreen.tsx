@@ -8,7 +8,7 @@ import {
     useState,
 } from "react";
 import classNames from "../../helpers/classNames";
-import { SelectionOption } from "../../helpers/types";
+import { SelectionOption } from "../../types/types";
 import Badge from "../../utilityComponents/Badge";
 
 interface ComboSelectFullScreenProps {

@@ -1,7 +1,7 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { type SelectionOption } from "../../helpers/types";
+import { type SelectionOption } from "../../types/types";
 import RadioGroup from "../../utilityComponents/RadioGroup";
 import CardChoice from "../../utilityComponents/TagSelectGroup";
 import Footer from "../footer/Footer";

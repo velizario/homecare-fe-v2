@@ -1,5 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { UserType } from "../helpers/types";
+import { ApiError, UserType } from "../types/types";
 import { ProfileForm } from "../structure/dashboard/account/profile/Profile";
 import { User } from "./userModel";
 
@@ -44,6 +44,6 @@ export const userEdit = async (data: ProfileForm) => {
 
 export const userPasswordChange = async (data: { email: string; password: string }) => {
   const resData = await requestToAPI(`users/passwordChange`, "PATCH", data);
-  // if (resData.status === 'success')
+  if (resData.hasOwnProperty("message")) return resData as ApiError;
   return (await resData.data) as User;
 };

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import classNames from "../../helpers/classNames";
-import { SelectionOption } from "../../helpers/types";
+import { SelectionOption } from "../../types/types";
 
 interface RangeSliderProps {
     options: SelectionOption[];

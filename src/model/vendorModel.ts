@@ -1,5 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { UserType } from "../helpers/types";
+import { UserType } from "../types/types";
 import { District } from "../structure/dashboard/account/profile/ComboSelectBox";
 
 export interface Vendor {

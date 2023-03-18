@@ -1,4 +1,4 @@
-import { type SelectionOption } from "../helpers/types";
+import { type SelectionOption } from "../types/types";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')

@@ -9,7 +9,7 @@ import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
 import { userState } from "../../../../store/userState";
 import { userEdit } from "../../../../model/clientModel";
-import { UserType } from "../../../../helpers/types";
+import { UserType } from "../../../../types/types";
 
 const profileInputValues = {
   firstName: {

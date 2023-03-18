@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
 import { userSignup } from "../../model/clientModel";
 import { useState } from "react";
-import { UserType } from "../../helpers/types";
+import { UserType } from "../../types/types";
 
 export type RegistrationForm = {
   firstName: string;

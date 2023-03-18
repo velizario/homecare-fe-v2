@@ -1,4 +1,4 @@
-import { WithRequired } from "../helpers/types";
+import { WithRequired } from "../types/types";
 import { Client } from "./clientModel";
 import { Vendor } from "./vendorModel";
 

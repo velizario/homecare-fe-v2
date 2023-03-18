@@ -1,6 +1,6 @@
 import { Switch } from '@headlessui/react'
 import classNames from '../../helpers/classNames';
-import { type SelectionOption } from '../../helpers/types';
+import { type SelectionOption } from '../../types/types';
 
 interface ToggleInputProps {
   options: SelectionOption[];
