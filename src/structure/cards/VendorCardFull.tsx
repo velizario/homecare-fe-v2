@@ -9,6 +9,7 @@ import VendorPrices from "./VendorPrices";
 import CreateOrder from "../searchOrders/CreateOrder";
 import { BACKEND_URL } from "../../helpers/envVariables";
 import { getVendor, Vendor } from "../../model/vendorModel";
+import classNames from "../../helpers/classNames";
 
 export default function VendorCardFull({ vendorId }: { vendorId: string }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -35,15 +36,15 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
             inputModalOpened={inputModalOpened}
             openInputModal={setInputModalOpened}
           />
-          // Larger screen
+          {/* Larger screen */}
           <div className="mx-auto grid max-w-5xl gap-x-3 bg-white sm:grid-cols-[1fr_2fr] sm:px-4 md:gap-x-6 lg:gap-x-9">
             <div className="bg-gradient-to-b from-fuchsia-50 to-indigo-300 [grid-row:1/10] sm:col-start-1 sm:min-w-[13rem] sm:max-w-xs sm:bg-none">
               <div className="mt-36 flex flex-col gap-8 rounded-t-3xl border-r bg-white px-4 sm:mt-0 sm:px-0">
                 {/* Name, town, photo, rating */}
                 <div className="flex flex-col">
-                  <div className="-mt-28 flex w-full max-w-[10rem] flex-col self-center sm:mt-0 sm:max-w-full sm:self-auto">
+                  <div className="-mt-28 flex w-full min-h-[10rem] flex-col self-center sm:mt-0 sm:max-w-full sm:self-auto items-center justify-center">
                     <img
-                      className="w-full rounded-md object-cover [aspect-ratio:_1_/_1]"
+                      className={classNames("w-full rounded-md object-cover [aspect-ratio:_1_/_1]", (!vendor.imageUrl) ? "w-14 h-14" : "")}
                       src={`${BACKEND_URL}/users/public/${
                         vendor.imageUrl || "defaultImage.png"
                       }`}

@@ -11,6 +11,7 @@ import { userState } from "../../../../store/userState";
 import { userEdit } from "../../../../model/clientModel";
 import { UserType } from "../../../../types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toasted } from "../../../../utilityComponents/Toast";
 
 const profileInputValues = {
   firstName: {
@@ -100,39 +101,45 @@ export type ProfileForm = {
 
 let BaseValidationSchema = z.object({
   firstName: z
-    .string({ required_error: "Required field" }).nonempty({message: "Required field"})
+    .string({ required_error: "Required field" })
+    .nonempty({ message: "Required field" })
     .min(2, { message: "Minimum allowed characters are 2" })
     .max(40, { message: "Maximum allowed characters are 40" }),
   lastName: z.string().nonempty({ message: "Required field" }).max(40, "Maximum allowed characters are 40"),
-  phone: z.string().max(15, "Maximum allowed characters are 15"),
-  district: z.string(),
-  facebook: z.string(),
-  website: z.string(),
-  instagram: z.string(),
-  about: z.string(),
-  city: z.string(),
-  address: z.string(),
-  servedDistrict: z.string(),
-  companyName: z.string().max(40, "Maximum allowed characters are 40").nonempty({ message: "Required field" }),
-  email: z.string({ required_error: "Required field" }).email({ message: "Invalid email address" }),
-  password: z.string({ required_error: "Required field" }).min(8, "Password should be at least 8 characters long"),
-  passwordConfirm: z.string({ required_error: "Required field" }),
+  phone: z.string().max(15, "Maximum allowed characters are 15").optional(),
+  district: z.string().optional(),
+  facebook: z.string().optional(),
+  website: z.string().optional(),
+  instagram: z.string().optional(),
+  about: z.string().optional(),
+  city: z.string().optional(),
+  address: z.string().optional(),
+  servedDistrict: z.array(z.object({ id: z.number(), districtName: z.string() })).optional(),
+  companyName: z
+    .string()
+    .max(40, "Maximum allowed characters are 40")
+    .nonempty({ message: "Required field" })
+    .optional(),
+  // email: z.string({ required_error: "Required field" }).email({ message: "Invalid email address" }),
+  // password: z.string({ required_error: "Required field" }).min(8, "Password should be at least 8 characters long"),
+  // passwordConfirm: z.string({ required_error: "Required field" }),
 });
 
 let DefaultValidationSchema = BaseValidationSchema.omit({
   companyName: true,
-}).refine((data) => data.password === data.passwordConfirm, {
-  message: "Passwords don't match",
-  path: ["passwordConfirm"],
 });
+// .refine((data) => data.password === data.passwordConfirm, {
+//   message: "Passwords don't match",
+//   path: ["passwordConfirm"],
+// });
 
-let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.password === data.passwordConfirm, {
-  message: "Passwords don't match",
-  path: ["passwordConfirm"],
-});
+let CompanyValidationSchema = BaseValidationSchema;
+// .refine((data) => data.password === data.passwordConfirm, {
+//   message: "Passwords don't match",
+//   path: ["passwordConfirm"],
+// });
 
 export default function Profile() {
-  console.log("Profile Rendered");
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const ActiveValidationSchema = userData.roles.includes(UserType.VENDOR_COMPANY)
     ? CompanyValidationSchema
@@ -149,7 +156,8 @@ export default function Profile() {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<ProfileForm>({resolver: zodResolver(ActiveValidationSchema)
+  } = useForm<ProfileForm>({
+    resolver: zodResolver(ActiveValidationSchema),
     // defaultValues: userData,
     // {
     //   firstName: userData.firstName || "",
@@ -166,10 +174,20 @@ export default function Profile() {
     // resolver: zodResolver(ActiveValidationSchema),
   });
 
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
   const submitFormHandler = async (data: ProfileForm) => {
+    console.log("!!!!", data);
     const editedUser = await userEdit(data);
-    if (editedUser.hasOwnProperty("id")) setUserData(editedUser);
-    else console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.");
+    if (!editedUser.hasOwnProperty("id")) {
+      console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.");
+      return;
+    }
+
+    setUserData(editedUser);
+    toasted("Информацията е записана успешно", "success");
   };
 
   return (

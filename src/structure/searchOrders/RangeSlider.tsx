@@ -15,15 +15,16 @@ export default function RangeSlider({
     onClick,
     styles,
 }: RangeSliderProps) {
+    const activeArea = options.find(option => option.id === activeId)?.name
     return (
         <div className={classNames("mt-1", styles ?? "")}>
             <div className="flex justify-end whitespace-nowrap rounded px-2 font-medium leading-4 text-indigo-700">
-                <span>{activeId}</span>&nbsp;кв.км
+                <span>{activeArea}</span>&nbsp;кв.км
             </div>
             <input
                 type="range"
                 list="steplist"
-                value={activeId}
+                value={activeArea}
                 onChange={(e) => onClick((e.target as HTMLInputElement).value)}
                 min="0"
                 max="200"

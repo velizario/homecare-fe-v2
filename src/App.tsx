@@ -15,6 +15,7 @@ import SignIn from "./structure/login/SignIn";
 import Register from "./structure/register/Register";
 import SearchOrderWizard from "./structure/searchOrders/SearchOrderWizard";
 import VendorList from "./structure/searchOrders/VendorList";
+import Toaster from "./utilityComponents/Toast";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -28,7 +29,6 @@ function App() {
   //   }
   // }
 
-
   // useEffect(() => {
   //   refreshUser()
   //   console.log("App.tsx user refreshed")
@@ -36,6 +36,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Toaster />
       <Header setSidebarOpen={setSidebarOpen} />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -46,7 +47,7 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="dashboard/*" element={<Dashboard />} />
         <Route path="search-wizard/*" element={<SearchOrderWizard />} />
-        <Route path="vendor-card-full/*" element={<VendorCardFull vendorId="1"/>} />
+        <Route path="vendor-card-full/*" element={<VendorCardFull vendorId="1" />} />
         <Route path="vendor-card/*" element={<VendorCard />} />
         <Route path="vendor-list/*" element={<VendorList />} />
         <Route path="*" element={<PageNotFound />} />

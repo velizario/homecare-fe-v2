@@ -1,32 +1,47 @@
+import { useState } from "react";
+import { FieldPath, FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import classNames from "../helpers/classNames";
 import { type SelectionOption } from "../types/types";
 
-interface RadioGroupProps {
+interface RadioGroupProps<T extends FieldValues> {
   options: SelectionOption[];
-  activeId: string | undefined;
-  onClick: (id: string) => void;
+  // onClick: (id: string) => void;
   styles?: string;
-  name: string;
+  name: FieldPath<T>;
+  setValue: UseFormSetValue<T>;
 }
 
-export default function RadioGroup({ options, activeId, onClick, styles, name }: RadioGroupProps) {
+export default function RadioGroup<K extends FieldValues>({
+  options,
+  styles,
+  name,
+  setValue,
+}: RadioGroupProps<K>) {
+
+  const [activeId, setActiveId] = useState<string | undefined>()
 
   const onSelect = (e: React.SyntheticEvent<HTMLDivElement>) => {
-    console.log(e.currentTarget);
     (e.currentTarget.querySelector("input") as HTMLInputElement).focus();
-    onClick(e.currentTarget.dataset.id as string)
-  }
+    setActiveId(e.currentTarget.dataset.id);
+    setValue(name as Path<K>, e.currentTarget.dataset.id as PathValue<K, Path<K>>);
+  };
 
   const stopPrapagate = (e: React.SyntheticEvent) => {
-    e.stopPropagation()
-  }
+    e.stopPropagation();
+  };
 
   return (
     <fieldset className={classNames("mt-3")}>
       <legend className="sr-only">Plan</legend>
-      <div className={classNames(styles ?? "space-y-5 flex flex-col")} >
+      <div className={classNames(styles ?? "flex flex-col space-y-5")}>
         {options.map((option) => (
-          <div id={name} key={option.id} data-id={option.id} onClick={onSelect} className="relative flex items-start cursor-pointer">
+          <div
+            id={name}
+            key={option.id}
+            data-id={option.id}
+            onClick={onSelect}
+            className="relative flex cursor-pointer items-start"
+          >
             <div className="flex h-5 items-center">
               <input
                 id={`${name}-${option.id}`}
@@ -35,20 +50,25 @@ export default function RadioGroup({ options, activeId, onClick, styles, name }:
                 aria-describedby={`${option.id}-description`}
                 name={name}
                 type="radio"
-                className="mt-1 h-5 w-5 border-gray-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer transition-all duration-300"
+                className="mt-1 h-5 w-5 cursor-pointer border-gray-300 text-indigo-600 transition-all duration-300 focus:ring-indigo-500"
               />
             </div>
             <div className="ml-3">
-              <label htmlFor={`${name}-${option.id}`} onClick={stopPrapagate} className={classNames("text-gray-800 cursor-pointer", activeId === option.id ? "text-indigo-700 font-medium" : "")}>
+              <label
+                htmlFor={`${name}-${option.id}`}
+                onClick={stopPrapagate}
+                className={classNames(
+                  "cursor-pointer text-gray-800",
+                  activeId === option.id ? "font-medium text-indigo-700" : ""
+                )}
+              >
                 {option.name}
               </label>
-              <p  className="text-gray-500 font-light text-sm mt-1.5 cursor-pointer">
-                {option.description}
-              </p>
+              <p className="mt-1.5 cursor-pointer text-sm font-light text-gray-500">{option.description}</p>
             </div>
           </div>
         ))}
       </div>
     </fieldset>
-  )
+  );
 }

@@ -5,8 +5,8 @@ import { ApiError } from "../../../../types/types";
 import { userPasswordChange } from "../../../../model/clientModel";
 import { userState } from "../../../../store/userState";
 import InputField from "../../../../utilityComponents/InputField";
-import InputErrorMessage from "../../../../utilityComponents/InputErrorMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toasted } from "../../../../utilityComponents/Toast";
 
 const ProfileInputValues = {
   email: {
@@ -73,6 +73,7 @@ export default function Security() {
     }
 
     setUserData(editedUser);
+    toasted("Промените са записани")
   };
 
   useEffect(() => {

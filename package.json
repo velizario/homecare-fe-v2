@@ -19,7 +19,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@floating-ui/react": "^0.18.0",
     "@floating-ui/react-dom": "^1.2.1",
-    "@headlessui/react": "^1.7.7",
+    "@headlessui/react": "^0.0.0-insiders.d55c77e",
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.13",
     "@hookform/resolvers": "^2.9.11",
@@ -39,6 +39,7 @@
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.6.1",
     "react-select": "^5.7.0",
+    "react-toastify": "^9.1.1",
     "yup": "^0.32.11",
     "zod": "^3.21.4",
     "zustand": "^4.2.0"

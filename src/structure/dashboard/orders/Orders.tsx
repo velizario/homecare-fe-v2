@@ -4,8 +4,8 @@ import OrderlistGrid from "./orderlist/OrderlistGrid";
 import OrderSchedule from "./orderschedule/OrderSchedule";
 
 const tabs = [
-    { id: 1, name: 'График', href: '#/dashboard/orders/schedule' },
-    { id: 2, name: 'Списък', href: '#/dashboard/orders/list' },
+    { id: 1, name: 'График', href: '/dashboard/orders/schedule' },
+    { id: 2, name: 'Списък', href: '/dashboard/orders/list' },
 ]
 
 export default function Orders() {

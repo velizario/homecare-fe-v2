@@ -91,7 +91,7 @@ export default function ComboSelectBox<K extends FieldValues>({
   }, [defaultValue]);
 
 
-  const changeHalnder = (value: District[]) => {
+  const changeHandler = (value: District[]) => {
     setSelectedDistrict(value);
     setValue("servedDistrict" as Path<K>, value as PathValue<K, Path<K>>);
   };
@@ -101,7 +101,7 @@ export default function ComboSelectBox<K extends FieldValues>({
       as="div"
       //   defaultValue={districts}
       value={selectedDistrict}
-      onChange={changeHalnder}
+      onChange={changeHandler}
       multiple
       //   nullable
       className="coverage-combo-box sm:col-span-3"
@@ -114,7 +114,7 @@ export default function ComboSelectBox<K extends FieldValues>({
           <button
             type="button"
             onClick={() => {
-              changeHalnder(
+              changeHandler(
                 selectedDistrict.length !== districts.length ? districts : []
               );
             }}

@@ -10,6 +10,7 @@ import { userSignup } from "../../model/clientModel";
 import { useState } from "react";
 import { UserType } from "../../types/types";
 import InputField from "../../utilityComponents/InputField";
+import Toaster, { toasted } from "../../utilityComponents/Toast";
 
 const RegisterInputValues = {
   firstName: {
@@ -100,7 +101,7 @@ export default function Register() {
     handleSubmit,
     control,
     formState: { errors },
-    setError
+    setError,
   } = useForm<RegistrationForm>({
     resolver: zodResolver(ActiveValidationSchema),
   });
@@ -113,9 +114,11 @@ export default function Register() {
     if (createAttempt.status === "success") {
       setIsLoggedIn(true);
       setUserData(createAttempt.data);
-      // navigate("/dashboard");
+      toasted("Регистрирахте се успешно!", "success")
+      navigate("/dashboard");
     }
-    if (createAttempt.status === "fail" && createAttempt.message.includes("email")) setError("email", {message: createAttempt.message}) 
+    if (createAttempt.status === "fail" && createAttempt.message.includes("email"))
+      setError("email", { message: createAttempt.message });
   };
 
   return (
@@ -142,7 +145,12 @@ export default function Register() {
                 <InputField {...RegisterInputValues.firstName} {...register("firstName")} control={control} />
                 <InputField {...RegisterInputValues.lastName} {...register("lastName")} control={control} />
               </div>
-              <InputField {...RegisterInputValues.companyName} {...register("companyName")} control={control} className={roles.includes(UserType.VENDOR_COMPANY) ? 'block' : 'hidden'}/>
+              <InputField
+                {...RegisterInputValues.companyName}
+                {...register("companyName")}
+                control={control}
+                className={roles.includes(UserType.VENDOR_COMPANY) ? "block" : "hidden"}
+              />
               <InputField {...RegisterInputValues.email} {...register("email")} control={control} />
 
               <InputField

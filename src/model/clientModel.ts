@@ -37,7 +37,7 @@ export const userSignup = async (data: {}) => sendRequest("userSignup", data);
 export const userLogin = async (data: {}) => sendRequest("userLogin", data);
 
 export const userEdit = async (data: ProfileForm) => {
-  const resData = await requestToAPI(`users/${data.id}`, "PATCH", data);
+  const resData = await requestToAPI(`users`, "PATCH", data);
   // if (resData.status === 'success')
   return (await resData.data) as User;
 };
