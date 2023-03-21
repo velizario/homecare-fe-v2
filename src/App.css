@@ -4,6 +4,12 @@
 
 }
 
+html {
+  /* override overflow hidden from headless ui modal */
+  overflow: auto !important;
+  padding: 0 !important;
+}
+
 /* body {
     min-height: 100vh;
     min-height: -moz-available;
