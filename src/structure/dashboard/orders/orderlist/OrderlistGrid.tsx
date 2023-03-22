@@ -1,14 +1,14 @@
-import OrderItem from "./OrderItem";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { ClipboardDocumentCheckIcon, HomeIcon, MapPinIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
 import classNames from "../../../../helpers/classNames";
+import { getAllOrders } from "../../../../model/orderModel";
+import { orderState } from "../../../../store/orderState";
+import { userState } from "../../../../store/userState";
+import { areaSizes, orderFrequency, OrderStatus, services } from "../../../../types/types";
 import ContextMenu from "../../../../utilityComponents/ContextMenu";
 import Filters from "../../../../utilityComponents/Filters";
-import { ClipboardDocumentCheckIcon, HomeIcon, UserIcon, MapPinIcon } from "@heroicons/react/24/outline";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useEffect } from "react";
-import { getAllOrders, getOrder } from "../../../../model/orderModel";
-import { orderState } from "../../../../store/orderState";
-import { areaSizes, orderFrequency, OrderStatus, services } from "../../../../types/types";
-import { userState } from "../../../../store/userState";
+import OrderItem from "./OrderItem";
 
 const people = [
   {
@@ -113,6 +113,7 @@ const people = [
 export default function OrderlistGrid() {
   const [orderData, setOrderData] = orderState((state) => [state.orderData, state.setOrderData]);
   const [userRoles] = userState((state) => [state.userData.roles]);
+
   const fetchOrders = async () => {
     // const order = await getOrder("4");
     const orders = await getAllOrders();
@@ -125,9 +126,11 @@ export default function OrderlistGrid() {
 
   return (
     <div className="pt-4">
-      <p className="mb-4 text-sm text-gray-500 sm:col-span-6">Списък със заявени, договорени и изпълнени поръчки.</p>
       {orderData.length > 0 && (
         <>
+          <p className="mb-4 text-sm text-gray-500 sm:col-span-6">
+            Списък със заявени, договорени и изпълнени поръчки.
+          </p>
           <Filters />
           {/* Desktop view */}
           <div className="hidden flex-col gap-4 md:flex">
@@ -139,37 +142,39 @@ export default function OrderlistGrid() {
               <OrderItem>Услуга</OrderItem>
               <OrderItem>Честота</OrderItem>
             </div>
-            {orderData.sort((a, b) => Number(b.id) - Number(a.id)).map((order) => {
-              return (
-                <div
-                  key={order.id}
-                  className="grid auto-rows-fr grid-cols-[1fr,1fr,1.5rem] gap-y-10 rounded-lg border border-indigo-100 bg-white  py-1 text-gray-800 shadow-order transition-shadow hover:shadow-order-hover md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1.5rem] md:px-5"
-                >
-                  <OrderItem styles="md:block text-xs text-indigo-500 font-medium cursor-pointer hover:text-indigo-900">
-                    #{order.id}
-                  </OrderItem>
-                  <OrderItem>{userRoles.includes(1) ? order.clientName : order.vendorName}</OrderItem>
-                  <OrderItem>{areaSizes.get(order.areaSize)}</OrderItem>
-                  <OrderItem>{OrderStatus.get(order.status?.toString())}</OrderItem>
-                  <OrderItem styles="text-xs whitespace-normal line-clamp-3">{services.get(order.service)}</OrderItem>
-                  <OrderItem>
-                    {
-                      <span
-                        className={classNames(
-                          order.frequency === "subscription"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-purple-100 text-purple-800",
-                          "inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium"
-                        )}
-                      >
-                        {orderFrequency.get(order.frequency.toString())}
-                      </span>
-                    }
-                  </OrderItem>
-                  <ContextMenu orderId={order.id} />
-                </div>
-              );
-            })}
+            {orderData
+              .sort((a, b) => Number(b.id) - Number(a.id))
+              .map((order) => {
+                return (
+                  <div
+                    key={order.id}
+                    className="grid auto-rows-fr grid-cols-[1fr,1fr,1.5rem] gap-y-10 rounded-lg border border-indigo-100 bg-white  py-1 text-gray-800 shadow-order transition-shadow hover:shadow-order-hover md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1.5rem] md:px-5"
+                  >
+                    <OrderItem styles="md:block text-xs text-indigo-500 font-medium cursor-pointer hover:text-indigo-900">
+                      #{order.id}
+                    </OrderItem>
+                    <OrderItem>{userRoles.includes(1) ? order.clientName : order.vendorName}</OrderItem>
+                    <OrderItem>{areaSizes.get(order.areaSize)}</OrderItem>
+                    <OrderItem>{OrderStatus.get(order.status?.toString())}</OrderItem>
+                    <OrderItem styles="text-xs whitespace-normal line-clamp-3">{services.get(order.service)}</OrderItem>
+                    <OrderItem>
+                      {
+                        <span
+                          className={classNames(
+                            order.frequency === "subscription"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-purple-100 text-purple-800",
+                            "inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium"
+                          )}
+                        >
+                          {orderFrequency.get(order.frequency.toString())}
+                        </span>
+                      }
+                    </OrderItem>
+                    <ContextMenu orderId={order.id}/>
+                  </div>
+                );
+              })}
           </div>
 
           {/* Mobile view */}

@@ -1,9 +1,10 @@
-import { Fragment, MouseEventHandler, useEffect, useState } from "react";
+import { Dispatch, Fragment, MouseEventHandler, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { cancelOrder, getAllOrders } from "../model/orderModel";
 import { orderState } from "../store/orderState";
 import Modal from "./Modal";
+import { Link } from "react-router-dom";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -17,19 +18,19 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
   const setOrderData = orderState((state) => state.setOrderData);
   const [modalOpen, setModalOpen] = useState(false);
   const [userConfirmed, setUserConfirmed] = useState(false);
-  const [cancelOrderId, setCancelOrderId] = useState<string | undefined>();
+  const [orderAnullment, setOrderAnullment] = useState(false);
 
   useEffect(() => {
-    if (userConfirmed && cancelOrderId) {
+    if (userConfirmed && orderAnullment) {
       callCancelOrder();
       setUserConfirmed(false);
-      setCancelOrderId(undefined)
+      setOrderAnullment(false);
     }
-  }, [userConfirmed, cancelOrderId]);
+  }, [userConfirmed, orderAnullment]);
 
   const callCancelOrder = async () => {
-    if (!cancelOrderId) return;
-    await cancelOrder(cancelOrderId);
+    if (!orderAnullment) return;
+    await cancelOrder(orderId);
     const orders = await getAllOrders();
     if (orders) setOrderData(orders);
   };
@@ -37,7 +38,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
   const handleCancelOrder: MouseEventHandler<HTMLAnchorElement> = async (e) => {
     const orderId = e.currentTarget.dataset.id;
     if (!orderId) return;
-    setCancelOrderId(orderId);
+    setOrderAnullment(true);
     setModalOpen(true);
   };
 
@@ -45,7 +46,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
     <Menu as="div" className="relative hidden w-min items-center justify-center text-left md:flex">
       <Modal
         title="Прекратяване на поръчка"
-        description="Прекратяването приключва отношенията клиент-доставчи. Сигурни ли сте, че искате да продължите?"
+        description="Прекратяването приключва отношенията клиент-доставчик. Сигурни ли сте, че искате да продължите?"
         btnPositive="Прекратяване"
         btnNegative="Затвори"
         confirmAction={setUserConfirmed}
@@ -72,14 +73,15 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
-                <a
+                <Link
+                  to={`/dashboard/orders/${orderId}`}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "block cursor-pointer px-4 py-2 text-sm"
                   )}
                 >
                   Редактиране
-                </a>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>

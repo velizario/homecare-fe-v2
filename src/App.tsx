@@ -9,6 +9,7 @@ import VendorCardFull from "./structure/cards/VendorCardFull";
 import Contact from "./structure/contact/Contact";
 import Dashboard from "./structure/dashboard/Dashboard";
 import PageNotFound from "./structure/defaultRoutePage/PageNotFound";
+import Footer from "./structure/footer/Footer";
 import Header from "./structure/header/Header";
 import HomePage from "./structure/homepage/HomePage";
 import SignIn from "./structure/login/SignIn";
@@ -46,12 +47,12 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
         <Route path="dashboard/*" element={<Dashboard />} />
-        <Route path="search-wizard/*" element={<SearchOrderWizard />} />
         <Route path="vendor-card-full/*" element={<VendorCardFull vendorId="1" />} />
         <Route path="vendor-card/*" element={<VendorCard />} />
         <Route path="vendor-list/*" element={<VendorList />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }
