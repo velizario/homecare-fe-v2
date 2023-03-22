@@ -20,7 +20,7 @@ export default function Orders() {
                 <Route path="/" element={<OrderSchedule/>}/>
                 <Route path="schedule" element={<OrderSchedule />} />
                 <Route path="list" element={<OrderlistGrid />} />
-                <Route path=":id" element={<OrderDetails/>} />
+                <Route path=":orderId" element={<OrderDetails/>} />
             </Routes>
         </div>
     )

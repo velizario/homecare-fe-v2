@@ -7,6 +7,8 @@ import { CreateOrderForm } from "../structure/searchOrders/CreateOrderInput";
 export interface Order extends CreateOrderForm {
   id: string;
   clientName: string;
+  clientImgUrl: string;
+  vendorImgUrl: string;
   vendorName: string;
   status: string;
 }
