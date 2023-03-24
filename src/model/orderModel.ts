@@ -1,5 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { CreateOrderForm } from "../structure/searchOrders/CreateOrderInput";
+import { CreateOrderForm } from "../structure/orderManagement/CreateOrderInput";
 
 
 

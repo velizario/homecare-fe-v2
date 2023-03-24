@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import checkIfVisible from "../../../../helpers/checkIfVisible";
 import InputField from "../../../../utilityComponents/InputField";
-import ComboSelectBox, { District } from "./ComboSelectBox";
+import ComboSelectBox, { District } from "./ComboSelectBoxMultiple";
 import ProfilePhoto from "./ProfilePhoto";
 import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
@@ -12,6 +12,7 @@ import { userEdit } from "../../../../model/clientModel";
 import { UserType } from "../../../../types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toasted } from "../../../../utilityComponents/Toast";
+import ComboSelectFullScreen from "../../../searchOrders/ComboSelectFullscreen";
 
 const profileInputValues = {
   firstName: {
@@ -253,6 +254,7 @@ export default function Profile() {
             {checkIfVisible([UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]) && (
               <ProfileAbout {...register("about")} defaultValue={userData.about} control={control} />
             )}
+
             {checkIfVisible([UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]) && (
               <ComboSelectBox
                 defaultValue={userData.servedDistrict}

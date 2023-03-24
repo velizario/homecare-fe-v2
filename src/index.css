@@ -61,7 +61,7 @@
 
   .animate-backdrop {
     animation-name: animate-backdrop;
-    animation-duration: 200ms;
+    animation-duration: 300ms;
     animation-fill-mode: forwards;
   }
 

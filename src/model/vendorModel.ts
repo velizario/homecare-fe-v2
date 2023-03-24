@@ -1,6 +1,6 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { UserType } from "../types/types";
-import { District } from "../structure/dashboard/account/profile/ComboSelectBox";
+import { District } from "../structure/dashboard/account/profile/ComboSelectBoxMultiple";
 
 export interface Vendor {
     id: string;

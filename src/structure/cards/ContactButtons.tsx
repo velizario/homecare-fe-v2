@@ -5,15 +5,15 @@ import {
 import { Link } from "react-router-dom";
 
 interface ContactButtonProps {
-    openInputModal: React.Dispatch<React.SetStateAction<boolean>>;
+    openRequest: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ContactButtons({ openInputModal }: ContactButtonProps) {
+export default function ContactButtons({ openRequest }: ContactButtonProps) {
     return (
         <div className="flex w-full flex-1 flex-col gap-[22px] whitespace-nowrap ">
             <button
                 type="button"
-                onClick={(e) => {e.stopPropagation(); openInputModal(true)}}
+                onClick={(e) => {e.stopPropagation(); openRequest(true)}}
                 className="inline-flex items-center justify-center gap-2 rounded border border-transparent bg-indigo-600 px-2.5 py-3 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
                 <CalendarIcon className="h-5 w-5"></CalendarIcon>

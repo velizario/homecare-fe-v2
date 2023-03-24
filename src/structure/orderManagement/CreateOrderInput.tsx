@@ -1,17 +1,16 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Dispatch, MouseEventHandler, useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { FieldPath, FieldValues, Path, PathValue, useForm, UseFormSetValue, useWatch } from "react-hook-form";
-import { type SelectionOption } from "../../types/types";
-import RadioGroup from "../../utilityComponents/RadioGroup";
-import CardChoice from "../../utilityComponents/CardChoice";
-import ComboSelectFullScreen from "./ComboSelectFullscreen";
-import RangeSlider from "./RangeSlider";
-import Toggle from "./ToggleInput";
-import { toasted } from "../../utilityComponents/Toast";
 import { createOrder } from "../../model/orderModel";
+import { type SelectionOption } from "../../types/types";
+import CardChoice from "../../utilityComponents/CardChoice";
+import RadioGroup from "../../utilityComponents/RadioGroup";
+import { toasted } from "../../utilityComponents/Toast";
+import RangeSlider from "../searchOrders/RangeSlider";
+import Toggle from "../searchOrders/ToggleInput";
 
 interface CreateOrderInputProps {
-  openInputModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setNextStep: () => void
 }
 
 export type CreateOrderForm = {
@@ -180,7 +179,7 @@ const ServiceHourChoices: SelectionOption[] = [
   // More users...
 ];
 
-export default function CreateOrderInput({ openInputModal }: CreateOrderInputProps) {
+export default function CreateOrderInput({ setNextStep }: CreateOrderInputProps) {
   const {
     control,
     setValue,
@@ -239,11 +238,10 @@ export default function CreateOrderInput({ openInputModal }: CreateOrderInputPro
   };
 
   const submitFormHandler = async (data: CreateOrderForm) => {
-    openInputModal(false);
-    console.log("data to request: ", data)
     const resData = await createOrder(data);
     console.log(resData);
     toasted(`Заявката е изпратена! Можете да видите статуса й в административния панел`, "success")
+    setNextStep()
   };
 
   return (
