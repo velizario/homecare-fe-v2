@@ -31,7 +31,7 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
   }, []);
 
   useEffect(() => {
-    requestActive;
+    console.log(requestActive);
   }, [requestActive]);
 
   return (

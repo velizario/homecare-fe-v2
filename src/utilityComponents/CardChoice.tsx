@@ -20,7 +20,7 @@ export default function CardChoice<K extends FieldValues>({
   activeId,
 }: CardChoiceProps<K>) {
   return (
-    <div className={classNames("mt-3 flex flex-wrap gap-3 whitespace-nowrap sm:col-span-4", styles ?? "")}>
+    <div className={classNames("mt-4 flex  flex-wrap gap-4 whitespace-nowrap ", styles ?? "")}>
       {options.map((option) => (
         <div
           key={option.id}
@@ -28,9 +28,9 @@ export default function CardChoice<K extends FieldValues>({
           onClick={handleUpdate}
           className={classNames(
             activeId.includes(option.id)
-              ? "border-transparent bg-indigo-600 text-white"
-              : "border-gray-200 bg-white text-gray-600 hover:bg-indigo-50",
-            "flex flex-1 cursor-pointer justify-center gap-1 rounded-full border py-3 px-5 text-sm shadow-order "
+              ? "border-transparent  text-indigo-700 ring-1 ring-indigo-400 bg-indigo-50 "
+              : " text-gray-600 ring-1 ring-indigo-100",
+            "flex flex-1 cursor-pointer justify-center gap-1 rounded-full py-3 px-5 text-sm shadow-sm hover:ring-indigo-300"
           )}
         >
           <span className="text-base">{option.name}</span>

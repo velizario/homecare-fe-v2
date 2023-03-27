@@ -8,14 +8,14 @@ interface RadioGroupProps<T extends FieldValues> {
   // onClick: (id: string) => void;
   styles?: string;
   name: FieldPath<T>;
-  setValue: UseFormSetValue<T>;
+  // setValue: UseFormSetValue<T>;
 }
 
 export default function RadioGroup<K extends FieldValues>({
   options,
   styles,
   name,
-  setValue,
+  // setValue,
 }: RadioGroupProps<K>) {
 
   const [activeId, setActiveId] = useState<string | undefined>()
@@ -23,7 +23,7 @@ export default function RadioGroup<K extends FieldValues>({
   const onSelect = (e: React.SyntheticEvent<HTMLDivElement>) => {
     (e.currentTarget.querySelector("input") as HTMLInputElement).focus();
     setActiveId(e.currentTarget.dataset.id);
-    setValue(name as Path<K>, e.currentTarget.dataset.id as PathValue<K, Path<K>>);
+    // setValue(name as Path<K>, e.currentTarget.dataset.id as PathValue<K, Path<K>>);
   };
 
   const stopPrapagate = (e: React.SyntheticEvent) => {

@@ -1,16 +1,17 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useRef } from "react";
 import { FieldPath, FieldValues, Path, PathValue, useForm, UseFormSetValue, useWatch } from "react-hook-form";
+import Schedule from "../../assets/schedule.jpg";
 import { createOrder } from "../../model/orderModel";
 import { type SelectionOption } from "../../types/types";
 import CardChoice from "../../utilityComponents/CardChoice";
-import RadioGroup from "../../utilityComponents/RadioGroup";
 import { toasted } from "../../utilityComponents/Toast";
 import RangeSlider from "../searchOrders/RangeSlider";
-import Toggle from "../searchOrders/ToggleInput";
+import Location from "../../assets/location.jpg";
+import ComboSingleSelect from "./ComboSingleSelect";
 
 interface CreateOrderInputProps {
-  setNextStep: () => void
+  setNextStep: () => void;
 }
 
 export type CreateOrderForm = {
@@ -104,7 +105,7 @@ const additionalServiceChoices: Record<string, SelectionOption[]> = {
   ],
 };
 
-const frequencyChoices: SelectionOption[] = [
+export const frequencyChoices: SelectionOption[] = [
   { id: "1", name: "Еднократно" },
   { id: "2", name: "Седмично" },
   { id: "3", name: "На 2 седмици" },
@@ -240,101 +241,87 @@ export default function CreateOrderInput({ setNextStep }: CreateOrderInputProps)
   const submitFormHandler = async (data: CreateOrderForm) => {
     const resData = await createOrder(data);
     console.log(resData);
-    toasted(`Заявката е изпратена! Можете да видите статуса й в административния панел`, "success")
-    setNextStep()
+    toasted(`Заявката е изпратена! Можете да видите статуса й в административния панел`, "success");
+    setNextStep();
   };
 
   return (
-    <form onSubmit={handleSubmit(submitFormHandler)}>
-      <div className="relative flex w-full flex-col px-4">
-        <h2 id="step-1" className="mx-auto mb-8 text-2xl text-gray-900">
-          Запазване на час
-        </h2>
-        <RadioGroup name="service" options={serviceTypeChoices} setValue={setValue} />
-        <Toggle
-          visible={watch.service ? true : false}
-          options={additionalServiceChoices[watch.service ?? "1"]}
-          styles=""
-          setValue={setValue}
-          name="additionalService"
-        />
-        <h2 id="step-3" className="mt-10 text-xl text-gray-900">
-          Колко често ще са посещенията?
-        </h2>
-        <RadioGroup name="frequency" options={frequencyChoices} setValue={setValue}></RadioGroup>
-        <h2 id="step-4" className="mt-10 text-xl text-gray-900">
-          В кои дни искате да са посещенията?
-        </h2>
-        <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
-        <CardChoice
-          options={serviceDayChoices}
-          styles="grid grid-cols-2 "
-          handleUpdate={(e) =>
-            CardChoiceUpdateHandler(e.currentTarget.dataset.id, watch.serviceDay, setValue, "serviceDay")
-          }
-          activeId={watch.serviceDay || []}
-        ></CardChoice>
-        <h2 id="step-5" className="mt-10 text-xl text-gray-900">
-          В кои часове искате да са посещенията?
-        </h2>
-        <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
-        <div className="mt-3 flex justify-between px-2">
-          <button
-            className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-            data-id="morning"
-            onClick={handleServiceHoursMultiple}
-          >
-            <PlusIcon className="-ml-1 mr-0.5 mt-0.5 h-3 w-3" /> преди обяд
-          </button>
-          <button
-            className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-            data-id="afternoon"
-            onClick={handleServiceHoursMultiple}
-          >
-            <PlusIcon className="-ml-1 mr-0.5 mt-0.5 h-3 w-3" />
-            след обяд
-          </button>
-          <button
-            className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-            data-id="clear"
-            onClick={handleServiceHoursMultiple}
-          >
-            <XMarkIcon className="-ml-1 mr-0.5 mt-0.5 h-3 w-3" />
-            изчисти
-          </button>
-        </div>
-        <CardChoice
-          options={ServiceHourChoices}
-          styles="grid grid-cols-3"
-          activeId={watch.serviceHour || []}
-          handleUpdate={(e) =>
-            CardChoiceUpdateHandler(e.currentTarget.dataset.id, watch.serviceHour, setValue, "serviceHour")
-          }
-        ></CardChoice>
-        <div className="mt-10  items-center justify-between text-gray-100">
-          <h2 id="step-6" className="text-xl text-gray-900">
-            Каква площ ще почистваме?
-          </h2>
-        </div>
-        <RangeSlider options={areaSizeChoices} activeId={watch.areaSize} onClick={handleAreaSizeChange} styles="" />
+    <form className="relative flex w-full flex-col p-8" onSubmit={handleSubmit(submitFormHandler)}>
+      <div className="mb-10 flex items-center gap-4">
+        <h2 className=" text-center text-lg font-semibold leading-7 text-indigo-600">Колко често ще ви посещаваме?</h2>
+        <img src={Schedule} className="h-20 w-20" />
+      </div>
 
-        <h2 ref={cleaningRef} id="step-7" className="mt-10 text-xl text-gray-900">
-          Къде ще почистваме?
-        </h2>
-        <p className="text-xs text-gray-600">(Ориентировъчна локация)</p>
-        {/* <ComboSelect
-                options={districtChoices}
-                selection={district}
-                handleChange={handleDistrict}
-                styles=""
-            ></ComboSelect> */}
+      <CardChoice
+        options={serviceDayChoices}
+        styles="grid grid-cols-2"
+        handleUpdate={(e) =>
+          CardChoiceUpdateHandler(e.currentTarget.dataset.id, watch.serviceDay, setValue, "serviceDay")
+        }
+        activeId={watch.serviceDay || []}
+      ></CardChoice>
+      <p className="mt-4 text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+
+      <div className="mt-14 flex justify-between px-2">
         <button
-          type="submit"
-          className="mt-10 flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+          className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+          data-id="morning"
+          onClick={handleServiceHoursMultiple}
         >
-          Изпрати заявка
+          <PlusIcon className="-ml-1 mr-0.5 mt-0.5 h-3 w-3" /> преди обяд
+        </button>
+        <button
+          className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+          data-id="afternoon"
+          onClick={handleServiceHoursMultiple}
+        >
+          <PlusIcon className="-ml-1 mr-0.5 mt-0.5 h-3 w-3" />
+          след обяд
+        </button>
+        <button
+          className="inline-flex items-center rounded bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+          data-id="clear"
+          onClick={handleServiceHoursMultiple}
+        >
+          <XMarkIcon className="-ml-1 mr-0.5 mt-0.5 h-3 w-3" />
+          изчисти
         </button>
       </div>
+
+      <CardChoice
+        options={ServiceHourChoices}
+        styles="grid grid-cols-3"
+        activeId={watch.serviceHour || []}
+        handleUpdate={(e) =>
+          CardChoiceUpdateHandler(e.currentTarget.dataset.id, watch.serviceHour, setValue, "serviceHour")
+        }
+      ></CardChoice>
+      <p className="mt-4 text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+
+      <div className="mt-10  flex items-center justify-between text-gray-100">
+        <h2 id="step-6" className=" text-center text-lg font-semibold leading-7 text-indigo-600">
+          Каква площ ще почистваме?
+        </h2>
+        <img
+          className="h-20 w-20"
+          src="https://i.pinimg.com/originals/6f/d8/84/6fd884b4cba095b894173481692785cd.gif"
+        ></img>
+      </div>
+      <RangeSlider options={areaSizeChoices} activeId={watch.areaSize} onClick={handleAreaSizeChange} styles="" />
+
+      <div className="mt-10 flex items-center justify-between">
+        <h2 ref={cleaningRef} id="step-7" className=" text-center text-lg font-semibold leading-7 text-indigo-600">
+          В кой район ще почистваме?
+        </h2>
+        <img className="h-20 w-20" src={Location} />
+      </div>
+      <ComboSingleSelect />
+      <button
+        type="submit"
+        className="mt-10 flex items-center justify-center rounded-md  bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+      >
+        Изпрати заявка
+      </button>
     </form>
   );
 }
