@@ -4,7 +4,6 @@ import { BACKEND_URL } from "../../helpers/envVariables";
 import { getVendor, Vendor } from "../../model/vendorModel";
 import RatingCard from "../../utilityComponents/RatingCard";
 import CreateOrder from "../orderManagement/CreateOrder";
-import SelectService from "../orderManagement/SelectService";
 import ContactButtons from "./ContactButtons";
 import DetailedInfo from "./DetailedInfo";
 import Perks from "./Perks";
