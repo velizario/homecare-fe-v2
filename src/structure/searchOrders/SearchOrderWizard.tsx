@@ -200,14 +200,14 @@ export default function SearchOrderWizard() {
             <TransitionWrapper visible={active === 4} btnNext={nextStep}>
                 <div>
                     <p className="text-2xl font-light text-gray-900 pb-8">В кои дни искате да са посещенията?</p>
-                    <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+                    <p className="text-xs text-gray-600">(Избери повече варианти, ако ви устройват)</p>
                     <CardChoice options={serviceDayChoices} onClick={handleServiceDays} activeId={serviceDays} styles="grid grid-cols-2"></CardChoice>
                 </div>
             </TransitionWrapper>
             <TransitionWrapper visible={active === 5} btnNext={nextStep}>
                 <div>
                     <p className="text-2xl font-light text-gray-900 pb-8">В кои часове искате да са посещенията?</p>
-                    <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+                    <p className="text-xs text-gray-600">(Избери повече варианти, ако ви устройват)</p>
                     <div className="flex justify-between py-3 flex-wrap gap-2">
                         <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="morning" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1"/> преди обяд</button>
                         <button className="inline-flex items-center rounded-full px-3 py-1.5 text-sm whitespace-nowrap font-medium bg-indigo-100 text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2" data-id="afternoon" onClick={handleServiceHoursMultiple}><PlusIcon className="h-4 w-4 mt-0.5 -ml-1"/>след обяд</button>

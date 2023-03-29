@@ -258,7 +258,7 @@ export default function CreateOrderDynamic() {
           <p id="step-4" className="pb-8 text-2xl font-light text-gray-900">
             В кои дни искате да са посещенията?
           </p>
-          <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+          <p className="text-xs text-gray-600">(Избери повече варианти, ако ви устройват)</p>
           <CardChoice
             options={serviceDayChoices}
             onClick={handleServiceDays}
@@ -272,7 +272,7 @@ export default function CreateOrderDynamic() {
           <p id="step-5" className="pb-8 text-2xl font-light text-gray-900">
             В кои часове искате да са посещенията?
           </p>
-          <p className="text-xs text-gray-600">(Изберете повече варианти, ако ви устройват)</p>
+          <p className="text-xs text-gray-600">(Избери повече варианти, ако ви устройват)</p>
           <div className="flex flex-wrap justify-between gap-2 py-3">
             <button
               className="inline-flex items-center whitespace-nowrap rounded-full bg-indigo-100 px-3 py-1.5 text-sm font-medium text-indigo-700  hover:bg-indigo-200  active:outline-none active:ring-2 active:ring-indigo-500 active:ring-offset-2"

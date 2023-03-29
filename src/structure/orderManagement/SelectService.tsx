@@ -1,75 +1,23 @@
 import { Dispatch, SetStateAction } from "react";
+import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import classNames from "../../helpers/classNames";
+import { serviceTypeChoices } from "../../store/static";
 
-const serviceTypeChoices = [
-  {
-    id: "1",
-    title: "Почистване на дома",
-    description: "Почистване на гъз, глава, и тем подобни",
-    img: "https://topmopscleaning.com/wp-content/uploads/2021/04/keeping-a-house-clean.jpeg",
-  },
-  {
-    id: "2",
-    title: "Почистване на офиси и магазини",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://nswcommercialcleaning.com.au/wp-content/uploads/2018/04/iStock-609094288.jpg",
-  },
-  {
-    id: "3",
-    title: "Основно почистване",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://cdn-ffokf.nitrocdn.com/LFtvDxXrnvtNThwjbFdxUfsgQYSGUhUB/assets/images/optimized/rev-37403d5/wp-content/uploads/2023/03/house-dusting.png",
-  },
-  {
-    id: "4",
-    title: "Следремонтно чистене",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://prohousekeepers.com/wp-content/uploads/2019/05/post-construction-cleanup.jpg",
-  },
-  {
-    id: "5",
-    title: "Индустриално обслужване",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://www.service-techcorp.com/hs-fs/hubfs/Industrial_Cleaning.jpeg?width=863&name=Industrial_Cleaning.jpeg",
-  },
-  {
-    id: "6",
-    title: "Пране на мека мебел",
-    description: "Почистване на фотьойли и изхвърляне на котки",
-    img: "https://media.angi.com/s3fs-public/Man-professionally-cleaning-couch.jpg?impolicy=leadImage",
-  },
-  {
-    id: "7",
-    title: "Пране на мокети / килими",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://aadvancedcarpetcleaning.com/wp-content/uploads/2021/07/carpet-cleaners.jpg",
-  },
-  {
-    id: "8",
-    title: "Почистване на подови настилки",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://www.webstaurantstore.com/images/products/large/573058/2253417.jpg",
-  },
-  {
-    id: "9",
-    title: "Почистване на прозорци и витрини",
-    description: "Рязане на кабели и промиване с чист спирт",
-    img: "https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/home-improvement/wp-content/uploads/2022/05/featured-image-window-cleaning.jpeg.jpg",
-  },
-];
-
-type SelectserviceProps = {
-  setService: Dispatch<SetStateAction<string | undefined>>;
+interface SelectserviceProps<T extends FieldValues> {
+  setValue: UseFormSetValue<T>;
   setNextStep: () => void;
-};
+}
 
-export default function SelectService({ setService, setNextStep }: SelectserviceProps) {
+export default function SelectService<K extends FieldValues>({setValue, setNextStep }: SelectserviceProps<K>) {
   return (
     <div className="max-w-4xl py-10">
-      <h2 id="step-1" className="mx-auto mb-2 mt-4 w-max text-2xl font-semibold text-gray-900">
-        Изберете вид услуга
+      <h2 id="step-1" className="mx-auto mt-4 w-max text-2xl font-semibold text-gray-900">
+        Избери вид услуга
       </h2>
-      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+      <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
+        Разполагаме с богата гама от услуги за да посрещнем вашите нужди.
+      </p>
+      <div className="mt-8 divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
         {serviceTypeChoices.map((action, actionIdx) => (
           <div
             key={action.title}
@@ -94,7 +42,8 @@ export default function SelectService({ setService, setNextStep }: Selectservice
               <h3 className="text-base font-semibold leading-6 text-gray-900">
                 <a
                   onClick={() => {
-                    setService(action.id);
+                    console.log(action.id)
+                    setValue("service" as Path<K>, action.id as PathValue<K, Path<K>>);
                     setNextStep();
                   }}
                   className="cursor-pointer focus:outline-none"

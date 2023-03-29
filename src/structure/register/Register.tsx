@@ -136,7 +136,7 @@ export default function Register() {
               onSubmit={handleSubmit(submitFormHandler)}
               className={classNames("animate-register-form space-y-6", roles.length > 0 ? "block" : "hidden")}
             >
-              <h4 className="mt-10 block text-sm text-gray-900">2. Въведете вашите данни</h4>
+              <h4 className="mt-10 block text-sm text-gray-900">2. Въведи вашите данни</h4>
               <div
                 className={classNames(
                   "flex flex-col space-y-6 sm:flex-row sm:justify-between sm:space-y-0 sm:space-x-4"

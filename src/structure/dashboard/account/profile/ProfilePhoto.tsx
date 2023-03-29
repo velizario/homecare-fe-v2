@@ -86,7 +86,7 @@ export default function ProfilePhoto() {
         </div>
 
         <p className="h-1 text-xs text-red-700">
-          {imageUploadError ? "Изберете валидно изображение (jpg/png/gif)" : " "}
+          {imageUploadError ? "Избери валидно изображение (jpg/png/gif)" : " "}
         </p>
       </div>
     </>

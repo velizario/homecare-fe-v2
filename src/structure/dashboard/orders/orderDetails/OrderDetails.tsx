@@ -347,7 +347,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                                     aria-hidden="true"
                                   />
                                   <p>
-                                    Записки по поръчката. За чат, отидете{" "}
+                                    Записки по поръчката. За чат, отиди{" "}
                                     <Link to="/dashboard/chat" className="font-medium text-gray-900">
                                       тук
                                     </Link>
