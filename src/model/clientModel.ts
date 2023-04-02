@@ -2,6 +2,7 @@ import { requestToAPI } from "../helpers/helperFunctions";
 import { ApiError, UserType } from "../types/types";
 import { ProfileForm } from "../structure/dashboard/account/profile/Profile";
 import { User } from "./userModel";
+import { userState } from "../store/userState";
 
 export interface Client {
   id: string;
@@ -18,23 +19,38 @@ export interface Client {
   address: string;
 }
 
-// endpoints = "userSignup" | "userEdit/:id" | "userLogin" | "userGet";
+type HandleRequestData = {
+  status: "fail" | "success" | "error";
+  message: string;
+  data: User;
+  token: string;
+};
 
-const sendRequest = async (endpoint: string, data?: {}) => {
-  const resData = await requestToAPI(`users/${endpoint}`, "POST", data);
-  if (resData.status === "success") localStorage.setItem("token", resData.token);
+const handleRequest = async (endpoint: string, method: string, data?: {}) => {
+  const resData: HandleRequestData = await requestToAPI(`users/${endpoint}`, method, data);
+  if (resData.status === "success") {
+    localStorage.setItem("token", resData.token);
+    userState.setState({ isLoggedIn: true, userData: resData.data });
+  }
 
+  if (resData.status === "fail" || resData.status === "error") {
+    localStorage.setItem("token", "");
+    userState.setState({ isLoggedIn: false, userData: {} as User });
+  }
   return resData;
 };
 
-export const userDataRefresh = async () => {
-  const res = await requestToAPI(`users/userGet`, "GET");
-  return (await res.data) as User;
+export const userSignup = async (data: {}) => {
+  return await handleRequest("userSignup", "POST", data);
 };
 
-export const userSignup = async (data: {}) => sendRequest("userSignup", data);
+export const userLogin = async (data: {}) => {
+  return await handleRequest("userLogin", "POST", data);
+};
 
-export const userLogin = async (data: {}) => sendRequest("userLogin", data);
+export const userDataRefresh = async () => {
+  return await handleRequest(`userAuthenticate`, "GET");
+};
 
 export const userEdit = async (data: ProfileForm) => {
   const resData = await requestToAPI(`users`, "PATCH", data);

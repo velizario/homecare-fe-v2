@@ -29,6 +29,7 @@ export default function CardChoice<K extends FieldValues>({
   return (
 
     <div className={classNames("mb-10 flex flex-wrap gap-4 whitespace-nowrap p-10 border rounded-2xl bg-stone-50", styles ?? "")}>
+      
       {options.map((option) => (
         <div
           key={option.id}
@@ -41,7 +42,7 @@ export default function CardChoice<K extends FieldValues>({
             "flex flex-1 cursor-pointer justify-center gap-1 rounded-full py-3 px-5 text-sm shadow-sm hover:ring-indigo-200"
           )}
         >
-          <span className="text-base">{option.name}</span>
+          <span className="text-base">{option.value}</span>
         </div>
       ))}
     </div>

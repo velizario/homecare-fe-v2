@@ -1,9 +1,6 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { CreateOrderForm } from "../structure/orderManagement/SelectTimeframe";
 
-
-
-
 export interface Order extends CreateOrderForm {
   id: string;
   clientName: string;
@@ -13,8 +10,8 @@ export interface Order extends CreateOrderForm {
   status: string;
 }
 
-export const createOrder = async (data: any) => {
-  const resData = await requestToAPI("orders/createOrder", "POST", data);
+export const createOrder = async (vendorId: string, data: any) => {
+  const resData = await requestToAPI("orders/createOrder", "POST", {vendorId, ...data});
   return resData as Order;
 };
 
@@ -25,7 +22,6 @@ export const getOrder = async (data: string) => {
 
 export const getAllOrders = async () => {
   const resData = await requestToAPI(`orders/getAllOrders`, "GET");
-  console.log(resData.data);
   return resData.data as Order[];
 };
 

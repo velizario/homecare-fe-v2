@@ -68,7 +68,7 @@ export default function ToggleInput<K extends FieldValues>({
                           enabled ? "font-medium text-indigo-700" : "text-gray-500"
                         )}
                       >
-                        {option.name}
+                        {option.value}
                       </Switch.Label>
                     </Switch.Group>
                   </div>

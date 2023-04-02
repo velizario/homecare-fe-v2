@@ -24,7 +24,7 @@ const RegisterInputValues = {
     className: "",
     name: "last-name",
     id: "last-name",
-    label: "Фамилия",
+    label: "Фамилия*",
     autoComplete: "family-name",
   },
   companyName: {
@@ -88,7 +88,6 @@ let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.passwor
 });
 
 export default function Register() {
-  const [setIsLoggedIn, setUserData] = userState((state) => [state.setIsLoggedIn, state.setUserData]);
   const navigate = useNavigate();
   const [roles, setRoles] = useState<UserType[]>([]);
 
@@ -112,8 +111,6 @@ export default function Register() {
     // reset error message
     const createAttempt = await userSignup(dataHydrated);
     if (createAttempt.status === "success") {
-      setIsLoggedIn(true);
-      setUserData(createAttempt.data);
       toasted("Регистрирахте се успешно!", "success")
       navigate("/dashboard");
     }

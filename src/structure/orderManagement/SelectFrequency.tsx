@@ -6,7 +6,7 @@ import RadioButtonFrequency from "./RadioButtonFrequency";
 
 const tiers = [
   {
-    frequencyId: 0,
+    id: 0,
     name: "Абонамент",
     priceMonthly: "15 лв",
     description: "Идеалният план за да осигурите чистота във вашия дом и офис",
@@ -21,7 +21,7 @@ const tiers = [
     selector: false,
   },
   {
-    frequencyId: 1,
+    id: 1,
     name: "Еднократно",
     priceMonthly: "20 лв",
     description: "Добър вариант, ако желаи да се запознаи с работата на изпълнителя",
@@ -70,7 +70,7 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-10 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
         {tiers.map((tier, frequencyIdx) => (
           <div
-            key={tier.frequencyId}
+            key={tier.id}
             className={classNames(
               tier.featured ? "relative bg-white shadow-2xl" : "bg-white/60 sm:mx-8 lg:mx-0",
               tier.featured
@@ -100,15 +100,17 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
               onClick={() => {
                 setValue(
                   "frequency" as Path<K>,
-                  ((tier.selector && tier.frequencyId) || recurrence) as PathValue<K, Path<K>>
+                  ((tier.selector && tier.id) || recurrence) as PathValue<K, Path<K>>
                 );
                 setNextStep();
               }}
               className={classNames(
                 tier.featured
-                  ? (recurrence > 0 ? "bg-indigo-600 text-white shadow hover:bg-indigo-500 transition-colors" : " bg-gray-200 font-normal shadow text-gray-400")
+                  ? recurrence > 0
+                    ? "bg-indigo-600 text-white font-medium hover:bg-indigo-500"
+                    : " bg-gray-200 text-gray-400 font-normal  "
                   : "text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300",
-                "mt-8 block cursor-pointer rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10"
+                "mt-8 block cursor-pointer rounded-md py-2.5 px-3.5 transition-colors text-center text-sm font-semibold shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10"
               )}
             >
               Избери

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { userDataRefresh } from "./model/clientModel";
-import { userState } from "./store/userState";
+import { fetchServices } from "./model/essentialsModel";
 import About from "./structure/about/About";
 import VendorCard from "./structure/cards/VendorCard";
 import VendorCardFull from "./structure/cards/VendorCardFull";
@@ -14,26 +14,26 @@ import Header from "./structure/header/Header";
 import HomePage from "./structure/homepage/HomePage";
 import SignIn from "./structure/login/SignIn";
 import Register from "./structure/register/Register";
-import SearchOrderWizard from "./structure/searchOrders/SearchOrderWizard";
 import VendorList from "./structure/searchOrders/VendorList";
 import Toaster from "./utilityComponents/Toast";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [setUserData] = userState((state) => [state.setUserData]);
 
   // do I need to refresh user? How is data lost? Added only for development purposes
-  // const refreshUser = async () => {
-  //   const user = await userDataRefresh();
-  //   if (user) {
-  //     setUserData(user)
-  //   }
-  // }
+  const refreshUser = async () => {
+    const user = await userDataRefresh();
 
-  // useEffect(() => {
-  //   refreshUser()
-  //   console.log("App.tsx user refreshed")
-  // },[])
+  }
+
+  const getServices = async () => {
+    const services = await fetchServices()
+  }
+
+  useEffect(() => {
+    refreshUser()
+    getServices();
+  },[])
 
   return (
     <BrowserRouter>

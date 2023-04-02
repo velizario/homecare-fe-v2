@@ -42,7 +42,6 @@ export default function SelectService<K extends FieldValues>({setValue, setNextS
               <h3 className="text-base font-semibold leading-6 text-gray-900">
                 <a
                   onClick={() => {
-                    console.log(action.id)
                     setValue("service" as Path<K>, action.id as PathValue<K, Path<K>>);
                     setNextStep();
                   }}

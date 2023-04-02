@@ -15,7 +15,7 @@ import { Link, useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { getOrder, Order } from "../../../../model/orderModel";
-import { areaSizes, orderFrequency, OrderStatus, services } from "../../../../types/types";
+import { areaSizes, orderFrequency, OrderStatus, services, servicesObj } from "../../../../types/types";
 import Badge from "../../../../utilityComponents/Badge";
 
 const user = {
@@ -155,7 +155,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                     <div className="relative">
                       <img
                         className="h-16 w-16 rounded-full"
-                        src={`${BACKEND_URL}/users/public/${orderData?.vendorImgUrl || "defaultImage.png"}`}
+                        src={`${BACKEND_URL}/users/public/${orderData.vendorImgUrl || "defaultImage.png"}`}
                         alt=""
                       />
                       <span className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
@@ -207,6 +207,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Услуга</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
+                              {servicesObj[orderData.service]}
                               {services.get(orderData.service)}
                             </dd>
                           </div>

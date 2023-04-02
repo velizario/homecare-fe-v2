@@ -8,7 +8,6 @@ type BackDropProps = {
 
 export default function BackDrop({ closeModal }: BackDropProps) {
   const dismissModal = (e: MouseEvent) => {
-    console.log((e.target as HTMLElement).closest(".backdrop"));
     const clickedOutside = (e.target as HTMLElement).closest(".backdrop") !== null;
     if (clickedOutside) closeModal();
   };

@@ -1,8 +1,7 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import loadingImage from "../../../../assets/loading.gif";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { getToken } from "../../../../helpers/helperFunctions";
-import { userDataRefresh } from "../../../../model/clientModel";
 import { userState } from "../../../../store/userState";
 
 export default function ProfilePhoto() {

@@ -3,8 +3,7 @@ import { Vendor } from "../model/vendorModel";
 
 export interface SelectionOption {
   id: string;
-  name: string;
-  description?: string;
+  value: string;
 }
 
 export enum UserType {
@@ -48,6 +47,18 @@ export const services = new Map([
   ["8", "Почистване на подови настилки"],
   ["9", "Почистване на прозорци и витрини"],
 ]);
+
+export const servicesObj:Record<string,string> = {
+  "1": "Почистване на дома",
+  "2": "Почистване на офиси и магазини",
+  "3": "Основно почистване",
+  "4": "Следремонтно чистене",
+  "5": "Индустриално обслужване",
+  "6": "Пране на мека мебел",
+  "7": "Пране на мокети / килими",
+  "8": "Почистване на подови настилки",
+  "9": "Почистване на прозорци и витрини",
+}
 
 export const orderFrequency = new Map([
   ["1", "еднократно"],

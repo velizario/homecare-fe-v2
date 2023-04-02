@@ -33,8 +33,6 @@ export default function SignIn() {
     console.log(data)
     const createAttempt = await userLogin(data);
     if (createAttempt.status === "success") {
-      setIsLoggedIn(true)
-      setUserData(createAttempt.data);
       navigate("/dashboard");
     }
   };

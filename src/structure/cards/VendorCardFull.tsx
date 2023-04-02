@@ -30,15 +30,11 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
     fetchVendorData();
   }, []);
 
-  useEffect(() => {
-    console.log(requestActive);
-  }, [requestActive]);
-
   return (
     <>
       {vendor && (
         <>
-          {requestActive && <CreateOrder closeModal={closeModal} />}
+          {requestActive && <CreateOrder closeModal={closeModal} vendorId={vendorId} />}
           {/* Larger screen */}
           <div className="mx-auto grid max-w-5xl gap-x-3 bg-white sm:grid-cols-[1fr_2fr] sm:px-4 md:gap-x-6 lg:gap-x-9">
             <div className="bg-gradient-to-b from-fuchsia-50 to-indigo-300 [grid-row:1/10] sm:col-start-1 sm:min-w-[13rem] sm:max-w-xs sm:bg-none">

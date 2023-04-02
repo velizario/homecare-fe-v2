@@ -70,7 +70,7 @@ export default function ComboSelectFullScreen({
     }
 
     const filteredList = options.filter((option) =>
-      option.name.toLowerCase().trim().includes(inputValue.toLowerCase().trim())
+      option.value.toLowerCase().trim().includes(inputValue.toLowerCase().trim())
     );
     // console.log(filteredList)
     debounce(() => {
@@ -117,10 +117,10 @@ export default function ComboSelectFullScreen({
         )}
       >
         {items.map((item) => {
-          const activeSelection = selection?.find((option) => option.name === item.name) !== undefined;
+          const activeSelection = selection?.find((option) => option.value === item.value) !== undefined;
           return (
             <li
-              data-name={item.name}
+              data-name={item.value}
               onClick={() => handleChange(item)}
               key={item.id}
               className={classNames(
@@ -130,7 +130,7 @@ export default function ComboSelectFullScreen({
               <span
                 className={classNames(activeSelection ? "font-medium text-indigo-700 group-hover:text-indigo-50" : "")}
               >
-                {item.name}
+                {item.value}
               </span>
               {activeSelection && <CheckIcon className="h-4 w-4" />}
             </li>
@@ -140,7 +140,7 @@ export default function ComboSelectFullScreen({
       <div className="flex flex-wrap line-clamp-3">
         {selection.map((item) => (
           <Badge onClick={() => handleChange(item)} styles="whitespace-nowrap" xMark={true} key={item.id}>
-            {item.name}
+            {item.value}
           </Badge>
         ))}
       </div>

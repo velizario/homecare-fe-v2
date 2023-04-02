@@ -4,21 +4,20 @@ import { SelectionOption } from "../../types/types";
 
 interface RangeSliderProps {
     options: SelectionOption[];
-    activeId: string | undefined;
+    activeArea: string;
     onClick: (id: string) => void;
     styles?: string;
 }
 
 export default function RangeSlider({
     options,
-    activeId,
+    activeArea,
     onClick,
     styles,
 }: RangeSliderProps) {
-    const activeArea = options.find(option => option.id === activeId)?.name
     return (
         <div className={classNames("mt-1", styles ?? "")}>
-            <div className="flex justify-end whitespace-nowrap rounded px-2 font-medium leading-4 text-indigo-700">
+            <div className="flex justify-end whitespace-nowrap rounded px-2 text-lg font-semibold leading-7 text-indigo-600">
                 <span>{activeArea}</span>&nbsp;кв.км
             </div>
             <input
@@ -38,14 +37,14 @@ export default function RangeSlider({
                 {options.map((option) => {
                     return (
                         <div
-                            key={option.id}
+                            key={option.value}
                             className="flex flex-col items-center justify-center"
                         >
                             <span className="mb-1 h-1.5 w-0 border-l border-gray-400"></span>
                             <option
                                 className="w-6 -rotate-45 text-sm"
-                                value={option.name}
-                                label={option.name}
+                                value={option.value}
+                                label={option.value}
                             />
                         </div>
                     );
