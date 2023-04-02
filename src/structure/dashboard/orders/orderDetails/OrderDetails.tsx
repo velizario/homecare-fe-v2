@@ -1,21 +1,16 @@
 import { Transition } from "@headlessui/react";
 import {
-  CheckIcon,
-  ExclamationCircleIcon,
-  ExclamationTriangleIcon,
-  HandThumbUpIcon,
+  CheckIcon, HandThumbUpIcon,
   InformationCircleIcon,
-  PaperClipIcon,
-  QuestionMarkCircleIcon,
-  ShieldExclamationIcon,
-  UserIcon,
+  PaperClipIcon, UserIcon
 } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { getOrder, Order } from "../../../../model/orderModel";
-import { areaSizes, orderFrequency, OrderStatus, services, servicesObj } from "../../../../types/types";
+import { essentialsStore } from "../../../../store/essentialsStore";
+import { areaSizes, orderFrequency, OrderStatus, servicesObj } from "../../../../types/types";
 import Badge from "../../../../utilityComponents/Badge";
 
 const user = {
@@ -108,6 +103,8 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [orderData, setOrderData] = useState<Order>();
   const { orderId } = useParams();
+
+  const services = essentialsStore(store => store.serviceList)
 
   const fetchOrder = async () => {
     console.log("!!!!", orderId);
@@ -207,7 +204,6 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Услуга</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {servicesObj[orderData.service]}
                               {services.get(orderData.service)}
                             </dd>
                           </div>
