@@ -1,9 +1,5 @@
 import { Transition } from "@headlessui/react";
-import {
-  CheckIcon, HandThumbUpIcon,
-  InformationCircleIcon,
-  PaperClipIcon, UserIcon
-} from "@heroicons/react/20/solid";
+import { CheckIcon, HandThumbUpIcon, InformationCircleIcon, PaperClipIcon, UserIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
@@ -104,7 +100,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const [orderData, setOrderData] = useState<Order>();
   const { orderId } = useParams();
 
-  const services = essentialsStore(store => store.serviceList)
+  const essentialData = essentialsStore((store) => store.essentialData);
 
   const fetchOrder = async () => {
     console.log("!!!!", orderId);
@@ -196,7 +192,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           </p>
                         </div>
                         <Badge styles="text-yellow-800 bg-yellow-50 font-medium text-base">
-                          {OrderStatus.get(orderData.status?.toString())}
+                          {essentialData.orderStatuses.find((item) => item.id == orderData.status.toString())?.value}
                         </Badge>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
@@ -204,25 +200,25 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Услуга</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {services.get(orderData.service)}
+                              {essentialData.serviceTypes.find((item) => item.id === orderData.service)?.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Честота</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {orderFrequency.get(orderData.frequency.toString())}
+                              {essentialData.visitFrequencies.find((item) => item.id === orderData.frequency.toString())?.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Квартал</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {orderData.district || "Витоша"}
+                              {essentialData.districtNames.find((item) => item.id === orderData.district)?.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Размер</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {areaSizes.get(orderData.areaSize)} кв.
+                              {essentialData.estateSizes.find((item) => item.value === orderData.areaSize)?.value} кв.
                             </dd>
                           </div>
                           <div className="sm:col-span-2">

@@ -1,6 +1,16 @@
 import { Client } from "../model/clientModel";
 import { Vendor } from "../model/vendorModel";
 
+export type EssentialsData = {
+  serviceTypes : {id: string, value: string}[], 
+  visitFrequencies: {id: string, value: string}[], 
+  visitDays : {id: string, value: string}[], 
+  orderStatuses : {id: string, value: string}[], 
+  visitHours : {id: string, value: string, daytime: "morning" | "afternoon"}[], 
+  estateSizes : {id: string, value: string}[], 
+  districtNames : {id: string, value: string}[]
+}
+
 export interface SelectionOption {
   id: string;
   value: string;
