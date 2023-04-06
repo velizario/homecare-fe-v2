@@ -18,7 +18,7 @@ export const getAllOrders = async () => {
   return resData.data as Order[];
 };
 
-export const cancelOrder = async (orderId: string) => {
+export const cancelOrder = async (orderId: number) => {
   const resData = await requestToAPI(`orders/cancelOrder/${orderId}`, "PATCH");
   return resData.data as Order[];
 };

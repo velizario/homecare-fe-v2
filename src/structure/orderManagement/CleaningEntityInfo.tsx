@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import LocationImage from "../../assets/location.jpg";
 import classNames from "../../helpers/classNames";
+import { fetchDistrictNames } from "../../model/essentialsModel";
+import { essentialsStore } from "../../store/essentialsStore";
 import { estateSizeSelections } from "../../store/static";
+import { SelectionOption } from "../../types/types";
 import RangeSlider from "../searchOrders/RangeSlider";
-import ComboSingleSelect, { Location } from "./ComboSingleSelect";
+import ComboSingleSelect from "../../utilityComponents/ComboSingleSelect";
 
 interface CleaningEntityInfoProps<T extends FieldValues> {
   // control: Control<T, object>;
@@ -23,7 +26,8 @@ export default function CleaningEntityInfo<K extends FieldValues>({
   // const watch = useWatch({ control });
 
   const [selectedestateSize, setSelectedestateSize] = useState<string>("60");
-  const [location, setLocation] = useState<Location | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<SelectionOption | null>(null);
+  const districtNames = essentialsStore((essentials) => essentials.districtNames);
 
   const handleAreaSizeChange = (value: string) => {
     setSelectedestateSize(value);
@@ -32,9 +36,14 @@ export default function CleaningEntityInfo<K extends FieldValues>({
   const handleClick = () => {
     const estateSizeId = estateSizeSelections.find((estateSize) => estateSize.value === selectedestateSize)?.id;
     setValue("estateSize" as Path<K>, estateSizeId as PathValue<K, Path<K>>);
-    setValue("districtName" as Path<K>, location?.id as PathValue<K, Path<K>>);
+    setValue("districtName" as Path<K>, selectedDistrict?.id as PathValue<K, Path<K>>);
     setNextStep();
   };
+
+  useEffect(() => {
+      fetchDistrictNames();
+    },
+    []);
 
   return (
     <div className="relative flex w-screen max-w-full flex-col p-8">
@@ -65,7 +74,11 @@ export default function CleaningEntityInfo<K extends FieldValues>({
         </h2>
         <img className="h-20 w-20" src={LocationImage} />
       </div>
-      <ComboSingleSelect location={location} setLocation={setLocation} />
+      <ComboSingleSelect
+        selectedDistrict={selectedDistrict}
+        setSelectedDistrict={setSelectedDistrict}
+        districtNames={districtNames}
+      />
       <button
         onClick={handleClick}
         className={classNames(

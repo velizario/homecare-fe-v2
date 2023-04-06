@@ -1,66 +1,44 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { useState } from 'react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Combobox } from '@headlessui/react'
-import classNames from '../../helpers/classNames'
-
-export type Location = {id: number, value: string}
-
-const locations: Location[] = [
-    {id: 1, value: "Витоша"},
-    {id: 2, value: "Банишора"},
-    {id: 3, value: "Триъгълниците"},
-    {id: 4, value: "Център"},
-    {id: 5, value: "Лозенец"},
-]
+import classNames from '../helpers/classNames'
+import { SelectionOption } from '../types/types'
 
 
 interface ComboSingleSelectProps {
-  location: Location | null;
-  setLocation: React.Dispatch<React.SetStateAction<Location | null>>;
+  selectedDistrict: SelectionOption | null;
+  setSelectedDistrict: React.Dispatch<React.SetStateAction<SelectionOption | null>>;
+  districtNames: SelectionOption[]
 }
 
-export default function ComboSingleSelect({location, setLocation} : ComboSingleSelectProps) {
+export default function ComboSingleSelect({selectedDistrict, setSelectedDistrict, districtNames} : ComboSingleSelectProps) {
   const [query, setQuery] = useState('')
 
-  const filteredlocations =
+  const filteredDistricts =
     query === ''
-      ? locations
-      : locations.filter((location) => {
-          return location.value.toLowerCase().includes(query.toLowerCase())
+      ? districtNames
+      : districtNames.filter((district) => {
+          return district.value.toLowerCase().includes(query.toLowerCase())
         })
 
   return (
-    <Combobox as="div" value={location} onChange={setLocation}>
+    <Combobox as="div" value={selectedDistrict} onChange={setSelectedDistrict}>
       <div className="relative mt-8">
         <Combobox.Input
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
-          displayValue={(location) => (location as Location)?.value || ""}
+          displayValue={(district) => (district as SelectionOption)?.value || ""}
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </Combobox.Button>
 
-        {filteredlocations.length > 0 && (
+        {filteredDistricts.length > 0 && (
           <Combobox.Options className="absolute bottom-full z-10 mb-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredlocations.map((location) => (
+            {filteredDistricts.map((district) => (
               <Combobox.Option
-                key={location.id}
-                value={location}
+                key={district.id}
+                value={district}
                 className={({ active }) =>
                   classNames(
                     'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -70,7 +48,7 @@ export default function ComboSingleSelect({location, setLocation} : ComboSingleS
               >
                 {({ active, selected }) => (
                   <>
-                    <span className={classNames('block truncate', selected ? 'font-semibold': "")}>{location?.value || ""}</span>
+                    <span className={classNames('block truncate', selected ? 'font-semibold': "")}>{district?.value || ""}</span>
 
                     {selected && (
                       <span

@@ -5,7 +5,9 @@ import { storeLogger } from "./storeLogger";
 
 type EssentialsState = {
     serviceTypes: EssentialsDb[];
+    districtNames: EssentialsDb[];
     listServices: () => string[];
+    listDistricts: () => string[];
 
 };
 
@@ -14,7 +16,9 @@ export const essentialsStore = create<EssentialsState>()(
     persist(
       (set, get) => ({
         serviceTypes: {} as EssentialsDb[],
-        listServices: () => get().serviceTypes.map(service => service.value) 
+        districtNames: {} as EssentialsDb[],
+        listServices: () => get().serviceTypes.map(service => service.value),
+        listDistricts: () => get().districtNames.map(district => district.value) 
       }),
       {
         name: "essentials", // name of the item in the storage (must be unique)

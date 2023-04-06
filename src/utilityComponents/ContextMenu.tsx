@@ -11,7 +11,7 @@ function classNames(...classes: string[]) {
 }
 
 type ContextMenuProps = {
-  orderId: string;
+  orderId: number;
 };
 
 export default function ContextMenu({ orderId }: ContextMenuProps) {

@@ -1,9 +1,8 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { essentialsStore } from "../store/essentialsStore";
-import { EssentialsDb, EssentialsStore } from "../types/types";
+import { EssentialsDb } from "../types/types";
 
 export const fetchServiceTypes = async () => {
-  console.log("Services yeeey start");
   const res = (await requestToAPI(`essentials/getServiceTypes`, "GET")).data as EssentialsDb[];
 
   // Do I want an indexed object?
@@ -21,3 +20,8 @@ export const fetchServiceTypes = async () => {
 
   essentialsStore.setState({ serviceTypes: res });
 };
+
+export const fetchDistrictNames = async () => {
+  const res = (await requestToAPI('essentials/getDistrictNames', "GET")).data as EssentialsDb[]
+  essentialsStore.setState({districtNames: res})
+}

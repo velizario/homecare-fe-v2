@@ -86,7 +86,7 @@ export interface Order {
   estateSize: SelectionOption
   orderStatus: SelectionOption
   orderStatusId: number
-  serviceType: SelectionOption[]
+  serviceType: SelectionOption
   vendorId: number
   vendorImgUrl? : string
   vendorName: string;

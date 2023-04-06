@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
-import { getOrder, Order } from "../../../../model/orderModel";
+import { getOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
-import { areaSizes, orderFrequency, OrderStatus, servicesObj } from "../../../../types/types";
+import { areaSizes, Order, orderFrequency, OrderStatus, servicesObj } from "../../../../types/types";
 import Badge from "../../../../utilityComponents/Badge";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
 
@@ -155,7 +155,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                     </div>
                   </div>
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-900">{orderData?.vendorName}</h1>
+                    <h1 className="text-2xl font-bold text-gray-900">{orderData.vendorName}</h1>
                     <p className="text-sm font-medium text-gray-500">
                       Създадена: <time dateTime="2020-08-25">25 Януари, 2023 г.</time>
                     </p>
@@ -192,7 +192,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           </p>
                         </div>
                         <StatusBadge label="Нова">
-                          {orderData.status.toString()}
+                          {orderData.orderStatus.value}
                         </StatusBadge>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
@@ -200,25 +200,25 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Услуга</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {/* {essentialData.serviceTypes.find((item) => item.id === orderData.service)?.value} */}
+                              {orderData.serviceType.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Честота</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {/* {essentialData.visitFrequencies.find((item) => item.id === orderData.frequency.toString())?.value} */}
+                              {orderData.visitFrequency.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Квартал</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {/* {essentialData.districtNames.find((item) => item.id === orderData.district)?.value} */}
+                              {orderData.districtName.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Размер</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {/* {essentialData.estateSizes.find((item) => item.value === orderData.areaSize)?.value} кв. */}
+                              {orderData.estateSize.value} кв.м.
                             </dd>
                           </div>
                           <div className="sm:col-span-2">
