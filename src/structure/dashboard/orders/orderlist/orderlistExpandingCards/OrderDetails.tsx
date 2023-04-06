@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react'
 import { ClockIcon, MapPinIcon, ChatBubbleBottomCenterTextIcon, CalendarIcon, ListBulletIcon, HomeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react'
 import classNames from '../../../../../helpers/classNames';
-import { type Order } from './Orderlist';
+import { Order } from '../../../../../types/types';
 
 interface OrderDetailsProps {
     order: Order;
@@ -21,17 +21,17 @@ export default function OrderDetails({ order }: OrderDetailsProps) {
                 <div className="flex gap-3 rounded-2xl">
                     <div className="flex flex-row gap-1 text-gray-500 items-center">
                         <ClockIcon className="h-5 w-5" />
-                        <p className="text-xs font-normal">{order.time}</p>
+                        {/* <p className="text-xs font-normal">{order.time}</p> */}
                     </div>
                     <div className="flex flex-row gap-1 text-gray-500 items-center">
                         <MapPinIcon className="h-5 w-5" />
-                        <p className="text-xs font-normal ">{order.location}</p>
+                        <p className="text-xs font-normal ">{order.districtName.value}</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2 ">
-                    <img className="h-12 w-12 rounded-full self-start flex-shrink-0 " src={order.imageUrl} alt="" />
+                    <img className="h-12 w-12 rounded-full self-start flex-shrink-0 " src={order.vendorImgUrl} alt="" />
                     <div>
-                        <h3 className="text-sm font-medium break-words text-gray-700">{order.name}</h3>
+                        <h3 className="text-sm font-medium break-words text-gray-700">{order.vendorName}</h3>
                         <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-normal text-indigo-800">
                             Планирана
                         </span>

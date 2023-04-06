@@ -99,7 +99,7 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
             <a
               onClick={() => {
                 setValue(
-                  "frequency" as Path<K>,
+                  "visitFrequency" as Path<K>,
                   ((tier.selector && tier.id) || recurrence) as PathValue<K, Path<K>>
                 );
                 setNextStep();

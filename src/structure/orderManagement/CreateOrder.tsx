@@ -15,17 +15,16 @@ interface CreateOrderProps {
 }
 
 export type CreateOrderForm = {
-  service: string;
+  serviceType: number;
   // additionalService: string[];
-  frequency: number;
-  serviceDays: string[];
-  serviceHours: string[];
-  areaSize: string;
-  district: string;
+  visitFrequency: number;
+  visitDay: number[];
+  visitHour: number[];
+  estateSize: number;
+  districtName: number;
 };
 
 export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) {
-  const [service, setService] = useState<string>();
   const [orderStep, setOrderStep] = useState<number>(1);
 
   const { watch, setValue } = useForm<CreateOrderForm>();

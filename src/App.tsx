@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { userDataRefresh } from "./model/clientModel";
-import { fetchServices } from "./model/essentialsModel";
+import { fetchServiceTypes } from "./model/essentialsModel";
 import About from "./structure/about/About";
 import VendorCard from "./structure/cards/VendorCard";
 import VendorCardFull from "./structure/cards/VendorCardFull";
@@ -27,7 +27,7 @@ function App() {
   }
 
   const getServices = async () => {
-    const services = await fetchServices()
+    const services = await fetchServiceTypes()
   }
 
   useEffect(() => {

@@ -1,17 +1,20 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import { EssentialsData } from "../types/types";
+import { EssentialsDb } from "../types/types";
 import { storeLogger } from "./storeLogger";
 
-type EssentialsStore = {
-    essentialData: EssentialsData;
+type EssentialsState = {
+    serviceTypes: EssentialsDb[];
+    listServices: () => string[];
+
 };
 
-export const essentialsStore = create<EssentialsStore>()(
+export const essentialsStore = create<EssentialsState>()(
   storeLogger(
     persist(
-      () => ({
-        essentialData: {} as EssentialsData,
+      (set, get) => ({
+        serviceTypes: {} as EssentialsDb[],
+        listServices: () => get().serviceTypes.map(service => service.value) 
       }),
       {
         name: "essentials", // name of the item in the storage (must be unique)

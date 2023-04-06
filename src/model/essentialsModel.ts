@@ -1,22 +1,23 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { essentialsStore } from "../store/essentialsStore";
-import { EssentialsData } from "../types/types";
+import { EssentialsDb, EssentialsStore } from "../types/types";
 
+export const fetchServiceTypes = async () => {
+  console.log("Services yeeey start");
+  const res = (await requestToAPI(`essentials/getServiceTypes`, "GET")).data as EssentialsDb[];
 
+  // Do I want an indexed object?
+  // const serviceTypes = res.reduce((first, current) => {
+  //   const { id, ...rest } = current;
+  //   return { ...first, [id]: rest };
+  // }, {} as EssentialsStore);
 
-export const fetchServices = async () => {
-    console.log("Services yeeey start")
-    const essentialData = (await requestToAPI(`essentials/getEssentialData`, "GET")).data as EssentialsData
-    // const essentialDataState = Object.keys(resData).map((key)  => {
-    //     return {[key] : new Map(resData[key as keyof EssentialsData].map(table => [table.id , table.value]))}
-    // })
-    
-    // Do I want Object?
-    // let serviceToObj = {} as {[key : string] : string} ;
-    // services.forEach(service => {console.log(serviceToObj); serviceToObj[service.id] = service.serviceName})
-    
-    // Or I want Map?
-    // let serviceMap = new Map(services.map(service => [service.id, service.serviceName]));
-    essentialsStore.setState({essentialData})
-    
-}
+  // Do I want Object?
+  // let serviceToObj = {} as {[key : string] : string} ;
+  // services.forEach(service => {console.log(serviceToObj); serviceToObj[service.id] = service.serviceName})
+
+  // Or I want Map?
+  // let serviceMap = new Map(services.map(service => [service.id, service.serviceName]));
+
+  essentialsStore.setState({ serviceTypes: res });
+};

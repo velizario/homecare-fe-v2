@@ -1,18 +1,19 @@
-import { useEffect, useRef } from "react";
 import classNames from "../../helpers/classNames";
-import { SelectionOption } from "../../types/types";
+import { EssentialsDb } from "../../types/types";
 
 interface RangeSliderProps {
-    options: SelectionOption[];
+    options: string[];
     activeArea: string;
-    onClick: (id: string) => void;
+    onChange: (id: string) => void;
     styles?: string;
 }
+
+
 
 export default function RangeSlider({
     options,
     activeArea,
-    onClick,
+    onChange,
     styles,
 }: RangeSliderProps) {
     return (
@@ -24,7 +25,7 @@ export default function RangeSlider({
                 type="range"
                 list="steplist"
                 value={activeArea}
-                onChange={(e) => onClick((e.target as HTMLInputElement).value)}
+                onChange={(e) => onChange((e.target as HTMLInputElement).value)}
                 min="0"
                 max="200"
                 className="w-full cursor-pointer px-1"
@@ -37,14 +38,14 @@ export default function RangeSlider({
                 {options.map((option) => {
                     return (
                         <div
-                            key={option.value}
+                            key={option}
                             className="flex flex-col items-center justify-center"
                         >
                             <span className="mb-1 h-1.5 w-0 border-l border-gray-400"></span>
                             <option
                                 className="w-6 -rotate-45 text-sm"
-                                value={option.value}
-                                label={option.value}
+                                value={option}
+                                label={option}
                             />
                         </div>
                     );
@@ -54,4 +55,5 @@ export default function RangeSlider({
     );
 }
 
-export {};
+export { };
+

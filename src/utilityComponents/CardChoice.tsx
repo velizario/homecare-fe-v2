@@ -7,10 +7,10 @@ function classNames(...classes: string[]) {
 }
 
 interface CardChoiceProps<T extends FieldValues> {
-  handleUpdate: (e: string) => void;
+  handleUpdate: (e: number) => void;
   options: SelectionOption[];
   styles?: string;
-  selections: string[];
+  selections: number[];
 }
 
 export default function CardChoice<K extends FieldValues>({
@@ -21,7 +21,7 @@ export default function CardChoice<K extends FieldValues>({
 }: CardChoiceProps<K>) {
 
   function updateHandler (e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    const selectedId = e.currentTarget.dataset.id;
+    const selectedId = Number(e.currentTarget.dataset.id);
     if (!selectedId) return;
     handleUpdate(selectedId);
   }

@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import classNames from "../../helpers/classNames";
 import { serviceTypeChoices } from "../../store/static";
@@ -42,7 +41,7 @@ export default function SelectService<K extends FieldValues>({setValue, setNextS
               <h3 className="text-base font-semibold leading-6 text-gray-900">
                 <a
                   onClick={() => {
-                    setValue("service" as Path<K>, action.id as PathValue<K, Path<K>>);
+                    setValue("serviceType" as Path<K>, action.id as PathValue<K, Path<K>>);
                     setNextStep();
                   }}
                   className="cursor-pointer focus:outline-none"

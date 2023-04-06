@@ -8,6 +8,7 @@ import { getOrder, Order } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import { areaSizes, orderFrequency, OrderStatus, servicesObj } from "../../../../types/types";
 import Badge from "../../../../utilityComponents/Badge";
+import StatusBadge from "../../../../utilityComponents/StatusBadge";
 
 const user = {
   name: "Whitney Francis",
@@ -100,7 +101,6 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const [orderData, setOrderData] = useState<Order>();
   const { orderId } = useParams();
 
-  const essentialData = essentialsStore((store) => store.essentialData);
 
   const fetchOrder = async () => {
     console.log("!!!!", orderId);
@@ -191,34 +191,34 @@ export default function OrderDetails({}: OrderDetailsProps) {
                             Създадена: <time dateTime="2023-01-25">25 Януари, 2023 г.</time>
                           </p>
                         </div>
-                        <Badge styles="text-yellow-800 bg-yellow-50 font-medium text-base">
-                          {essentialData.orderStatuses.find((item) => item.id == orderData.status.toString())?.value}
-                        </Badge>
+                        <StatusBadge label="Нова">
+                          {orderData.status.toString()}
+                        </StatusBadge>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Услуга</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {essentialData.serviceTypes.find((item) => item.id === orderData.service)?.value}
+                              {/* {essentialData.serviceTypes.find((item) => item.id === orderData.service)?.value} */}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Честота</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {essentialData.visitFrequencies.find((item) => item.id === orderData.frequency.toString())?.value}
+                              {/* {essentialData.visitFrequencies.find((item) => item.id === orderData.frequency.toString())?.value} */}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Квартал</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {essentialData.districtNames.find((item) => item.id === orderData.district)?.value}
+                              {/* {essentialData.districtNames.find((item) => item.id === orderData.district)?.value} */}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Размер</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {essentialData.estateSizes.find((item) => item.value === orderData.areaSize)?.value} кв.
+                              {/* {essentialData.estateSizes.find((item) => item.value === orderData.areaSize)?.value} кв. */}
                             </dd>
                           </div>
                           <div className="sm:col-span-2">

@@ -1,14 +1,7 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { CreateOrderForm } from "../structure/orderManagement/SelectTimeframe";
+import { Order } from "../types/types";
 
-export interface Order extends CreateOrderForm {
-  id: string;
-  clientName: string;
-  clientImgUrl: string;
-  vendorImgUrl: string;
-  vendorName: string;
-  status: string;
-}
+
 
 export const createOrder = async (vendorId: string, data: any) => {
   const resData = await requestToAPI("orders/createOrder", "POST", {vendorId, ...data});

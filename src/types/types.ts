@@ -1,18 +1,10 @@
-import { Client } from "../model/clientModel";
-import { Vendor } from "../model/vendorModel";
 
-export type EssentialsData = {
-  serviceTypes : {id: string, value: string}[], 
-  visitFrequencies: {id: string, value: string}[], 
-  visitDays : {id: string, value: string}[], 
-  orderStatuses : {id: string, value: string}[], 
-  visitHours : {id: string, value: string, daytime: "morning" | "afternoon"}[], 
-  estateSizes : {id: string, value: string}[], 
-  districtNames : {id: string, value: string}[]
-}
+// Essentials
+export type EssentialsDb = { id: number; value: string };
+export type EssentialsStore = Record<string, Omit<EssentialsDb, "id">> 
 
 export interface SelectionOption {
-  id: string;
+  id: number;
   value: string;
 }
 
@@ -83,3 +75,22 @@ export const OrderStatus = new Map([
   ["3", "Завършена"],
   ["4", "Анулирана"],
 ]);
+
+
+export interface Order {
+  id: number
+  additionalService? : string[]
+  clientImgUrl?: string
+  clientName: string
+  districtName: SelectionOption
+  estateSize: SelectionOption
+  orderStatus: SelectionOption
+  orderStatusId: number
+  serviceType: SelectionOption[]
+  vendorId: number
+  vendorImgUrl? : string
+  vendorName: string;
+  visitDay: SelectionOption[]
+  visitHour: SelectionOption[]
+  visitFrequency: SelectionOption
+}

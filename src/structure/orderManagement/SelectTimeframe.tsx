@@ -3,8 +3,7 @@ import { useState } from "react";
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import Schedule from "../../assets/schedule.jpg";
 import classNames from "../../helpers/classNames";
-import { daytime, serviceDayChoices, ServiceHourChoices } from "../../store/static";
-import { type SelectionOption } from "../../types/types";
+import { visitDaySelections, visitHourSelections } from "../../store/static";
 import CardChoice from "../../utilityComponents/CardChoice";
 
 interface CreateOrderInputProps<T extends FieldValues> {
@@ -12,30 +11,21 @@ interface CreateOrderInputProps<T extends FieldValues> {
   setNextStep: () => void;
 }
 
-export type CreateOrderForm = {
-  service: string;
-  additionalService: string[];
-  frequency: string;
-  serviceDay: string[];
-  serviceHour: string[];
-  areaSize: string;
-  district: string;
-};
 
 
 export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNextStep }: CreateOrderInputProps<K>) {
-  const [visitDays, setVisitDays] = useState<string[]>([]);
-  const [visitHours, setVisitHours] = useState<string[]>([]);
+  const [visitDays, setVisitDays] = useState<number[]>([]);
+  const [visitHours, setVisitHours] = useState<number[]>([]);
 
-  function toggleSelection(selectedId: string, selection: string[]) {
+  function toggleSelection(selectedId: number, selection: number[]) {
     return selection?.includes(selectedId) ? selection.filter((id) => id !== selectedId) : [...selection, selectedId];
   }
 
-  function updateVisitDays(selectedId: string) {
+  function updateVisitDays(selectedId: number) {
     setVisitDays((days) => toggleSelection(selectedId, days));
   }
 
-  function updateVisitHours(selectedId: string) {
+  function updateVisitHours(selectedId: number) {
     setVisitHours((hours) => toggleSelection(selectedId, hours));
   }
 
@@ -47,13 +37,13 @@ export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNe
       return;
     }
 
-    const btnChoices = daytime.filter((item) => item.daytime === filterWord).map((hour) => hour.id);
+    const btnChoices = visitHourSelections.filter((item) => item.daytime === filterWord).map((hour) => hour.id);
     setVisitHours((hours) => [...hours, ...btnChoices]);
   };
 
   function handleSubmit() {
-    setValue("serviceDays" as Path<K>, visitDays as PathValue<K, Path<K>>);
-    setValue("serviceHours" as Path<K>, visitHours as PathValue<K, Path<K>>);
+    setValue("visitDay" as Path<K>, visitDays as PathValue<K, Path<K>>);
+    setValue("visitHour" as Path<K>, visitHours as PathValue<K, Path<K>>);
     setNextStep();
   }
 
@@ -69,7 +59,7 @@ export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNe
         Дни за посещение:
       </h2>
       <CardChoice
-        options={serviceDayChoices}
+        options={visitDaySelections}
         styles="grid grid-cols-2"
         handleUpdate={updateVisitDays}
         selections={visitDays}
@@ -106,7 +96,7 @@ export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNe
       </div>
 
       <CardChoice
-        options={ServiceHourChoices}
+        options={visitHourSelections}
         styles="grid grid-cols-3"
         selections={visitHours}
         handleUpdate={updateVisitHours}
