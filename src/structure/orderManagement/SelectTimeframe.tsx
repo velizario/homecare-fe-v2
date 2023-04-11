@@ -42,8 +42,8 @@ export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNe
   };
 
   function handleSubmit() {
-    setValue("visitDay" as Path<K>, visitDays as PathValue<K, Path<K>>);
-    setValue("visitHour" as Path<K>, visitHours as PathValue<K, Path<K>>);
+    setValue("visitDay" as Path<K>, visitDays.map(day => {return {id: day}}) as PathValue<K, Path<K>>);
+    setValue("visitHour" as Path<K>, visitHours.map(hour => {return {id: hour}}) as PathValue<K, Path<K>>);
     setNextStep();
   }
 

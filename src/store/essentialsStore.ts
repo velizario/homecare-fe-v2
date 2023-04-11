@@ -1,11 +1,11 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import { EssentialsDb } from "../types/types";
+import { EssentialDataAllAll } from "../types/types";
 import { storeLogger } from "./storeLogger";
 
 type EssentialsState = {
-    serviceTypes: EssentialsDb[];
-    districtNames: EssentialsDb[];
+    serviceTypes: EssentialDataAllAll[];
+    districtNames: EssentialDataAllAll[];
     listServices: () => string[];
     listDistricts: () => string[];
 
@@ -15,8 +15,8 @@ export const essentialsStore = create<EssentialsState>()(
   storeLogger(
     persist(
       (set, get) => ({
-        serviceTypes: {} as EssentialsDb[],
-        districtNames: {} as EssentialsDb[],
+        serviceTypes: {} as EssentialDataAllAll[],
+        districtNames: {} as EssentialDataAllAll[],
         listServices: () => get().serviceTypes.map(service => service.value),
         listDistricts: () => get().districtNames.map(district => district.value) 
       }),

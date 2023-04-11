@@ -10,10 +10,10 @@ interface StatusBadgeProps {
 }
 
 const statusStyles = new Map([
-  ["Нова", "text-violet-700 bg-violet-100"],
-  ["Активна", "text-sky-700 bg-sky-100"],
-  ["Завършена", "text-green-700 bg-green-100"],
-  ["Анулирана", "text-orange-700 bg-orange-100"],
+  ["Нова", "text-violet-500 bg-violet-50"],
+  ["Активна", "text-sky-500 bg-sky-50"],
+  ["Завършена", "text-green-500 bg-green-50"],
+  ["Анулирана", "text-orange-500 bg-orange-50"],
 ]);
 
 const StatusBadge = ({ children, label, xMark, onClick }: StatusBadgeProps) => {
@@ -21,13 +21,12 @@ const StatusBadge = ({ children, label, xMark, onClick }: StatusBadgeProps) => {
     <span
       onClick={onClick}
       className={classNames(
-        "group mr-2 inline-flex justify-center items-center gap-0.5 text- rounded-full bg-gray-100 px-3 min-w-[6rem] py-1 text-base font-medium text-gray-800 last:mr-0",
+        "inline-flex justify-center rounded-2xl bg-gray-100 px-3 h-min w-10 min-w-[8rem] py-1 text-base font-medium text-gray-800",
         statusStyles.get(label) ?? "",
         xMark ? "cursor-pointer transition-colors" : ""
       )}
     >
       {children}
-      {xMark && <XMarkIcon className="h-3 w-3 text-gray-500 transition-colors group-hover:text-black" />}
     </span>
   );
 };

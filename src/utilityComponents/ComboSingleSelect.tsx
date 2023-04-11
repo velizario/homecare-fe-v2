@@ -1,29 +1,32 @@
-import { useState } from 'react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Combobox } from '@headlessui/react'
-import classNames from '../helpers/classNames'
-import { SelectionOption } from '../types/types'
-
+import { useState } from "react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { Combobox } from "@headlessui/react";
+import classNames from "../helpers/classNames";
+import { SelectionOption } from "../types/types";
 
 interface ComboSingleSelectProps {
-  selectedDistrict: SelectionOption | null;
-  setSelectedDistrict: React.Dispatch<React.SetStateAction<SelectionOption | null>>;
-  districtNames: SelectionOption[]
+  selected: SelectionOption | null;
+  setSelected: React.Dispatch<React.SetStateAction<SelectionOption | null>>;
+  selections: SelectionOption[];
 }
 
-export default function ComboSingleSelect({selectedDistrict, setSelectedDistrict, districtNames} : ComboSingleSelectProps) {
-  const [query, setQuery] = useState('')
+export default function ComboSingleSelect({
+  selected,
+  setSelected,
+  selections,
+}: ComboSingleSelectProps) {
+  const [query, setQuery] = useState("");
 
   const filteredDistricts =
-    query === ''
-      ? districtNames
-      : districtNames.filter((district) => {
-          return district.value.toLowerCase().includes(query.toLowerCase())
-        })
+    query === ""
+      ? selections
+      : selections.filter((district) => {
+          return district.value.toLowerCase().includes(query.toLowerCase());
+        });
 
   return (
-    <Combobox as="div" value={selectedDistrict} onChange={setSelectedDistrict}>
-      <div className="relative mt-8">
+    <Combobox as="div" value={selected} onChange={setSelected}>
+      <div className="relative">
         <Combobox.Input
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
@@ -41,20 +44,22 @@ export default function ComboSingleSelect({selectedDistrict, setSelectedDistrict
                 value={district}
                 className={({ active }) =>
                   classNames(
-                    'relative cursor-default select-none py-2 pl-3 pr-9',
-                    active ? 'bg-indigo-600 text-white' : 'text-gray-900'
+                    "relative cursor-default select-none py-2 pl-3 pr-9",
+                    active ? "bg-indigo-600 text-white" : "text-gray-900"
                   )
                 }
               >
                 {({ active, selected }) => (
                   <>
-                    <span className={classNames('block truncate', selected ? 'font-semibold': "")}>{district?.value || ""}</span>
+                    <span className={classNames("block truncate", selected ? "font-semibold" : "")}>
+                      {district?.value || ""}
+                    </span>
 
                     {selected && (
                       <span
                         className={classNames(
-                          'absolute inset-y-0 right-0 flex items-center pr-4',
-                          active ? 'text-white' : 'text-indigo-600'
+                          "absolute inset-y-0 right-0 flex items-center pr-4",
+                          active ? "text-white" : "text-indigo-600"
                         )}
                       >
                         <CheckIcon className="h-5 w-5" aria-hidden="true" />
@@ -68,5 +73,5 @@ export default function ComboSingleSelect({selectedDistrict, setSelectedDistrict
         )}
       </div>
     </Combobox>
-  )
+  );
 }

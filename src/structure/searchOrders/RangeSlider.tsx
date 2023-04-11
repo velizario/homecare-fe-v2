@@ -1,5 +1,5 @@
 import classNames from "../../helpers/classNames";
-import { EssentialsDb } from "../../types/types";
+import { EssentialDataAllAll } from "../../types/types";
 
 interface RangeSliderProps {
     options: string[];

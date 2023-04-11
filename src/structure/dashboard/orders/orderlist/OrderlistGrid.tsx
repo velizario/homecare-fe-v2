@@ -7,17 +7,17 @@ import { userState } from "../../../../store/userState";
 import { Order } from "../../../../types/types";
 import ContextMenu from "../../../../utilityComponents/ContextMenu";
 import Filters from "../../../../utilityComponents/Filters";
-import OrderItem from "./OrderItem";
+import OrderItem from "./OrderListItem";
 
 
 export default function OrderlistGrid() {
-  const [orderData, setOrderData] = orderState((state) => [state.orderData, state.setOrderData]);
+  const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
   const [userRoles] = userState((state) => [state.userData.roles]);
 
   const fetchOrders = async () => {
     // const order = await getOrder("4");
     const orders = await getAllOrders();
-    if (orders) setOrderData(orders);
+    if (orders) updateOrderData(orders);
   };
 
   useEffect(() => {

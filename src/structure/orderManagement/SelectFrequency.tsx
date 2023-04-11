@@ -1,8 +1,10 @@
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { useState } from "react";
-import { FieldValue, FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
+import { MouseEventHandler, useEffect, useState } from "react";
+import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import classNames from "../../helpers/classNames";
-import RadioButtonFrequency from "./RadioButtonFrequency";
+import { visitFrequencySelections } from "../../store/static";
+import { SelectionOption } from "../../types/types";
+import SelectFrequencyButton from "./SelectFrequencyButton";
 
 const tiers = [
   {
@@ -18,7 +20,7 @@ const tiers = [
       "Планиране на графика",
     ],
     featured: true,
-    selector: false,
+    frequencyOptions: [visitFrequencySelections[0], visitFrequencySelections[1]],
   },
   {
     id: 1,
@@ -27,7 +29,7 @@ const tiers = [
     description: "Добър вариант, ако желаи да се запознаи с работата на изпълнителя",
     features: ["Вижте как работим", "Гъвкав избор на час"],
     featured: false,
-    selector: true,
+    frequencyOptions: [visitFrequencySelections[2]],
   },
 ];
 
@@ -37,7 +39,13 @@ interface SelectFrequencyProps<T extends FieldValues> {
 }
 
 export default function SelectFrequency<K extends FieldValues>({ setValue, setNextStep }: SelectFrequencyProps<K>) {
-  const [recurrence, setRecurrence] = useState<number>(0);
+
+  const handleChange: MouseEventHandler<HTMLDivElement> = (e) => {
+    const selectedId = Number(e.currentTarget.dataset.id);
+    const selectedFrequency = visitFrequencySelections.find((selection) => selection.id === selectedId);
+    setValue("visitFrequency" as Path<K>, {id: selectedId} as PathValue<K, Path<K>>)
+    setNextStep();
+  };
 
   return (
     <div className="relative isolate max-w-4xl bg-white px-6 sm:py-10 lg:px-8">
@@ -95,29 +103,31 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
                 </li>
               ))}
             </ul>
-            {!tier.selector && <RadioButtonFrequency recurrence={recurrence} setRecurrence={setRecurrence} />}
-            <a
-              onClick={() => {
-                setValue(
-                  "visitFrequency" as Path<K>,
-                  ((tier.selector && tier.id) || recurrence) as PathValue<K, Path<K>>
-                );
-                setNextStep();
-              }}
-              className={classNames(
-                tier.featured
-                  ? recurrence > 0
-                    ? "bg-indigo-600 text-white font-medium hover:bg-indigo-500"
-                    : " bg-gray-200 text-gray-400 font-normal  "
-                  : "text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300",
-                "mt-8 block cursor-pointer rounded-md py-2.5 px-3.5 transition-colors text-center text-sm font-semibold shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10"
-              )}
-            >
-              Избери
-            </a>
+            <div className="mt-8 flex flex-col gap-4">
+              {tier.frequencyOptions.map((option) => (
+                <SelectFrequencyButton
+                  selection={option}
+                  handleChange={handleChange}
+                />
+              ))}
+            </div>
           </div>
         ))}
       </div>
+      {/* <a
+        onClick={() => {
+          setNextStep();
+        }}
+        className={classNames(
+          recurrence !== null
+            ? "bg-indigo-600 font-medium text-white hover:bg-indigo-500"
+            : " bg-gray-200 font-normal text-gray-400",
+          // "text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300",
+          "mt-8 block cursor-pointer rounded-md py-2.5 px-3.5 text-center text-sm font-semibold shadow transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10"
+        )}
+      >
+        Продължи
+      </a> */}
     </div>
   );
 }

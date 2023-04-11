@@ -6,6 +6,10 @@ export const getToken = () => {
   return bearerString;
 };
 
+
+// TODO: use axios for fetching
+// axios.get(url).then((response) => response.data);
+
 export const requestToAPI = async (addrPath: string, method: string, body = {}) => {
   const reqObject: RequestInit = {
     method: method,

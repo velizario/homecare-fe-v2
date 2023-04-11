@@ -1,14 +1,24 @@
 import { Transition } from "@headlessui/react";
 import { CheckIcon, HandThumbUpIcon, InformationCircleIcon, PaperClipIcon, UserIcon } from "@heroicons/react/20/solid";
-import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format, parseJSON } from "date-fns";
+import bg from "date-fns/locale/bg";
+import React, { FormEventHandler, useEffect, useState } from "react";
+import { MdTextRotateVertical } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
-import { getOrder } from "../../../../model/orderModel";
+import { addOrderComment, getAllOrders, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
-import { areaSizes, Order, orderFrequency, OrderStatus, servicesObj } from "../../../../types/types";
-import Badge from "../../../../utilityComponents/Badge";
+import { orderState } from "../../../../store/orderState";
+import { estateSizeSelections, visitFrequencySelections } from "../../../../store/static";
+import { userState } from "../../../../store/userState";
+import { Order, OrderComment, SelectionOption } from "../../../../types/types";
+import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
+import { toasted } from "../../../../utilityComponents/Toast";
+import axios from "axios";
+import { requestToAPI } from "../../../../helpers/helperFunctions";
 
 const user = {
   name: "Whitney Francis",
@@ -68,69 +78,98 @@ const timeline = [
     datetime: "2020-10-04",
   },
 ];
-const comments = [
-  {
-    id: 1,
-    name: "Leslie Alexander",
-    date: "4d ago",
-    imageId: "1494790108377-be9c29b29330",
-    body: "Ducimus quas delectus ad maxime totam doloribus reiciendis ex. Tempore dolorem maiores. Similique voluptatibus tempore non ut.",
-  },
-  {
-    id: 2,
-    name: "Michael Foster",
-    date: "4d ago",
-    imageId: "1519244703995-f4e0f30006d5",
-    body: "Et ut autem. Voluptatem eum dolores sint necessitatibus quos. Quis eum qui dolorem accusantium voluptas voluptatem ipsum. Quo facere iusto quia accusamus veniam id explicabo et aut.",
-  },
-  {
-    id: 3,
-    name: "Dries Vincent",
-    date: "4d ago",
-    imageId: "1506794778202-cad84cf45f1d",
-    body: "Expedita consequatur sit ea voluptas quo ipsam recusandae. Ab sint et voluptatem repudiandae voluptatem et eveniet. Nihil quas consequatur autem. Perferendis rerum et.",
-  },
-];
-
 type OrderDetailsProps = {
   //   isShowing: boolean;
 };
 
 export default function OrderDetails({}: OrderDetailsProps) {
-  const [isShowing, setIsShowing] = useState(false);
-  const [orderData, setOrderData] = useState<Order>();
   const { orderId } = useParams();
+  const [editMode, setEditMode] = useState(false);
+  const [orderDataChanged, setOrderDataChanged] = useState(false);
+  const [selectedDistrict, setSelectedDistrict] = useState<SelectionOption | null>(null);
+  const [selectedEstateSize, setSelectedEstateSize] = useState<SelectionOption | null>(null);
+  const [selectedVisitFrequency, setSelectedVisitFrequency] = useState<SelectionOption | null>(null);
+  const [districtNames] = essentialsStore((essentials) => [essentials.districtNames]);
+  const [textarea, setTextarea] = useState("");
+  const [textareaError, setTextareaError] = useState(false);
+  const userId = userState((state) => state.userData.id);
+  const updateOrderData = orderState((state) => state.updateOrderData);
+  const queryClient = useQueryClient();
+  const addCommentMutation = useMutation({
+    mutationFn: addOrderComment,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["orders", orderId], { exact: true });
+      // TODO: add it the right way. now it is failing
+      // queryClient.setQueryData(["orders", orderId], data);
+    },
+  });
 
+  const setInitialFormValues = (data: Order) => {
+    setSelectedDistrict(data.districtName || null);
+    setSelectedEstateSize(data.estateSize || null);
+    setSelectedVisitFrequency(data.visitFrequency || null);
+  };
 
-  const fetchOrder = async () => {
-    console.log("!!!!", orderId);
-    if (!orderId) {
-      // TODO expose the error to the user
-      console.log("Order not found!");
+  const {
+    data: orderData,
+    error,
+    status: orderDataIn,
+  } = useQuery({
+    queryKey: ["orders", orderId],
+    queryFn: () => getOrder(orderId as string),
+    onSuccess: setInitialFormValues,
+  });
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextarea(e.target.value);
+    setTextareaError(false);
+  };
+
+  const addComment: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    if (!textarea) {
+      setTextareaError(true);
       return;
     }
-    const order = await getOrder(orderId);
-    if (!order) {
-      // TODO expose the error to the user
-      console.log("Order not found!");
-      return;
+    const orderComment = { userId: userId, comment: textarea, order: { id: orderId } };
+    addCommentMutation.mutate(orderComment);
+  };
+
+  const toggleEditMode = () => {
+    setEditMode((mode) => !mode);
+  };
+
+  const handleOrderUpdate = async () => {
+    const updatedOrder = {
+      ...orderData,
+      districtName: selectedDistrict,
+      estateSize: selectedEstateSize,
+      visitFrequency: selectedVisitFrequency,
+    };
+    await updateOrder(updatedOrder);
+    const orders = await getAllOrders();
+    if (orders) {
+      updateOrderData(orders);
+      setEditMode(false);
+      toasted("Информацията е променена успешно.");
     }
-    setOrderData(order);
+    // TODO: create mutation for updateOrderData which will update the view automatically
   };
 
   useEffect(() => {
-    fetchOrder();
-  }, [orderId]);
-
-  useEffect(() => {
-    setIsShowing(true);
-  }, [orderData]);
+    const isChanged =
+      selectedDistrict?.value !== orderData?.districtName.value ||
+      selectedEstateSize?.value !== orderData?.estateSize.value ||
+      selectedVisitFrequency?.value !== orderData?.visitFrequency.value;
+    setOrderDataChanged(isChanged);
+  }, [selectedDistrict, selectedEstateSize, selectedVisitFrequency]);
 
   //   TODO: Order should be reported differently whether it is looked by vendor or user
   return (
     <div className="min-h-screen">
       <Transition
-        show={isShowing}
+        appear={true}
+        show={true}
         enter="transition-opacity duration-150"
         enterFrom="opacity-0 translate-x-full"
         enterTo="opacity-100 translate-x-0"
@@ -138,43 +177,26 @@ export default function OrderDetails({}: OrderDetailsProps) {
         leaveFrom="opacity-100 translate-x-0"
         leaveTo="opacity-0 translate-x-full"
       >
-        {orderData && (
+        {orderDataIn === "success" && (
           <div className="min-h-full">
             <main className="py-10">
               {/* Page header */}
               <div className="mx-auto max-w-3xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
                 <div className="flex items-center space-x-5">
-                  <div className="flex-shrink-0">
-                    <div className="relative">
-                      <img
-                        className="h-16 w-16 rounded-full"
-                        src={`${BACKEND_URL}/users/public/${orderData.vendorImgUrl || "defaultImage.png"}`}
-                        alt=""
-                      />
-                      <span className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
-                    </div>
-                  </div>
                   <div>
-                    <h1 className="text-2xl font-bold text-gray-900">{orderData.vendorName}</h1>
-                    <p className="text-sm font-medium text-gray-500">
+                    <div className="text-2xl font-bold text-gray-900 ">{orderData.serviceType.value}</div>
+                    <p className="mt-2 text-sm font-medium text-gray-500">
                       Създадена: <time dateTime="2020-08-25">25 Януари, 2023 г.</time>
                     </p>
                   </div>
                 </div>
-                <div className="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  >
-                    Редактирай
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                  >
-                    Потвърди
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={toggleEditMode}
+                  className="mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:mt-0"
+                >
+                  Редактирай
+                </button>
               </div>
 
               <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
@@ -182,18 +204,23 @@ export default function OrderDetails({}: OrderDetailsProps) {
                   {/* Description list*/}
                   <section aria-labelledby="applicant-information-title">
                     <div className="bg-white shadow sm:rounded-lg">
-                      <div className="flex items-start justify-between px-4 py-5 sm:px-6">
-                        <div>
-                          <h2 id="applicant-information-title" className="text-lg font-medium leading-6 text-gray-900">
-                            Информация за поръчката
-                          </h2>
-                          <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                            Създадена: <time dateTime="2023-01-25">25 Януари, 2023 г.</time>
-                          </p>
+                      <div className="flex  flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
+                        <div className="flex items-center space-x-5">
+                          <div className="flex-shrink-0">
+                            <div className="relative">
+                              <img
+                                className="h-16 w-16 rounded-full"
+                                src={`${BACKEND_URL}/users/public/${orderData.vendorImgUrl || "defaultImage.png"}`}
+                                alt=""
+                              />
+                              <span className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
+                            </div>
+                          </div>
+                          <div>
+                            <h1 className="text-lg font-semibold text-gray-900">{orderData.vendorName}</h1>
+                          </div>
                         </div>
-                        <StatusBadge label="Нова">
-                          {orderData.orderStatus.value}
-                        </StatusBadge>
+                        <StatusBadge label="Нова">{orderData.orderStatus.value}</StatusBadge>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
@@ -206,23 +233,44 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Честота</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {orderData.visitFrequency.value}
+                              {editMode && (
+                                <ComboSingleSelect
+                                  selections={visitFrequencySelections}
+                                  selected={selectedVisitFrequency}
+                                  setSelected={setSelectedVisitFrequency}
+                                />
+                              )}
+                              {!editMode && orderData.visitFrequency.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
                             <dt className="text-sm font-medium text-gray-500">Квартал</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {orderData.districtName.value}
+                              {editMode && (
+                                <ComboSingleSelect
+                                  selections={districtNames}
+                                  selected={selectedDistrict}
+                                  setSelected={setSelectedDistrict}
+                                />
+                              )}
+                              {!editMode && orderData.districtName.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-1">
-                            <dt className="text-sm font-medium text-gray-500">Размер</dt>
+                            <dt className="text-sm font-medium text-gray-500">Размер, кв.м.</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              {orderData.estateSize.value} кв.м.
+                              {editMode && (
+                                <ComboSingleSelect
+                                  selections={estateSizeSelections}
+                                  selected={selectedEstateSize}
+                                  setSelected={setSelectedEstateSize}
+                                />
+                              )}
+                              {!editMode && orderData.estateSize.value}
                             </dd>
                           </div>
                           <div className="sm:col-span-2">
-                            <dt className="text-sm font-medium text-gray-500">Коментар</dt>
+                            <dt className="text-sm font-medium text-gray-500">Допълнителна информация</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
                               Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
                             </dd>
@@ -260,10 +308,13 @@ export default function OrderDetails({}: OrderDetailsProps) {
                       </div>
                       <div>
                         <a
-                          href="#"
-                          className="block bg-gray-50 px-4 py-4 text-center text-sm font-medium text-gray-500 hover:text-gray-700 sm:rounded-b-lg"
+                          onClick={handleOrderUpdate}
+                          className={classNames(
+                            "block px-4 py-4 text-center text-sm font-medium sm:rounded-b-lg",
+                            orderDataChanged ? "bg-blue-600 text-white hover:bg-blue-500" : "bg-gray-50 text-gray-500"
+                          )}
                         >
-                          Някакво действие?
+                          Запиши промените
                         </a>
                       </div>
                     </div>
@@ -275,41 +326,50 @@ export default function OrderDetails({}: OrderDetailsProps) {
                       <div className="divide-y divide-gray-200">
                         <div className="px-4 py-5 sm:px-6">
                           <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-                            Коментари
+                            Въпроси и коментари
                           </h2>
                         </div>
                         <div className="px-4 py-6 sm:px-6">
                           <ul role="list" className="space-y-8">
-                            {comments.map((comment) => (
-                              <li key={comment.id}>
-                                <div className="flex space-x-3">
-                                  <div className="flex-shrink-0">
-                                    <img
-                                      className="h-10 w-10 rounded-full"
-                                      src={`https://images.unsplash.com/photo-${comment.imageId}?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80`}
-                                      alt=""
-                                    />
+                            {orderData.orderComment.length > 0 &&
+                              orderData.orderComment.map((comment) => (
+                                <li key={comment.id}>
+                                  <div className="flex space-x-3">
+                                    <div className="flex-shrink-0">
+                                      <img
+                                        className="h-10 w-10 rounded-full"
+                                        src={`${BACKEND_URL}/users/public/${
+                                          (comment.userId === orderData.vendorId
+                                            ? orderData.vendorImgUrl
+                                            : orderData.clientImgUrl) || "defaultImage.png"
+                                        }`}
+                                        alt=""
+                                      />
+                                    </div>
+                                    <div>
+                                      <div className="text-sm">
+                                        <a href="#" className="font-medium text-gray-900">
+                                          {comment.userId === orderData.vendorId
+                                            ? orderData.vendorName
+                                            : orderData.clientName}
+                                        </a>
+                                      </div>
+                                      <div className="mt-1 text-sm text-gray-700">
+                                        <p>{comment.comment}</p>
+                                      </div>
+                                      <div className="mt-2 space-x-2 text-sm">
+                                        <span className="font-medium text-gray-500">
+                                          {format(parseJSON(comment.createdAt), "dd.MM.yyyy HH:mm")}
+                                        </span>{" "}
+                                        <span className="font-medium text-gray-500">&middot;</span>{" "}
+                                        <button type="button" className="font-medium text-gray-900">
+                                          Reply
+                                        </button>
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div>
-                                    <div className="text-sm">
-                                      <a href="#" className="font-medium text-gray-900">
-                                        {comment.name}
-                                      </a>
-                                    </div>
-                                    <div className="mt-1 text-sm text-gray-700">
-                                      <p>{comment.body}</p>
-                                    </div>
-                                    <div className="mt-2 space-x-2 text-sm">
-                                      <span className="font-medium text-gray-500">{comment.date}</span>{" "}
-                                      <span className="font-medium text-gray-500">&middot;</span>{" "}
-                                      <button type="button" className="font-medium text-gray-900">
-                                        Reply
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </li>
-                            ))}
+                                </li>
+                              ))}
                           </ul>
                         </div>
                       </div>
@@ -319,7 +379,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                             <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <form action="#">
+                            <form onSubmit={addComment}>
                               <div>
                                 <label htmlFor="comment" className="sr-only">
                                   About
@@ -330,10 +390,12 @@ export default function OrderDetails({}: OrderDetailsProps) {
                                   rows={3}
                                   className="block w-full rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:py-1.5 sm:text-sm sm:leading-6"
                                   placeholder="Add a note"
-                                  defaultValue={""}
+                                  value={textarea}
+                                  onChange={handleTextareaChange}
                                 />
                               </div>
-                              <div className="mt-3 flex items-center justify-between gap-4">
+                              {textareaError && <p>Попълнете полето за коментар</p>}
+                              <div className="mt-3 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                                 <div className="inline-flex items-start space-x-2 text-sm text-gray-500">
                                   <InformationCircleIcon
                                     className="-mr-1 h-5 w-5 flex-shrink-0 pb-0.5 text-gray-400"
@@ -424,7 +486,6 @@ export default function OrderDetails({}: OrderDetailsProps) {
           </div>
         )}
       </Transition>
-      )
     </div>
   );
 }

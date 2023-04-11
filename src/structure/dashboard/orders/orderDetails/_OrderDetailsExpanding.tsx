@@ -1,8 +1,8 @@
 import { Transition } from '@headlessui/react'
 import { ClockIcon, MapPinIcon, ChatBubbleBottomCenterTextIcon, CalendarIcon, ListBulletIcon, HomeIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react'
-import classNames from '../../../../../helpers/classNames';
-import { Order } from '../../../../../types/types';
+import classNames from '../../../../helpers/classNames';
+import { Order } from '../../../../types/types';
 
 interface OrderDetailsProps {
     order: Order;

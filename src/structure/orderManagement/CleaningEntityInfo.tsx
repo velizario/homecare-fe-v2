@@ -35,8 +35,8 @@ export default function CleaningEntityInfo<K extends FieldValues>({
 
   const handleClick = () => {
     const estateSizeId = estateSizeSelections.find((estateSize) => estateSize.value === selectedestateSize)?.id;
-    setValue("estateSize" as Path<K>, estateSizeId as PathValue<K, Path<K>>);
-    setValue("districtName" as Path<K>, selectedDistrict?.id as PathValue<K, Path<K>>);
+    setValue("estateSize" as Path<K>, {id: estateSizeId} as PathValue<K, Path<K>>);
+    setValue("districtName" as Path<K>, {id: selectedDistrict?.id} as PathValue<K, Path<K>>);
     setNextStep();
   };
 
@@ -68,16 +68,16 @@ export default function CleaningEntityInfo<K extends FieldValues>({
         styles=""
       />
 
-      <div className="mt-10 flex items-end justify-between">
+      <div className="mt-10 mb-8 flex items-end justify-between">
         <h2 id="step-7" className="text-center text-lg font-semibold leading-7 text-indigo-600">
           В кой район ще почистваме?
         </h2>
         <img className="h-20 w-20" src={LocationImage} />
       </div>
       <ComboSingleSelect
-        selectedDistrict={selectedDistrict}
-        setSelectedDistrict={setSelectedDistrict}
-        districtNames={districtNames}
+        selected={selectedDistrict}
+        setSelected={setSelectedDistrict}
+        selections={districtNames}
       />
       <button
         onClick={handleClick}

@@ -1,9 +1,9 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { essentialsStore } from "../store/essentialsStore";
-import { EssentialsDb } from "../types/types";
+import { EssentialDataAll, EssentialDataServiceType } from "../types/types";
 
 export const fetchServiceTypes = async () => {
-  const res = (await requestToAPI(`essentials/getServiceTypes`, "GET")).data as EssentialsDb[];
+  const res = (await requestToAPI(`essentials/getServiceTypes`, "GET")).data as EssentialDataServiceType[];
 
   // Do I want an indexed object?
   // const serviceTypes = res.reduce((first, current) => {
@@ -22,6 +22,6 @@ export const fetchServiceTypes = async () => {
 };
 
 export const fetchDistrictNames = async () => {
-  const res = (await requestToAPI('essentials/getDistrictNames', "GET")).data as EssentialsDb[]
+  const res = (await requestToAPI('essentials/getDistrictNames', "GET")).data as EssentialDataAll[]
   essentialsStore.setState({districtNames: res})
 }

@@ -15,7 +15,7 @@ type ContextMenuProps = {
 };
 
 export default function ContextMenu({ orderId }: ContextMenuProps) {
-  const setOrderData = orderState((state) => state.setOrderData);
+  const updateOrderData = orderState((state) => state.updateOrderData);
   const [modalOpen, setModalOpen] = useState(false);
   const [userConfirmed, setUserConfirmed] = useState(false);
   const [orderAnullment, setOrderAnullment] = useState(false);
@@ -32,7 +32,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
     if (!orderAnullment) return;
     await cancelOrder(orderId);
     const orders = await getAllOrders();
-    if (orders) setOrderData(orders);
+    if (orders) updateOrderData(orders);
   };
 
   const handleCancelOrder: MouseEventHandler<HTMLAnchorElement> = async (e) => {

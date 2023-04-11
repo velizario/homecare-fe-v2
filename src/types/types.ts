@@ -1,12 +1,8 @@
-
 // Essentials
-export type EssentialsDb = { id: number; value: string };
-export type EssentialsStore = Record<string, Omit<EssentialsDb, "id">> 
+export type EssentialDataAll = { id: number; value: string };
+export type EssentialDataServiceType = { id: number; value: string; description?: string; imgUrl?: string };
 
-export interface SelectionOption {
-  id: number;
-  value: string;
-}
+export interface SelectionOption extends EssentialDataAll {}
 
 export enum UserType {
   ADMIN,
@@ -50,7 +46,7 @@ export const services = new Map([
   ["9", "Почистване на прозорци и витрини"],
 ]);
 
-export const servicesObj:Record<string,string> = {
+export const servicesObj: Record<string, string> = {
   "1": "Почистване на дома",
   "2": "Почистване на офиси и магазини",
   "3": "Основно почистване",
@@ -60,7 +56,7 @@ export const servicesObj:Record<string,string> = {
   "7": "Пране на мокети / килими",
   "8": "Почистване на подови настилки",
   "9": "Почистване на прозорци и витрини",
-}
+};
 
 export const orderFrequency = new Map([
   ["1", "еднократно"],
@@ -76,21 +72,31 @@ export const OrderStatus = new Map([
   ["4", "Анулирана"],
 ]);
 
+export interface OrderComment {
+  id: number;
+  userId: number;
+  comment: string;
+  createdAt: string;
+  orderId: number;
+}
 
 export interface Order {
-  id: number
-  additionalService? : string[]
-  clientImgUrl?: string
-  clientName: string
-  districtName: SelectionOption
-  estateSize: SelectionOption
-  orderStatus: SelectionOption
-  orderStatusId: number
-  serviceType: SelectionOption
-  vendorId: number
-  vendorImgUrl? : string
+  id: number;
+  additionalService?: string[];
+  clientImgUrl?: string;
+  clientId: number;
+  clientName: string;
+  createdAt: string;
+  districtName: SelectionOption;
+  estateSize: SelectionOption;
+  orderStatus: SelectionOption;
+  orderStatusId: number;
+  serviceType: SelectionOption;
+  vendorId: number;
+  vendorImgUrl?: string;
   vendorName: string;
-  visitDay: SelectionOption[]
-  visitHour: SelectionOption[]
-  visitFrequency: SelectionOption
+  visitDay: SelectionOption[];
+  visitHour: SelectionOption[];
+  visitFrequency: SelectionOption;
+  orderComment: OrderComment[];
 }

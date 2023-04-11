@@ -1,6 +1,7 @@
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import classNames from "../../helpers/classNames";
-import { serviceTypeChoices } from "../../store/static";
+import { essentialsStore } from "../../store/essentialsStore";
+import { EssentialDataServiceType } from "../../types/types";
 
 interface SelectserviceProps<T extends FieldValues> {
   setValue: UseFormSetValue<T>;
@@ -8,6 +9,8 @@ interface SelectserviceProps<T extends FieldValues> {
 }
 
 export default function SelectService<K extends FieldValues>({setValue, setNextStep }: SelectserviceProps<K>) {
+  const serviceTypeChoices = essentialsStore(store => store.serviceTypes)
+
   return (
     <div className="max-w-4xl py-10">
       <h2 id="step-1" className="mx-auto mt-4 w-max text-2xl font-semibold text-gray-900">
@@ -17,16 +20,16 @@ export default function SelectService<K extends FieldValues>({setValue, setNextS
         Разполагаме с богата гама от услуги за да посрещнем вашите нужди.
       </p>
       <div className="mt-8 divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
-        {serviceTypeChoices.map((action, actionIdx) => (
+        {serviceTypeChoices.map((serviceType: EssentialDataServiceType, serviceTypeIdx) => (
           <div
-            key={action.title}
+            key={serviceType.value}
             className={classNames(
               "group relative bg-white p-2 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 hover:bg-neutral-100 sm:p-4 md:p-6"
             )}
           >
             <div className="flex max-h-[7rem] justify-between overflow-hidden">
               <div className="h-full">
-                <img src={action.img} className="h-full object-cover" aria-hidden="true" />
+                <img src={serviceType.imgUrl} className="h-full object-cover" aria-hidden="true" />
               </div>
               <span
                 className="pointer-events-none ml-4 hidden text-gray-300 group-hover:text-gray-400 sm:block"
@@ -41,17 +44,17 @@ export default function SelectService<K extends FieldValues>({setValue, setNextS
               <h3 className="text-base font-semibold leading-6 text-gray-900">
                 <a
                   onClick={() => {
-                    setValue("serviceType" as Path<K>, action.id as PathValue<K, Path<K>>);
+                    setValue("serviceType" as Path<K>, {id: serviceType.id} as PathValue<K, Path<K>>);
                     setNextStep();
                   }}
                   className="cursor-pointer focus:outline-none"
                 >
                   {/* Extend touch target to entire panel */}
                   <span className="absolute inset-0" aria-hidden="true" />
-                  {action.title}
+                  {serviceType.value}
                 </a>
               </h3>
-              <p className="mt-2 text-sm text-gray-500">{action.description}</p>
+              <p className="mt-2 text-sm text-gray-500">{serviceType.description}</p>
             </div>
           </div>
         ))}
