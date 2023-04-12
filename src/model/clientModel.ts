@@ -1,23 +1,22 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { ApiError, UserType } from "../types/types";
+import { ApiError, User, UserRole } from "../types/types";
 import { ProfileForm } from "../structure/dashboard/account/profile/Profile";
-import { User } from "./userModel";
 import { userState } from "../store/userState";
 
-export interface Client {
-  id: string;
-  createdAt: Date;
-  firstName: string;
-  lastName: string;
-  email: string;
-  imageUrl: string;
-  isSuspended: boolean;
-  roles: UserType[];
-  phone: string;
-  district: string;
-  city: string;
-  address: string;
-}
+// export interface Client {
+//   id: string;
+//   createdAt: Date;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   imageUrl: string;
+//   isSuspended: boolean;
+//   roles: UserRole[];
+//   phone: string;
+//   district: string;
+//   city: string;
+//   address: string;
+// }
 
 type HandleRequestData = {
   status: "fail" | "success" | "error";

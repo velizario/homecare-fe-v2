@@ -6,14 +6,14 @@ import classNames from "../../helpers/classNames";
 import { visitDaySelections, visitHourSelections } from "../../store/static";
 import CardChoice from "../../utilityComponents/CardChoice";
 
-interface CreateOrderInputProps<T extends FieldValues> {
+interface SelectTimeFrameProps<T extends FieldValues> {
   setValue: UseFormSetValue<T>;
   setNextStep: () => void;
 }
 
 
 
-export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNextStep }: CreateOrderInputProps<K>) {
+export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNextStep }: SelectTimeFrameProps<K>) {
   const [visitDays, setVisitDays] = useState<number[]>([]);
   const [visitHours, setVisitHours] = useState<number[]>([]);
 

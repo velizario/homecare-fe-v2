@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UserType } from "../../../../types/types";
+import { UserRole } from "../../../../types/types";
 import { userState } from "../../../../store/userState";
 
 function classNames(...classes: string[]) {
@@ -21,20 +21,20 @@ const serviceMode = [
 
 const providerMode = [
   {
-    id: UserType.VENDOR_INDIVIDUAL,
+    id: UserRole.VENDOR_INDIVIDUAL,
     name: "Частно лице",
     description: "Профилът Ви ще е представен с име и фамилия",
   },
   {
-    id: UserType.VENDOR_COMPANY,
+    id: UserRole.VENDOR_COMPANY,
     name: "Фирма",
     description: "Профилът Ви ще е представен с име на фирмата",
   },
 ];
 
 type UserTypeSelectionProps = {
-  roles: UserType[];
-  setRoles: (roles: UserType[]) => void;
+  roles: UserRole[];
+  setRoles: (roles: UserRole[]) => void;
 };
 
 export default function UserTypeSelection({ roles, setRoles }: UserTypeSelectionProps) {
@@ -50,7 +50,7 @@ export default function UserTypeSelection({ roles, setRoles }: UserTypeSelection
                 key={option.id}
                 onClick={() => {
                   setSelection(option.id);
-                  option.id === 0 && setRoles([UserType.CLIENT]);
+                  option.id === 0 && setRoles([UserRole.CLIENT]);
                   option.id === 1 && setRoles([]);
                 }}
                 className={classNames(
@@ -73,7 +73,7 @@ export default function UserTypeSelection({ roles, setRoles }: UserTypeSelection
             <div
               key={option.id}
               onClick={() => {
-                setRoles([option.id as UserType]);
+                setRoles([option.id as UserRole]);
               }}
               className={classNames(
                 selectionId === 0 ? "rounded-tl-md rounded-tr-md" : "",

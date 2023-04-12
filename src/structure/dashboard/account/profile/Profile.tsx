@@ -9,14 +9,14 @@ import ProfileAbout from "./ProfileAbout";
 import RegionSelection from "./RegionSelection";
 import { userState } from "../../../../store/userState";
 import { userEdit } from "../../../../model/clientModel";
-import { UserType } from "../../../../types/types";
+import { UserRole } from "../../../../types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toasted } from "../../../../utilityComponents/Toast";
 import ComboSelectFullScreen from "../../../searchOrders/ComboSelectFullscreen";
 
 const profileInputValues = {
   firstName: {
-    scope: [UserType.CLIENT, UserType.VENDOR_INDIVIDUAL],
+    scope: [UserRole.CLIENT, UserRole.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "firstName",
     id: "first-name",
@@ -24,7 +24,7 @@ const profileInputValues = {
     autoComplete: "given-name",
   },
   lastName: {
-    scope: [UserType.CLIENT, UserType.VENDOR_INDIVIDUAL],
+    scope: [UserRole.CLIENT, UserRole.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "last-name",
     id: "last-name",
@@ -32,35 +32,35 @@ const profileInputValues = {
     autoComplete: "family-name",
   },
   companyName: {
-    scope: [UserType.VENDOR_COMPANY],
+    scope: [UserRole.VENDOR_COMPANY],
     className: "sm:col-span-6",
     name: "company",
     id: "company",
     label: "Име на фирма*",
   },
   website: {
-    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL],
+    scope: [UserRole.VENDOR_COMPANY, UserRole.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "website",
     id: "website",
     label: "Уеб сайт",
   },
   facebook: {
-    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL],
+    scope: [UserRole.VENDOR_COMPANY, UserRole.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "facebook",
     id: "facebook",
     label: "Фейсбук",
   },
   instagram: {
-    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL],
+    scope: [UserRole.VENDOR_COMPANY, UserRole.VENDOR_INDIVIDUAL],
     className: "sm:col-span-3",
     name: "instagram",
     id: "instagram",
     label: "Инстаграм",
   },
   phone: {
-    scope: [UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL, UserType.CLIENT],
+    scope: [UserRole.VENDOR_COMPANY, UserRole.VENDOR_INDIVIDUAL, UserRole.CLIENT],
     className: "sm:col-span-3",
     name: "phone-number",
     id: "phone-number",
@@ -68,7 +68,7 @@ const profileInputValues = {
     autoComplete: "tel",
   },
   address: {
-    scope: [UserType.CLIENT],
+    scope: [UserRole.CLIENT],
     className: "sm:col-span-3",
     name: "address",
     id: "address",
@@ -76,7 +76,7 @@ const profileInputValues = {
     autoComplete: "street-address",
   },
   city: {
-    scope: [UserType.CLIENT],
+    scope: [UserRole.CLIENT],
     className: "sm:col-span-3",
     name: "city",
     id: "city",
@@ -142,7 +142,7 @@ let CompanyValidationSchema = BaseValidationSchema;
 
 export default function Profile() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
-  const ActiveValidationSchema = userData.roles.includes(UserType.VENDOR_COMPANY)
+  const ActiveValidationSchema = userData.roles.includes(UserRole.VENDOR_COMPANY)
     ? CompanyValidationSchema
     : DefaultValidationSchema;
 
@@ -240,7 +240,7 @@ export default function Profile() {
                 control={control}
               />
             )}
-            {checkIfVisible([UserType.CLIENT]) && (
+            {checkIfVisible([UserRole.CLIENT]) && (
               <RegionSelection {...register("district")} defaultValue={userData.district} control={control} />
             )}
             {checkIfVisible(profileInputValues.address.scope) && (
@@ -251,11 +251,11 @@ export default function Profile() {
                 control={control}
               />
             )}
-            {checkIfVisible([UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]) && (
+            {checkIfVisible([UserRole.VENDOR_COMPANY, UserRole.VENDOR_INDIVIDUAL]) && (
               <ProfileAbout {...register("about")} defaultValue={userData.about} control={control} />
             )}
 
-            {checkIfVisible([UserType.VENDOR_COMPANY, UserType.VENDOR_INDIVIDUAL]) && (
+            {checkIfVisible([UserRole.VENDOR_COMPANY, UserRole.VENDOR_INDIVIDUAL]) && (
               <ComboSelectBox
                 defaultValue={userData.servedDistrict}
                 // {...register("servedDistrict")}

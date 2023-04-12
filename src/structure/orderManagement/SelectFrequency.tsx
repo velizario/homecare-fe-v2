@@ -39,11 +39,10 @@ interface SelectFrequencyProps<T extends FieldValues> {
 }
 
 export default function SelectFrequency<K extends FieldValues>({ setValue, setNextStep }: SelectFrequencyProps<K>) {
-
   const handleChange: MouseEventHandler<HTMLDivElement> = (e) => {
     const selectedId = Number(e.currentTarget.dataset.id);
     const selectedFrequency = visitFrequencySelections.find((selection) => selection.id === selectedId);
-    setValue("visitFrequency" as Path<K>, {id: selectedId} as PathValue<K, Path<K>>)
+    setValue("visitFrequency" as Path<K>, { id: selectedId } as PathValue<K, Path<K>>);
     setNextStep();
   };
 
@@ -105,10 +104,7 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
             </ul>
             <div className="mt-8 flex flex-col gap-4">
               {tier.frequencyOptions.map((option) => (
-                <SelectFrequencyButton
-                  selection={option}
-                  handleChange={handleChange}
-                />
+                <SelectFrequencyButton key={option.id} selection={option} handleChange={handleChange} />
               ))}
             </div>
           </div>

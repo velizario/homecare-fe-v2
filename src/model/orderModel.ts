@@ -9,7 +9,7 @@ export const createOrder = async (vendorId: string, data: any) => {
 export const updateOrder = async (data: any) => {
   console.log("Order data to update with: ", data);
   const resData = await requestToAPI("orders/createOrder", "POST", data);
-  return resData as Order;
+  return resData.data as Order;
 };
 
 export const getOrder = async (data: string) => {
@@ -20,6 +20,7 @@ export const getOrder = async (data: string) => {
 
 export const getAllOrders = async () => {
   const resData = await requestToAPI(`orders/getAllOrders`, "GET");
+  // axios.get()
   return resData.data as Order[];
 };
 
@@ -30,5 +31,5 @@ export const cancelOrder = async (orderId: number) => {
 
 export const addOrderComment = async (orderData: any) => {
   const resData = await requestToAPI(`orders/addComment`, "POST", orderData);
-  return resData.data as Order[];
+  return resData.data as OrderComment;
 };

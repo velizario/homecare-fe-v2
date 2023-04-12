@@ -10,11 +10,9 @@ import {
   PathValue,
   UseFormSetValue,
 } from "react-hook-form";
+import { District } from "../../../../types/types";
 
-export interface District {
-  id: number;
-  districtName: string;
-}
+
 
 const districts: District[] = [
   { id: 1, districtName: "Leslie Alexander" },

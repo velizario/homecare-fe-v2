@@ -33,7 +33,7 @@ export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) 
 
   useEffect(() => {
     if (orderStep === 5) {
-      submitFormHandler(watch())
+      submitFormHandler(watch());
       closeModal();
     }
   }, [orderStep]);

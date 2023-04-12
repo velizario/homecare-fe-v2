@@ -1,7 +1,7 @@
-import { UserType } from "../types/types";
+import { UserRole } from "../types/types";
 import { userState } from "../store/userState";
 
-const checkIfVisible = ( scope : UserType[]) => {
+const checkIfVisible = ( scope : UserRole[]) => {
   const roles = userState((state) => state.userData.roles);
   return roles.length === 0
     ? false

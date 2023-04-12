@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
 import { userSignup } from "../../model/clientModel";
 import { useState } from "react";
-import { UserType } from "../../types/types";
+import { UserRole } from "../../types/types";
 import InputField from "../../utilityComponents/InputField";
 import Toaster, { toasted } from "../../utilityComponents/Toast";
 
@@ -89,9 +89,9 @@ let CompanyValidationSchema = BaseValidationSchema.refine((data) => data.passwor
 
 export default function Register() {
   const navigate = useNavigate();
-  const [roles, setRoles] = useState<UserType[]>([]);
+  const [roles, setRoles] = useState<UserRole[]>([]);
 
-  const ActiveValidationSchema = roles.includes(UserType.VENDOR_COMPANY)
+  const ActiveValidationSchema = roles.includes(UserRole.VENDOR_COMPANY)
     ? CompanyValidationSchema
     : DefaultValidationSchema;
 
@@ -106,7 +106,7 @@ export default function Register() {
   });
 
   const submitFormHandler = async (data: RegistrationForm) => {
-    // add role to the request. Should be of UserType. Cannot be ADMIN
+    // add role to the request. Should be of UserRole. Cannot be ADMIN
     const dataHydrated = { ...data, roles };
     // reset error message
     const createAttempt = await userSignup(dataHydrated);
@@ -146,7 +146,7 @@ export default function Register() {
                 {...RegisterInputValues.companyName}
                 {...register("companyName")}
                 control={control}
-                className={roles.includes(UserType.VENDOR_COMPANY) ? "block" : "hidden"}
+                className={roles.includes(UserRole.VENDOR_COMPANY) ? "block" : "hidden"}
               />
               <InputField {...RegisterInputValues.email} {...register("email")} control={control} />
 
@@ -171,9 +171,9 @@ export default function Register() {
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-700 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Регистрирай се като{" "}
-                  {roles.includes(UserType.CLIENT)
+                  {roles.includes(UserRole.CLIENT)
                     ? "клиент"
-                    : roles.includes(UserType.VENDOR_COMPANY) || roles.includes(UserType.VENDOR_INDIVIDUAL)
+                    : roles.includes(UserRole.VENDOR_COMPANY) || roles.includes(UserRole.VENDOR_INDIVIDUAL)
                     ? "доставчик"
                     : ""}
                 </button>

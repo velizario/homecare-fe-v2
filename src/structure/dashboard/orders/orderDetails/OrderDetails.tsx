@@ -1,31 +1,20 @@
 import { Transition } from "@headlessui/react";
-import { CheckIcon, HandThumbUpIcon, InformationCircleIcon, PaperClipIcon, UserIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, HandThumbUpIcon, PaperClipIcon, UserIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { format, parseJSON } from "date-fns";
-import bg from "date-fns/locale/bg";
-import React, { FormEventHandler, useEffect, useState } from "react";
-import { MdTextRotateVertical } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
-import { addOrderComment, getAllOrders, getOrder, updateOrder } from "../../../../model/orderModel";
+import { addOrderComment, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import { orderState } from "../../../../store/orderState";
 import { estateSizeSelections, visitFrequencySelections } from "../../../../store/static";
 import { userState } from "../../../../store/userState";
-import { Order, OrderComment, SelectionOption } from "../../../../types/types";
+import { Order, SelectionOption } from "../../../../types/types";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { toasted } from "../../../../utilityComponents/Toast";
-import axios from "axios";
-import { requestToAPI } from "../../../../helpers/helperFunctions";
-
-const user = {
-  name: "Whitney Francis",
-  email: "whitney@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80",
-};
+import OrderDetailsComments from "./OrderDetailsComments";
 
 const attachments = [
   { name: "resume_front_end_developer.pdf", href: "#" },
@@ -90,24 +79,24 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const [selectedEstateSize, setSelectedEstateSize] = useState<SelectionOption | null>(null);
   const [selectedVisitFrequency, setSelectedVisitFrequency] = useState<SelectionOption | null>(null);
   const [districtNames] = essentialsStore((essentials) => [essentials.districtNames]);
-  const [textarea, setTextarea] = useState("");
-  const [textareaError, setTextareaError] = useState(false);
-  const userId = userState((state) => state.userData.id);
+  const [userData] = userState((state) => [state.userData]);
   const updateOrderData = orderState((state) => state.updateOrderData);
   const queryClient = useQueryClient();
-  const addCommentMutation = useMutation({
-    mutationFn: addOrderComment,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(["orders", orderId], { exact: true });
-      // TODO: add it the right way. now it is failing
-      // queryClient.setQueryData(["orders", orderId], data);
-    },
-  });
 
   const setInitialFormValues = (data: Order) => {
     setSelectedDistrict(data.districtName || null);
     setSelectedEstateSize(data.estateSize || null);
     setSelectedVisitFrequency(data.visitFrequency || null);
+  };
+
+  const handleOrderUpdate = async () => {
+    const updatedOrder = {
+      ...orderData,
+      districtName: selectedDistrict,
+      estateSize: selectedEstateSize,
+      visitFrequency: selectedVisitFrequency,
+    };
+    updateOrderMutation.mutate(updatedOrder);
   };
 
   const {
@@ -120,40 +109,37 @@ export default function OrderDetails({}: OrderDetailsProps) {
     onSuccess: setInitialFormValues,
   });
 
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextarea(e.target.value);
-    setTextareaError(false);
-  };
+  const addCommentMutation = useMutation({
+    mutationFn: addOrderComment,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["orders", orderId], { exact: true });
+      queryClient.setQueryData(["orders", orderId], (oldData: Order | undefined) => {
+        if (!oldData) return oldData;
+        const { orderComment } = oldData;
+        orderComment.push({ ...data, user: userData });
+        return { ...oldData, orderComment };
+      });
+    },
+  });
 
-  const addComment: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    if (!textarea) {
-      setTextareaError(true);
-      return;
-    }
-    const orderComment = { userId: userId, comment: textarea, order: { id: orderId } };
+  const updateOrderMutation = useMutation({
+    mutationFn: updateOrder,
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.setQueryData(["orders", orderId], data);
+      queryClient.invalidateQueries(["orders", orderId], { exact: true });
+      setEditMode(false);
+      toasted("Информацията е променена успешно.");
+    },
+  });
+
+  const addComment = async (commentText: string) => {
+    const orderComment = { user: { id: userData.id }, comment: commentText, order: { id: orderId } };
     addCommentMutation.mutate(orderComment);
   };
 
   const toggleEditMode = () => {
     setEditMode((mode) => !mode);
-  };
-
-  const handleOrderUpdate = async () => {
-    const updatedOrder = {
-      ...orderData,
-      districtName: selectedDistrict,
-      estateSize: selectedEstateSize,
-      visitFrequency: selectedVisitFrequency,
-    };
-    await updateOrder(updatedOrder);
-    const orders = await getAllOrders();
-    if (orders) {
-      updateOrderData(orders);
-      setEditMode(false);
-      toasted("Информацията е променена успешно.");
-    }
-    // TODO: create mutation for updateOrderData which will update the view automatically
   };
 
   useEffect(() => {
@@ -210,14 +196,18 @@ export default function OrderDetails({}: OrderDetailsProps) {
                             <div className="relative">
                               <img
                                 className="h-16 w-16 rounded-full"
-                                src={`${BACKEND_URL}/users/public/${orderData.vendorImgUrl || "defaultImage.png"}`}
+                                src={`${BACKEND_URL}/users/public/${
+                                  orderData.vendor.user.imageUrl || "defaultImage.png"
+                                }`}
                                 alt=""
                               />
                               <span className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
                             </div>
                           </div>
                           <div>
-                            <h1 className="text-lg font-semibold text-gray-900">{orderData.vendorName}</h1>
+                            <h1 className="text-lg font-semibold text-gray-900">{`${orderData.vendor.user.firstName}${
+                              orderData.vendor.user.lastName ? " " + orderData.vendor.user.lastName : ""
+                            }`}</h1>
                           </div>
                         </div>
                         <StatusBadge label="Нова">{orderData.orderStatus.value}</StatusBadge>
@@ -311,7 +301,9 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           onClick={handleOrderUpdate}
                           className={classNames(
                             "block px-4 py-4 text-center text-sm font-medium sm:rounded-b-lg",
-                            orderDataChanged ? "bg-blue-600 text-white hover:bg-blue-500" : "bg-gray-50 text-gray-500"
+                            orderDataChanged
+                              ? "cursor-pointer bg-blue-600 text-white hover:bg-blue-500"
+                              : "pointer-events-none bg-gray-50 text-gray-500"
                           )}
                         >
                           Запиши промените
@@ -321,108 +313,8 @@ export default function OrderDetails({}: OrderDetailsProps) {
                   </section>
 
                   {/* Comments*/}
-                  <section aria-labelledby="notes-title">
-                    <div className="bg-white shadow sm:overflow-hidden sm:rounded-lg">
-                      <div className="divide-y divide-gray-200">
-                        <div className="px-4 py-5 sm:px-6">
-                          <h2 id="notes-title" className="text-lg font-medium text-gray-900">
-                            Въпроси и коментари
-                          </h2>
-                        </div>
-                        <div className="px-4 py-6 sm:px-6">
-                          <ul role="list" className="space-y-8">
-                            {orderData.orderComment.length > 0 &&
-                              orderData.orderComment.map((comment) => (
-                                <li key={comment.id}>
-                                  <div className="flex space-x-3">
-                                    <div className="flex-shrink-0">
-                                      <img
-                                        className="h-10 w-10 rounded-full"
-                                        src={`${BACKEND_URL}/users/public/${
-                                          (comment.userId === orderData.vendorId
-                                            ? orderData.vendorImgUrl
-                                            : orderData.clientImgUrl) || "defaultImage.png"
-                                        }`}
-                                        alt=""
-                                      />
-                                    </div>
-                                    <div>
-                                      <div className="text-sm">
-                                        <a href="#" className="font-medium text-gray-900">
-                                          {comment.userId === orderData.vendorId
-                                            ? orderData.vendorName
-                                            : orderData.clientName}
-                                        </a>
-                                      </div>
-                                      <div className="mt-1 text-sm text-gray-700">
-                                        <p>{comment.comment}</p>
-                                      </div>
-                                      <div className="mt-2 space-x-2 text-sm">
-                                        <span className="font-medium text-gray-500">
-                                          {format(parseJSON(comment.createdAt), "dd.MM.yyyy HH:mm")}
-                                        </span>{" "}
-                                        <span className="font-medium text-gray-500">&middot;</span>{" "}
-                                        <button type="button" className="font-medium text-gray-900">
-                                          Reply
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </li>
-                              ))}
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="bg-gray-50 px-4 py-6 sm:px-6">
-                        <div className="flex space-x-3">
-                          <div className="flex-shrink-0">
-                            <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <form onSubmit={addComment}>
-                              <div>
-                                <label htmlFor="comment" className="sr-only">
-                                  About
-                                </label>
-                                <textarea
-                                  id="comment"
-                                  name="comment"
-                                  rows={3}
-                                  className="block w-full rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:py-1.5 sm:text-sm sm:leading-6"
-                                  placeholder="Add a note"
-                                  value={textarea}
-                                  onChange={handleTextareaChange}
-                                />
-                              </div>
-                              {textareaError && <p>Попълнете полето за коментар</p>}
-                              <div className="mt-3 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                                <div className="inline-flex items-start space-x-2 text-sm text-gray-500">
-                                  <InformationCircleIcon
-                                    className="-mr-1 h-5 w-5 flex-shrink-0 pb-0.5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                  <p>
-                                    Записки по поръчката. За чат, отиди{" "}
-                                    <Link to="/dashboard/chat" className="font-medium text-gray-900">
-                                      тук
-                                    </Link>
-                                  </p>
-                                </div>
-                                <button
-                                  type="submit"
-                                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                >
-                                  Добави коментар
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+                  <OrderDetailsComments orderComment={orderData.orderComment} addComment={addComment} />
                 </div>
-
                 <section aria-labelledby="timeline-title" className="lg:col-span-1 lg:col-start-3">
                   <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
                     <h2 id="timeline-title" className="text-lg font-medium text-gray-900">

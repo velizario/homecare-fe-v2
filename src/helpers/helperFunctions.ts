@@ -1,3 +1,4 @@
+import axios from "axios";
 import { BACKEND_URL } from "./envVariables";
 
 export const getToken = () => {
@@ -6,34 +7,26 @@ export const getToken = () => {
   return bearerString;
 };
 
-
-// TODO: use axios for fetching
-// axios.get(url).then((response) => response.data);
-
 export const requestToAPI = async (addrPath: string, method: string, body = {}) => {
-  const reqObject: RequestInit = {
+  const reqObject = {
+    url: `${BACKEND_URL}/${addrPath}`,
     method: method,
-    mode: "cors",
-    cache: "no-cache",
+    // cache: "no-cache",
     headers: {
       "Content-Type": "application/json",
       Authorization: getToken() || "",
     },
-    credentials: "include",
+    // credentials: "include",
+    data: JSON.stringify(body),
   };
 
-  // Add check for POST requests where body is not empty
-  if (Object.keys(body).length > 0) reqObject.body = JSON.stringify(body);
 
-  // if (bearerString)
-  //   reqObject.headers = { ...reqObject.headers, Authorization: bearerString };
 
   try {
-    const response = await fetch(`${BACKEND_URL}/${addrPath}`, reqObject);
-    const data = await response.json();
-    console.log("Returned data from API:", data);
-    return data;
+    const resData = await axios(reqObject);
+    console.log("Returned data from API:", resData.data);
+    return resData.data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
