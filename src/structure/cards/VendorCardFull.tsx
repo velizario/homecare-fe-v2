@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import classNames from "../../helpers/classNames";
 import { BACKEND_URL } from "../../helpers/envVariables";
-import { getVendor, Vendor } from "../../model/vendorModel";
+import { createFullName } from "../../helpers/helperFunctions";
+import { getVendor } from "../../model/vendorModel";
+import { Vendor } from "../../types/types";
 import RatingCard from "../../utilityComponents/RatingCard";
 import CreateOrder from "../orderManagement/CreateOrder";
 import ContactButtons from "./ContactButtons";
@@ -23,6 +25,7 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
 
   const fetchVendorData = async () => {
     const vendorData = await getVendor(vendorId);
+    console.log(vendorData)
     setVendor(vendorData);
   };
 
@@ -45,15 +48,15 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
                     <img
                       className={classNames(
                         "w-full rounded-md object-cover [aspect-ratio:_1_/_1]",
-                        !vendor.imageUrl ? "h-14 w-14" : ""
+                        // !vendor.user.imageUrl ? "h-14 w-14" : ""
                       )}
-                      src={`${BACKEND_URL}/users/public/${vendor.imageUrl || "defaultImage.png"}`}
+                      // src={`${BACKEND_URL}/users/public/${vendor.user.imageUrl || "defaultImage.png"}`}
                       alt=""
                     />
                   </div>
                   <div className="flex flex-col items-center px-3 md:px-5">
                     <h2 className="mt-2 text-center text-xl font-bold tracking-tight text-gray-900">
-                      {vendor.firstName} {vendor.lastName}
+                      {createFullName(vendor.user)}
                     </h2>
                     <p className="self-center text-sm text-gray-400">{vendor.city}</p>
                     <SingleRating />

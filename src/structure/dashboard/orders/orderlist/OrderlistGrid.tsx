@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { ClipboardDocumentCheckIcon, HomeIcon, MapPinIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
+import { createFullName, sortObjArrAsc, sortObjArrDesc } from "../../../../helpers/helperFunctions";
 import { getAllOrders } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { userState } from "../../../../store/userState";
@@ -8,7 +9,6 @@ import { Order } from "../../../../types/types";
 import ContextMenu from "../../../../utilityComponents/ContextMenu";
 import Filters from "../../../../utilityComponents/Filters";
 import OrderItem from "./OrderListItem";
-
 
 export default function OrderlistGrid() {
   const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
@@ -42,32 +42,30 @@ export default function OrderlistGrid() {
               <OrderItem>Услуга</OrderItem>
               <OrderItem>Честота</OrderItem>
             </div>
-            {orderData
-              .sort((a, b) => Number(b.id) - Number(a.id))
-              .map((order: Order) => {
-                return (
-                  <div
-                    key={order.id}
-                    className="grid auto-rows-fr grid-cols-[1fr,1fr,1.5rem] gap-y-10 rounded-lg border border-indigo-100 bg-white  py-1 text-gray-800 shadow-order transition-shadow hover:shadow-order-hover md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1.5rem] md:px-5"
-                  >
-                    <OrderItem styles="md:block text-xs text-indigo-500 font-medium cursor-pointer hover:text-indigo-900">
-                      #{order.id}
-                    </OrderItem>
-                    <OrderItem>{userRoles.includes(1) ? order.clientName : order.vendorName}</OrderItem>
-                    <OrderItem>{order.estateSize.value}</OrderItem>
-                    <OrderItem>{order.orderStatus.value}</OrderItem>
-                    <OrderItem styles="text-xs whitespace-normal line-clamp-3">{order.serviceType.value}</OrderItem>
-                    <OrderItem>
-                      {
-                        <span className="inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium">
-                          {order.visitFrequency.value}
-                        </span>
-                      }
-                    </OrderItem>
-                    <ContextMenu orderId={order.id} />
-                  </div>
-                );
-              })}
+            {sortObjArrDesc(orderData).map((order: Order) => {
+              return (
+                <div
+                  key={order.id}
+                  className="grid auto-rows-fr grid-cols-[1fr,1fr,1.5rem] gap-y-10 rounded-lg border border-indigo-100 bg-white  py-1 text-gray-800 shadow-order transition-shadow hover:shadow-order-hover md:grid-cols-[2.5rem,1fr,8rem,1fr,1fr,8rem,1.5rem] md:px-5"
+                >
+                  <OrderItem styles="md:block text-xs text-indigo-500 font-medium cursor-pointer hover:text-indigo-900">
+                    #{order.id}
+                  </OrderItem>
+                  <OrderItem>{createFullName(userRoles.includes(1) ? order.client.user : order.vendor.user)}</OrderItem>
+                  <OrderItem>{order.estateSize.value}</OrderItem>
+                  <OrderItem>{order.orderStatus.value}</OrderItem>
+                  <OrderItem styles="text-xs whitespace-normal line-clamp-3">{order.serviceType.value}</OrderItem>
+                  <OrderItem>
+                    {
+                      <span className="inline-flex items-center rounded-full px-3 py-0.5 text-xs font-medium">
+                        {order.visitFrequency.value}
+                      </span>
+                    }
+                  </OrderItem>
+                  <ContextMenu orderId={order.id} />
+                </div>
+              );
+            })}
           </div>
 
           {/* Mobile view */}
@@ -115,7 +113,7 @@ export default function OrderlistGrid() {
                       <UserIcon className="h-5 w-5" />
                       <div className="flex flex-col ">
                         <p className="text-sm text-gray-500">Клиент</p>
-                        <p className="font-medium">{order.vendorName}</p>
+                        <p className="font-medium">{createFullName(userRoles.includes(1) ? order.client.user : order.vendor.user)}</p>
                       </div>
                     </li>
                     <li className="flex flex-1 gap-2">
@@ -134,9 +132,7 @@ export default function OrderlistGrid() {
                       <ClipboardDocumentCheckIcon className="h-5 w-5" />
                       <div className="flex flex-col ">
                         <p className="text-sm text-gray-500">Тип</p>
-                        <p className="overflow-visible font-medium">
-                          {order.visitFrequency.value}
-                        </p>
+                        <p className="overflow-visible font-medium">{order.visitFrequency.value}</p>
                       </div>
                     </li>
                     <li className="flex flex-1 gap-2">

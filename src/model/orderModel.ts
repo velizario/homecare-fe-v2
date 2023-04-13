@@ -8,7 +8,7 @@ export const createOrder = async (vendorId: string, data: any) => {
 
 export const updateOrder = async (data: any) => {
   console.log("Order data to update with: ", data);
-  const resData = await requestToAPI("orders/createOrder", "POST", data);
+  const resData = await requestToAPI("orders/updateOrder", "POST", data);
   return resData.data as Order;
 };
 

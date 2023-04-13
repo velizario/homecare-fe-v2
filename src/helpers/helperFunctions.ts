@@ -20,8 +20,6 @@ export const requestToAPI = async (addrPath: string, method: string, body = {}) 
     data: JSON.stringify(body),
   };
 
-
-
   try {
     const resData = await axios(reqObject);
     console.log("Returned data from API:", resData.data);
@@ -30,3 +28,15 @@ export const requestToAPI = async (addrPath: string, method: string, body = {}) 
     console.log(error);
   }
 };
+
+export const createFullName = (objectWithNames: { firstName: string; lastName: string }) => {
+  return `${objectWithNames.firstName}${objectWithNames.lastName ? " " + objectWithNames.lastName : ""}`;
+};
+
+export function sortObjArrAsc<T extends Record<any, any> & { id: number }>(objectToSort: T[]): T[] {
+  return [...objectToSort].sort((a, b) => a.id - b.id);
+}
+
+export function sortObjArrDesc<T extends Record<any, any> & { id: number }>(objectToSort: T[]): T[] {
+  return [...objectToSort].sort((a, b) => b.id - a.id);
+}

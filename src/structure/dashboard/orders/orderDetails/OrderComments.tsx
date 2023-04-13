@@ -1,16 +1,17 @@
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
-import { parseJSON, format } from "date-fns";
+import { format, parseJSON } from "date-fns";
 import { FormEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
-import { Order, OrderComment } from "../../../../types/types";
+import { createFullName, sortObjArrAsc } from "../../../../helpers/helperFunctions";
+import { OrderComment } from "../../../../types/types";
 
-type OrderDetailsCommentsProps = {
+type OrderCommentsProps = {
   orderComment: OrderComment[];
   addComment: (commentText: string) => void;
 };
 
-export default function OrderDetailsComments({ orderComment, addComment }: OrderDetailsCommentsProps) {
+export default function OrderComments({ orderComment, addComment }: OrderCommentsProps) {
   const [textareaError, setTextareaError] = useState(false);
   const [textarea, setTextarea] = useState("");
 
@@ -40,7 +41,7 @@ export default function OrderDetailsComments({ orderComment, addComment }: Order
           </div>
           <div className="px-4 py-6 sm:px-6">
             <ul role="list" className="space-y-8">
-              {orderComment.map((comment) => (
+              {sortObjArrAsc(orderComment).map((comment) => (
                 <li key={comment.id}>
                   <div className="flex space-x-3">
                     <div className="flex-shrink-0">
@@ -53,19 +54,19 @@ export default function OrderDetailsComments({ orderComment, addComment }: Order
                     <div>
                       <div className="text-sm">
                         <a href="#" className="font-medium text-gray-900">
-                          {`${comment.user.firstName}${comment.user.lastName ? " " + comment.user.lastName : ""}`}
+                          {createFullName(comment.user)}
                         </a>
                       </div>
                       <div className="mt-1 text-sm text-gray-700">
                         <p>{comment.comment}</p>
                       </div>
                       <div className="mt-2 space-x-2 text-sm">
-                        <span className="font-medium text-gray-500">
+                        <time dateTime={comment.createdAt} className="font-medium text-gray-500">
                           {format(parseJSON(comment.createdAt), "dd.MM.yyyy HH:mm")}
-                        </span>{" "}
+                        </time>{" "}
                         <span className="font-medium text-gray-500">&middot;</span>{" "}
                         <button type="button" className="font-medium text-gray-900">
-                          Reply
+                          Delete
                         </button>
                       </div>
                     </div>

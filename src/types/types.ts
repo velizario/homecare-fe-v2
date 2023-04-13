@@ -64,7 +64,6 @@ export interface Client {
   user: User
 }
 
-
 export interface OrderComment {
   id: number;
   user: User;
@@ -72,23 +71,37 @@ export interface OrderComment {
   createdAt: string;
 }
 
+export enum OrderHistoryEvents  {
+  NEW = "Създадена",
+  UPDATED = "Променена",
+}
+
+
+export interface OrderHistory {
+  id: number
+  updateType: keyof typeof OrderHistoryEvents
+  createdAt: string
+  user: User
+}
+
 export interface Order {
   id: number;
   additionalService?: string[];
+  client: Client
   clientId: number;
   createdAt: string;
   districtName: EssentialDataAll;
   estateSize: EssentialDataAll;
+  orderComment: OrderComment[];
+  orderHistory: OrderHistory[]
   orderStatus: EssentialDataAll;
   orderStatusId: number;
   serviceType: EssentialDataAll;
+  vendor: Vendor
   vendorId: number;
   visitDay: EssentialDataAll[];
-  visitHour: EssentialDataAll[];
   visitFrequency: EssentialDataAll;
-  orderComment: OrderComment[];
-  client: Client
-  vendor: Vendor
+  visitHour: EssentialDataAll[];
 }
 
 

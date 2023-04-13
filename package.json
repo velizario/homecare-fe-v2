@@ -14,7 +14,6 @@
     "eslint": "npx eslint --format html \"**/*.tsx\" --output-file eslintChecks.html"
   },
   "dependencies": {
-    "@chakra-ui/slider": "^2.0.20",
     "@emoji-mart/data": "^1.1.1",
     "@emoji-mart/react": "^1.1.1",
     "@floating-ui/react": "^0.18.0",
@@ -38,7 +37,6 @@
     "react-day-picker": "^8.4.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.2",
-    "react-icons": "^4.7.1",
     "react-router-dom": "^6.6.1",
     "react-select": "^5.7.0",
     "react-toastify": "^9.1.1",

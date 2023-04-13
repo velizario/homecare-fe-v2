@@ -1,72 +1,27 @@
 import { Transition } from "@headlessui/react";
-import { CheckIcon, HandThumbUpIcon, PaperClipIcon, UserIcon } from "@heroicons/react/20/solid";
+import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
+import { createFullName } from "../../../../helpers/helperFunctions";
 import { addOrderComment, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
-import { orderState } from "../../../../store/orderState";
 import { estateSizeSelections, visitFrequencySelections } from "../../../../store/static";
 import { userState } from "../../../../store/userState";
 import { Order, SelectionOption } from "../../../../types/types";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { toasted } from "../../../../utilityComponents/Toast";
-import OrderDetailsComments from "./OrderDetailsComments";
+import OrderComments from "./OrderComments";
+import OrderTimeline from "./OrderTimeline";
 
 const attachments = [
   { name: "resume_front_end_developer.pdf", href: "#" },
   { name: "coverletter_front_end_developer.pdf", href: "#" },
 ];
-const eventTypes = {
-  applied: { icon: UserIcon, bgColorClass: "bg-gray-400" },
-  advanced: { icon: HandThumbUpIcon, bgColorClass: "bg-blue-500" },
-  completed: { icon: CheckIcon, bgColorClass: "bg-green-500" },
-};
-const timeline = [
-  {
-    id: 1,
-    type: eventTypes.applied,
-    content: "Създадена от",
-    target: "Велизар Стоянов",
-    date: "Септ 20",
-    datetime: "2020-09-20",
-  },
-  {
-    id: 2,
-    type: eventTypes.advanced,
-    content: "Променена от",
-    target: "Velizar Stoyanov",
-    date: "Септ 22",
-    datetime: "2020-09-22",
-  },
-  {
-    id: 3,
-    type: eventTypes.completed,
-    content: "Потвърдена от",
-    target: "Велизар Стоянов",
-    date: "Септ 28",
-    datetime: "2020-09-28",
-  },
-  {
-    id: 4,
-    type: eventTypes.advanced,
-    content: "Променена от",
-    target: "Велизар Стоянов",
-    date: "Септ 30",
-    datetime: "2020-09-30",
-  },
-  {
-    id: 5,
-    type: eventTypes.completed,
-    content: "Анулирана от",
-    target: "Велизар Стоянов",
-    date: "Окт 4",
-    datetime: "2020-10-04",
-  },
-];
+
 type OrderDetailsProps = {
   //   isShowing: boolean;
 };
@@ -80,7 +35,6 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const [selectedVisitFrequency, setSelectedVisitFrequency] = useState<SelectionOption | null>(null);
   const [districtNames] = essentialsStore((essentials) => [essentials.districtNames]);
   const [userData] = userState((state) => [state.userData]);
-  const updateOrderData = orderState((state) => state.updateOrderData);
   const queryClient = useQueryClient();
 
   const setInitialFormValues = (data: Order) => {
@@ -167,7 +121,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
           <div className="min-h-full">
             <main className="py-10">
               {/* Page header */}
-              <div className="mx-auto max-w-3xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
+              <div className="mx-auto max-w-3xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 xl:max-w-7xl xl:px-8">
                 <div className="flex items-center space-x-5">
                   <div>
                     <div className="text-2xl font-bold text-gray-900 ">{orderData.serviceType.value}</div>
@@ -185,8 +139,8 @@ export default function OrderDetails({}: OrderDetailsProps) {
                 </button>
               </div>
 
-              <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3">
-                <div className="space-y-6 lg:col-span-2 lg:col-start-1">
+              <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-6 sm:px-6 xl:max-w-7xl xl:grid-flow-col-dense xl:grid-cols-3">
+                <div className="space-y-6 xl:col-span-2 xl:col-start-1">
                   {/* Description list*/}
                   <section aria-labelledby="applicant-information-title">
                     <div className="bg-white shadow sm:rounded-lg">
@@ -205,9 +159,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                             </div>
                           </div>
                           <div>
-                            <h1 className="text-lg font-semibold text-gray-900">{`${orderData.vendor.user.firstName}${
-                              orderData.vendor.user.lastName ? " " + orderData.vendor.user.lastName : ""
-                            }`}</h1>
+                            <h1 className="text-lg font-semibold text-gray-900">{createFullName(orderData.vendor.user)}</h1>
                           </div>
                         </div>
                         <StatusBadge label="Нова">{orderData.orderStatus.value}</StatusBadge>
@@ -311,68 +263,9 @@ export default function OrderDetails({}: OrderDetailsProps) {
                       </div>
                     </div>
                   </section>
-
-                  {/* Comments*/}
-                  <OrderDetailsComments orderComment={orderData.orderComment} addComment={addComment} />
+                  <OrderComments orderComment={orderData.orderComment} addComment={addComment} />
                 </div>
-                <section aria-labelledby="timeline-title" className="lg:col-span-1 lg:col-start-3">
-                  <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
-                    <h2 id="timeline-title" className="text-lg font-medium text-gray-900">
-                      История
-                    </h2>
-
-                    {/* Activity Feed */}
-                    <div className="mt-6 flow-root">
-                      <ul role="list" className="-mb-8">
-                        {timeline.map((item, itemIdx) => (
-                          <li key={item.id}>
-                            <div className="relative pb-8">
-                              {itemIdx !== timeline.length - 1 ? (
-                                <span
-                                  className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                                  aria-hidden="true"
-                                />
-                              ) : null}
-                              <div className="relative flex space-x-3">
-                                <div>
-                                  <span
-                                    className={classNames(
-                                      item.type.bgColorClass,
-                                      "flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white"
-                                    )}
-                                  >
-                                    <item.type.icon className="h-5 w-5 text-white" aria-hidden="true" />
-                                  </span>
-                                </div>
-                                <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                                  <div>
-                                    <p className="text-sm text-gray-500">
-                                      {item.content}{" "}
-                                      <a href="#" className="font-medium text-gray-900">
-                                        {item.target}
-                                      </a>
-                                    </p>
-                                  </div>
-                                  <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                    <time dateTime={item.datetime}>{item.date}</time>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="justify-stretch mt-6 flex flex-col">
-                      <button
-                        type="button"
-                        className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                      >
-                        Действие?
-                      </button>
-                    </div>
-                  </div>
-                </section>
+                <OrderTimeline orderHistory={orderData.orderHistory} />
               </div>
             </main>
           </div>

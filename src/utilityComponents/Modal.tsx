@@ -1,7 +1,6 @@
-import { Dispatch, Fragment, Ref, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { MdOutlineFreeCancellation } from "react-icons/md";
 import { ExclamationTriangleIcon } from "@heroicons/react/20/solid";
+import { Dispatch, Fragment, useEffect } from "react";
 
 type ModalProps = {
   title: string;
