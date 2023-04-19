@@ -18,8 +18,8 @@ export type CreateOrderForm = {
   serviceType: number;
   // additionalService: string[];
   visitFrequency: number;
-  visitDay: number[];
-  visitHour: number[];
+  clientDayChoice: number[];
+  clientHourChoice: number[];
   estateSize: number;
   districtName: number;
 };
@@ -38,18 +38,14 @@ export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) 
     }
   }, [orderStep]);
 
-  // const formValues = watch();
-  // useEffect(() => console.log("Form values changed to: ", formValues), [formValues]);
-
   const submitFormHandler = async (data: CreateOrderForm) => {
-    console.log("Data to return return", data);
     const resData = await createOrder(vendorId, data);
     toasted(`Заявката е изпратена! Можи да видите статуса й в административния панел`, "success");
   };
 
   return (
     <>
-      <div className="fixed inset-0 z-30 flex items-center justify-center ">
+      <div className="fixed inset-0 z-30 flex items-center justify-center">
         <BackDrop closeModal={closeModal} />
         {
           {

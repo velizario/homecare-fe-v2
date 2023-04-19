@@ -71,15 +71,23 @@ export interface OrderComment {
   createdAt: string;
 }
 
-export enum OrderHistoryEvents  {
-  NEW = "Създадена",
-  UPDATED = "Променена",
+export enum OrderHistoryLogType {
+  NEW = 1,
+  UPDATED,
+  COMPLETE,
+  CANCELLED
 }
 
+export enum ORDER_STATUS {
+  NEW = 1,
+  ACTIVE,
+  COMPLETE,
+  CANCELLED,
+}
 
 export interface OrderHistory {
   id: number
-  updateType: keyof typeof OrderHistoryEvents
+  updateType: number
   createdAt: string
   user: User
 }
@@ -89,6 +97,9 @@ export interface Order {
   additionalService?: string[];
   client: Client
   clientId: number;
+  additionalInfo: string;
+  clientDayChoice: EssentialDataAll[];
+  clientHourChoice: EssentialDataAll[];
   createdAt: string;
   districtName: EssentialDataAll;
   estateSize: EssentialDataAll;
@@ -99,13 +110,10 @@ export interface Order {
   serviceType: EssentialDataAll;
   vendor: Vendor
   vendorId: number;
-  visitDay: EssentialDataAll[];
+  visitDay: EssentialDataAll;
+  visitHour: EssentialDataAll;
   visitFrequency: EssentialDataAll;
-  visitHour: EssentialDataAll[];
 }
-
-
-
 
 // export const areaSizes = new Map([
 //   ["1", "0"],

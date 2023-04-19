@@ -30,6 +30,7 @@ export const cancelOrder = async (orderId: number) => {
 };
 
 export const addOrderComment = async (orderData: any) => {
+  console.log(orderData)
   const resData = await requestToAPI(`orders/addComment`, "POST", orderData);
   return resData.data as OrderComment;
 };

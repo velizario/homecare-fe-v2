@@ -10,7 +10,7 @@ export const visitFrequencySelections = [
 ];
 
 // if changed here, needs to be changed on the BE too
-export const visitDaySelections = [
+export const weekDaySelections = [
   { id: 1, value: "Понеделник" },
   { id: 2, value: "Вторник" },
   { id: 3, value: "Сряда" },
@@ -19,6 +19,7 @@ export const visitDaySelections = [
   { id: 6, value: "Събота" },
   { id: 7, value: "Неделя" },
 ];
+
 
 // if changed here, needs to be changed on the BE too
 export const orderStatusSelections = [
@@ -29,7 +30,7 @@ export const orderStatusSelections = [
 ]
 
 // if changed here, needs to be changed on the BE too
-export const visitHourSelections = [
+export const hourDaySelections = [
   { id: 1, value: "08:00", daytime: "morning" },
   { id: 2, value: "08:30", daytime: "morning" },
   { id: 3, value: "09:00", daytime: "morning" },

@@ -40,3 +40,8 @@ export function sortObjArrAsc<T extends Record<any, any> & { id: number }>(objec
 export function sortObjArrDesc<T extends Record<any, any> & { id: number }>(objectToSort: T[]): T[] {
   return [...objectToSort].sort((a, b) => b.id - a.id);
 }
+
+
+export function toggleFilterSelection(selectedId: number, selection: number[]) {
+  return selection?.includes(selectedId) ? selection.filter((id) => id !== selectedId) : [...selection, selectedId];
+}

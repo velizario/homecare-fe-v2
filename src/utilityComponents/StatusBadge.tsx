@@ -21,7 +21,7 @@ const StatusBadge = ({ children, label, xMark, onClick }: StatusBadgeProps) => {
     <span
       onClick={onClick}
       className={classNames(
-        "inline-flex justify-center rounded-2xl bg-gray-100 px-3 h-min w-10 min-w-[8rem] py-1 text-base font-medium text-gray-800",
+        "inline-flex justify-center rounded-2xl bg-gray-100 px-3 py-1 min-w-[6rem] text-sm font-medium text-gray-800",
         statusStyles.get(label) ?? "",
         xMark ? "cursor-pointer transition-colors" : ""
       )}

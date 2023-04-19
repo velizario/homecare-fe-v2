@@ -1,7 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { ClipboardDocumentCheckIcon, HomeIcon, MapPinIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
-import { createFullName, sortObjArrAsc, sortObjArrDesc } from "../../../../helpers/helperFunctions";
+import { createFullName, sortObjArrDesc } from "../../../../helpers/helperFunctions";
 import { getAllOrders } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { userState } from "../../../../store/userState";

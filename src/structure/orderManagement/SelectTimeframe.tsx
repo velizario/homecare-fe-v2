@@ -3,7 +3,8 @@ import { useState } from "react";
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import Schedule from "../../assets/schedule.jpg";
 import classNames from "../../helpers/classNames";
-import { visitDaySelections, visitHourSelections } from "../../store/static";
+import { toggleFilterSelection } from "../../helpers/helperFunctions";
+import { weekDaySelections, hourDaySelections } from "../../store/static";
 import CardChoice from "../../utilityComponents/CardChoice";
 
 interface SelectTimeFrameProps<T extends FieldValues> {
@@ -11,39 +12,44 @@ interface SelectTimeFrameProps<T extends FieldValues> {
   setNextStep: () => void;
 }
 
-
-
 export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNextStep }: SelectTimeFrameProps<K>) {
-  const [visitDays, setVisitDays] = useState<number[]>([]);
-  const [visitHours, setVisitHours] = useState<number[]>([]);
+  const [clientDayChoices, setClientDayChoices] = useState<number[]>([]);
+  const [clientHourChoices, setClientHourChoices] = useState<number[]>([]);
 
-  function toggleSelection(selectedId: number, selection: number[]) {
-    return selection?.includes(selectedId) ? selection.filter((id) => id !== selectedId) : [...selection, selectedId];
+
+  function handleClientDayChoice(selectedId: number) {
+    setClientDayChoices((days) => toggleFilterSelection(selectedId, days));
   }
 
-  function updateVisitDays(selectedId: number) {
-    setVisitDays((days) => toggleSelection(selectedId, days));
-  }
-
-  function updateVisitHours(selectedId: number) {
-    setVisitHours((hours) => toggleSelection(selectedId, hours));
+  function handleClientHoursChoice(selectedId: number) {
+    setClientHourChoices((hours) => toggleFilterSelection(selectedId, hours));
   }
 
   const handleServiceHoursMultiple: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     const filterWord = e.currentTarget.dataset.id;
     if (filterWord === "clear") {
-      setVisitHours([]);
+      setClientHourChoices([]);
       return;
     }
 
-    const btnChoices = visitHourSelections.filter((item) => item.daytime === filterWord).map((hour) => hour.id);
-    setVisitHours((hours) => [...hours, ...btnChoices]);
+    const btnChoices = hourDaySelections.filter((item) => item.daytime === filterWord).map((hour) => hour.id);
+    setClientHourChoices((hours) => [...hours, ...btnChoices]);
   };
 
   function handleSubmit() {
-    setValue("visitDay" as Path<K>, visitDays.map(day => {return {id: day}}) as PathValue<K, Path<K>>);
-    setValue("visitHour" as Path<K>, visitHours.map(hour => {return {id: hour}}) as PathValue<K, Path<K>>);
+    setValue(
+      "clientDayChoice" as Path<K>,
+      clientDayChoices.map((day) => {
+        return { id: day };
+      }) as PathValue<K, Path<K>>
+    );
+    setValue(
+      "clientHourChoice" as Path<K>,
+      clientHourChoices.map((hour) => {
+        return { id: hour };
+      }) as PathValue<K, Path<K>>
+    );
     setNextStep();
   }
 
@@ -59,10 +65,10 @@ export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNe
         Дни за посещение:
       </h2>
       <CardChoice
-        options={visitDaySelections}
+        options={weekDaySelections}
         styles="grid grid-cols-2"
-        handleUpdate={updateVisitDays}
-        selections={visitDays}
+        handleUpdate={handleClientDayChoice}
+        selections={clientDayChoices}
       ></CardChoice>
 
       <h2 id="step-6" className="ml-2 mb-2 text-lg font-semibold leading-7 text-indigo-600">
@@ -96,15 +102,15 @@ export default function SelectTimeFrame<K extends FieldValues>({ setValue, setNe
       </div>
 
       <CardChoice
-        options={visitHourSelections}
+        options={hourDaySelections}
         styles="grid grid-cols-3"
-        selections={visitHours}
-        handleUpdate={updateVisitHours}
+        selections={clientHourChoices}
+        handleUpdate={handleClientHoursChoice}
       ></CardChoice>
       <a
         onClick={handleSubmit}
         className={classNames(
-          visitDays.length > 0 && visitHours.length > 0
+          clientDayChoices.length > 0 && clientHourChoices.length > 0
             ? "bg-indigo-600 font-semibold text-white"
             : "bg-gray-200 font-normal  text-gray-400",
           "mt-8 block cursor-pointer rounded-md  py-2.5 px-3.5 text-center text-sm   shadow transition-colors hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10"

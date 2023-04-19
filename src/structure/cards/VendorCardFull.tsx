@@ -48,9 +48,9 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
                     <img
                       className={classNames(
                         "w-full rounded-md object-cover [aspect-ratio:_1_/_1]",
-                        // !vendor.user.imageUrl ? "h-14 w-14" : ""
+                        !vendor.user.imageUrl ? "h-14 w-14" : ""
                       )}
-                      // src={`${BACKEND_URL}/users/public/${vendor.user.imageUrl || "defaultImage.png"}`}
+                      src={`${BACKEND_URL}/users/public/${vendor.user.imageUrl || "defaultImage.png"}`}
                       alt=""
                     />
                   </div>

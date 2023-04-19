@@ -41,7 +41,6 @@ interface SelectFrequencyProps<T extends FieldValues> {
 export default function SelectFrequency<K extends FieldValues>({ setValue, setNextStep }: SelectFrequencyProps<K>) {
   const handleChange: MouseEventHandler<HTMLDivElement> = (e) => {
     const selectedId = Number(e.currentTarget.dataset.id);
-    const selectedFrequency = visitFrequencySelections.find((selection) => selection.id === selectedId);
     setValue("visitFrequency" as Path<K>, { id: selectedId } as PathValue<K, Path<K>>);
     setNextStep();
   };

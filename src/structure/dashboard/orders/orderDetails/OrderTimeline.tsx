@@ -1,14 +1,16 @@
-import { CheckIcon, HandThumbUpIcon } from "@heroicons/react/20/solid";
+import { ArrowPathIcon, CheckIcon, ChevronDoubleRightIcon, HandThumbUpIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { format, parseJSON } from "date-fns";
+import { useState } from "react";
 
 import classNames from "../../../../helpers/classNames";
-import { sortObjArrDesc } from "../../../../helpers/helperFunctions";
-import { OrderHistory, OrderHistoryEvents } from "../../../../types/types";
+import { createFullName, sortObjArrDesc } from "../../../../helpers/helperFunctions";
+import { OrderHistory, OrderHistoryLogType } from "../../../../types/types";
 
-const eventTypes: Record<keyof typeof OrderHistoryEvents, { icon: JSX.Element; style: string }> = {
-  // NEW: {icon: <UserIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-gray-400"},
-  UPDATED: {icon: <HandThumbUpIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-blue-400"},
-  NEW: { icon: <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-green-400" },
+const eventTypes: Record<number, {updateType: string, icon: JSX.Element; style: string }> = {
+  [OrderHistoryLogType.NEW] : {updateType: "Създадена", icon: <PlusIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-green-400"},
+  [OrderHistoryLogType.CANCELLED] : { updateType: "Анулирана", icon: <XMarkIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-red-400" },
+  [OrderHistoryLogType.COMPLETE] : {updateType: "Активна", icon: <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-blue-400"},
+  [OrderHistoryLogType.UPDATED] : {updateType: "Променена", icon: <ArrowPathIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-indigo-400"},
 };
 
 type OrderTimelineProps = {
@@ -16,6 +18,9 @@ type OrderTimelineProps = {
 };
 
 export default function OrderTimeline({ orderHistory }: OrderTimelineProps) {
+  const [briefView, setBriefView] = useState(true)
+  const orderList = briefView ? orderHistory.slice(0,3) : orderHistory
+console.log(orderList)
   return (
     <section aria-labelledby="timeline-title" className="xl:col-span-1 xl:col-start-3">
       <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
@@ -26,10 +31,10 @@ export default function OrderTimeline({ orderHistory }: OrderTimelineProps) {
         {/* Activity Feed */}
         <div className="mt-6 flow-root">
           <ul role="list" className="-mb-8">
-            {sortObjArrDesc(orderHistory).map((entry, itemIdx) => (
+            {sortObjArrDesc(orderList).map((entry, itemIdx) => (
               <li key={entry.id}>
                 <div className="relative pb-8">
-                  {itemIdx !== orderHistory.length - 1 ? (
+                  {itemIdx !== orderList.length - 1 ? (
                     <span className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" aria-hidden="true" />
                   ) : null}
                   <div className="relative flex space-x-3">
@@ -46,9 +51,9 @@ export default function OrderTimeline({ orderHistory }: OrderTimelineProps) {
                     <div className="flex min-w-0 flex-1 justify-between gap-x-4 pt-1.5">
                       <div className="">
                         <p className="text-sm text-gray-500 ">
-                          {OrderHistoryEvents[entry.updateType]} от{" "}
+                          {eventTypes[entry.updateType].updateType} от{" "}
                           <a href="#" className=" font-medium text-gray-900">
-                            Велизар Максимов
+                            {createFullName(entry.user)}
                           </a>
                         </p>
                       </div>
@@ -69,10 +74,12 @@ export default function OrderTimeline({ orderHistory }: OrderTimelineProps) {
         </div>
         <div className="justify-stretch mt-6 flex flex-col">
           <button
+          onClick={()=> setBriefView(view => !view)}
             type="button"
-            className="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            className="group inline-flex items-center p-1 text-xs font-medium hover:text-indigo-600 gap-0.5 transition-all"
           >
-            Действие?
+            {briefView ? "Повече..." : "По-малко..."}
+            <ChevronDoubleRightIcon className="h-2.5 w-2.5 align-middle  group-hover:translate-x-0.5 transition-transform"/>
           </button>
         </div>
       </div>

@@ -35,8 +35,14 @@ module.exports = {
     //   },
     // },
     extend: {
+      colors: {
+        picker: {
+          hover: "#e7edff",
+          selected: "rgba(51, 0, 193, 0.1)",
+        },
+      },
       screens: {
-        "xs": '400px'
+        xs: "400px",
       },
       fontFamily: {
         sans: [
@@ -52,9 +58,7 @@ module.exports = {
           "Segoe UI Emoji",
           ...defaultTheme.fontFamily.sans,
         ],
-        serif: [
-          'Roboto Slab'
-        ]
+        serif: ["Roboto Slab"],
       },
       boxShadow: {
         order: "1px 1px 15px -4px rgba(200,200,200,0.7)",
@@ -69,10 +73,10 @@ module.exports = {
         "screen-fixed": "100dvh",
       },
       lineClamp: {
-        none: "display: flex"
-      }
+        none: "display: flex",
+      },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp"), require('@headlessui/tailwindcss')],
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp"), require("@headlessui/tailwindcss")],
   variants: {},
 };

@@ -2,6 +2,7 @@ import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { format, parseJSON } from "date-fns";
 import { FormEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
+import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { createFullName, sortObjArrAsc } from "../../../../helpers/helperFunctions";
 import { OrderComment } from "../../../../types/types";
@@ -39,7 +40,7 @@ export default function OrderComments({ orderComment, addComment }: OrderComment
               Въпроси и коментари
             </h2>
           </div>
-          <div className="px-4 py-6 sm:px-6">
+          <div className={classNames("px-4 sm:px-6", orderComment.length > 0 ? "py-6" : "")}>
             <ul role="list" className="space-y-8">
               {sortObjArrAsc(orderComment).map((comment) => (
                 <li key={comment.id}>
@@ -89,7 +90,7 @@ export default function OrderComments({ orderComment, addComment }: OrderComment
                     name="comment"
                     rows={3}
                     className="block w-full rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:py-1.5 sm:text-sm sm:leading-6"
-                    placeholder="Add a note"
+                    placeholder="Добави коментар"
                     value={textarea}
                     onChange={handleTextareaChange}
                   />
