@@ -8,6 +8,7 @@ import { OrderHistory, OrderHistoryLogType } from "../../../../types/types";
 
 const eventTypes: Record<number, {updateType: string, icon: JSX.Element; style: string }> = {
   [OrderHistoryLogType.NEW] : {updateType: "Създадена", icon: <PlusIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-green-400"},
+  [OrderHistoryLogType.OFFER] : {updateType: "Оферта", icon: <PlusIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-green-400"},
   [OrderHistoryLogType.CANCELLED] : { updateType: "Анулирана", icon: <XMarkIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-red-400" },
   [OrderHistoryLogType.COMPLETE] : {updateType: "Активна", icon: <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-blue-400"},
   [OrderHistoryLogType.UPDATED] : {updateType: "Променена", icon: <ArrowPathIcon className="h-5 w-5 text-white" aria-hidden="true" />, style: "bg-indigo-400"},
@@ -19,8 +20,7 @@ type OrderTimelineProps = {
 
 export default function OrderTimeline({ orderHistory }: OrderTimelineProps) {
   const [briefView, setBriefView] = useState(true)
-  const orderList = briefView ? orderHistory.slice(0,3) : orderHistory
-console.log(orderList)
+  const orderList = briefView ? sortObjArrDesc(orderHistory).slice(0,3) : sortObjArrDesc(orderHistory)
   return (
     <section aria-labelledby="timeline-title" className="xl:col-span-1 xl:col-start-3">
       <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
@@ -31,7 +31,7 @@ console.log(orderList)
         {/* Activity Feed */}
         <div className="mt-6 flow-root">
           <ul role="list" className="-mb-8">
-            {sortObjArrDesc(orderList).map((entry, itemIdx) => (
+            {orderList.map((entry, itemIdx) => (
               <li key={entry.id}>
                 <div className="relative pb-8">
                   {itemIdx !== orderList.length - 1 ? (

@@ -8,6 +8,7 @@ export const createOrder = async (vendorId: string, data: any) => {
 
 export const updateOrder = async (data: any) => {
   console.log("Order data to update with: ", data);
+  console.log({...data})
   const resData = await requestToAPI("orders/updateOrder", "POST", data);
   return resData.data as Order;
 };
@@ -26,11 +27,16 @@ export const getAllOrders = async () => {
 
 export const cancelOrder = async (orderId: number) => {
   const resData = await requestToAPI(`orders/cancelOrder/${orderId}`, "PATCH");
-  return resData.data as Order[];
+  return resData.data as Order;
+};
+
+export const createOffer = async (orderId: number) => {
+  // TODO: Create offer returns empty array from the BE. Do I need an order data. What about for all other responses. Can I use them without fetching another time the order?
+  const resData = await requestToAPI(`orders/createOffer/${orderId}`, "PATCH");
+  return resData.data as Order;
 };
 
 export const addOrderComment = async (orderData: any) => {
-  console.log(orderData)
   const resData = await requestToAPI(`orders/addComment`, "POST", orderData);
   return resData.data as OrderComment;
 };

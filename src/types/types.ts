@@ -74,12 +74,14 @@ export interface OrderComment {
 export enum OrderHistoryLogType {
   NEW = 1,
   UPDATED,
+  OFFER,
   COMPLETE,
   CANCELLED
 }
 
 export enum ORDER_STATUS {
   NEW = 1,
+  OFFER,
   ACTIVE,
   COMPLETE,
   CANCELLED,

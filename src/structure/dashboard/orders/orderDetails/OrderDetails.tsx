@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { createFullName } from "../../../../helpers/helperFunctions";
-import { addOrderComment, getOrder, updateOrder } from "../../../../model/orderModel";
+import { addOrderComment, createOffer, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import {
   estateSizeSelections,
@@ -23,6 +23,7 @@ import { toasted } from "../../../../utilityComponents/Toast";
 import SelectionDropdown from "./SelectionDropdown";
 import OrderComments from "./OrderComments";
 import OrderTimeline from "./OrderTimeline";
+import Modal from "../../../../utilityComponents/Modal";
 
 const attachments = [
   { name: "resume_front_end_developer.pdf", href: "#" },
@@ -34,8 +35,10 @@ type OrderDetailsProps = {
 };
 
 export default function OrderDetails({}: OrderDetailsProps) {
+  // TODO: handle wrong params for order - fetch order and return error if not found
   const { orderId } = useParams();
   const [editMode, setEditMode] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [orderDataChanged, setOrderDataChanged] = useState(false);
   const [selectedDistrict, setSelectedDistrict] = useState<SelectionOption | null>(null);
   const [selectedEstateSize, setSelectedEstateSize] = useState<SelectionOption | null>(null);
@@ -60,7 +63,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
 
   const handleOrderUpdate = async () => {
     const updatedOrder = {
-      ...orderData,
+      id: Number(orderId),
       districtName: selectedDistrict,
       estateSize: selectedEstateSize,
       visitFrequency: selectedVisitFrequency,
@@ -104,13 +107,17 @@ export default function OrderDetails({}: OrderDetailsProps) {
       setOrderDataChanged(false);
       console.log("Edit mode disabled");
       toasted("Информацията е променена успешно.");
-      // invalidation doesnt work for some reason witht he history property and OrderTimeline component
     },
   });
 
   const addComment = async (commentText: string) => {
     const orderComment = { user: { id: userData.id }, comment: commentText, order: { id: orderId } };
     addCommentMutation.mutate(orderComment);
+  };
+
+  const setUserConfirmed = () => {
+    createOffer(Number(orderId))
+    console.log("confirmed");
   };
 
   const toggleEditMode = () => {
@@ -130,7 +137,6 @@ export default function OrderDetails({}: OrderDetailsProps) {
       selectedVisitDay !== orderData?.visitDay ||
       selectedVisitHour !== orderData?.visitHour;
     setOrderDataChanged(isChanged);
-    console.log("is changed? ", isChanged);
   }, [
     selectedDistrict,
     selectedEstateSize,
@@ -143,6 +149,16 @@ export default function OrderDetails({}: OrderDetailsProps) {
   //   TODO: Order should be reported differently whether it is looked by vendor or user
   return (
     <div className="min-h-screen">
+      <Modal
+        messageType="info"
+        title="Изпращане оферта към клиента"
+        description={selectedVisitDay && selectedVisitHour ? "След потвърждаване, офертата ще бъде изпратена към клиента за одобрение." : "Попълнете всички данни за да изпратим конкретно предложение към клиента"}
+        btnAckText={selectedVisitDay && selectedVisitHour ? "Потвърди" : undefined}
+        btnCloseText="Затвори"
+        confirmAction={setUserConfirmed}
+        isOpen={modalOpen}
+        setModalOpen={setModalOpen}
+      />
       <Transition
         appear={true}
         show={true}
@@ -170,13 +186,27 @@ export default function OrderDetails({}: OrderDetailsProps) {
                   </div>
                 </div>
                 <div className="flex gap-2">
+                  {/* send button for vendors */}
+
+                  <button
+                    type="button"
+                    onClick={() => setModalOpen(true)}
+                    className={classNames(
+                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset hover:bg-gray-50 md:mt-0 transition-all",
+                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED || orderData.orderStatus.id === ORDER_STATUS.OFFER || editMode
+                        ? "pointer-events-none text-gray-400 ring-gray-100"
+                        : "cursor-pointer bg-blue-600 text-white hover:bg-blue-500  ring-gray-300"
+                    )}
+                  >
+                    Изпрати оферта
+                  </button>
                   <button
                     type="button"
                     onClick={() => {
                       orderDataChanged ? handleOrderUpdate() : toggleEditMode();
                     }}
                     className={classNames(
-                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:mt-0",
+                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:mt-0 ",
                       orderData.orderStatus.id === ORDER_STATUS.CANCELLED
                         ? "pointer-events-none text-gray-400"
                         : orderDataChanged
@@ -185,21 +215,6 @@ export default function OrderDetails({}: OrderDetailsProps) {
                     )}
                   >
                     {`${orderDataChanged ? "Запиши промените" : "Редактирай"}`}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      orderDataChanged ? handleOrderUpdate() : toggleEditMode();
-                    }}
-                    className={classNames(
-                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:mt-0",
-                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED
-                        ? "pointer-events-none text-gray-400"
-                        : "cursor-pointer bg-blue-600 text-white hover:bg-blue-500"
-                    )}
-                  >
-                    Потвърди и изпрати
                   </button>
                 </div>
               </div>

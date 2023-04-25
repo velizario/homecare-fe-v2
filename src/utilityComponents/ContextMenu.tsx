@@ -45,10 +45,11 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
   return (
     <Menu as="div" className="relative hidden w-min items-center justify-center text-left md:flex">
       <Modal
+        messageType="alert"
         title="Прекратяване на поръчка"
         description="Прекратяването приключва отношенията клиент-доставчик. Сигурни ли сте, че искате да продължите?"
-        btnPositive="Прекратяване"
-        btnNegative="Затвори"
+        btnAckText="Прекратяване"
+        btnCloseText="Затвори"
         confirmAction={setUserConfirmed}
         isOpen={modalOpen}
         setModalOpen={setModalOpen}

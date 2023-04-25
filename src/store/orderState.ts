@@ -10,15 +10,15 @@ type OrderState = {
   
   export const orderState = create<OrderState>()(
     storeLogger(
-      persist(
+      // persist(
         (set) => ({
           orderData: [] as Order[],
           updateOrderData: (data) => set({ orderData: data }),
         }),
-        {
-          name: "order", // name of the item in the storage (must be unique)
-        }
-      )
+      //   {
+      //     name: "order", // name of the item in the storage (must be unique)
+      //   }
+      // )
     )
   );
   

@@ -20,5 +20,6 @@ let store: StateCreator<Store, [], [], Store> = (set) => ({
   deleteUser: (userId: string) => set((state) => ({ users: state.users.filter((user) => user.id !== userId) })),
 });
 
-let storePersist = persist(store, { name: "user" });
-export const useStore = create(storePersist);
+export const useStore = create(store)
+// let storePersist = persist(store, { name: "user" });
+// export const useStore = create(storePersist);

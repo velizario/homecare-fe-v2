@@ -1,11 +1,11 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
-import { EssentialDataAllAll } from "../types/types";
+import { EssentialDataAll } from "../types/types";
 import { storeLogger } from "./storeLogger";
 
 type EssentialsState = {
-    serviceTypes: EssentialDataAllAll[];
-    districtNames: EssentialDataAllAll[];
+    serviceTypes: EssentialDataAll[];
+    districtNames: EssentialDataAll[];
     listServices: () => string[];
     listDistricts: () => string[];
 
@@ -13,16 +13,16 @@ type EssentialsState = {
 
 export const essentialsStore = create<EssentialsState>()(
   storeLogger(
-    persist(
+    // persist(
       (set, get) => ({
-        serviceTypes: {} as EssentialDataAllAll[],
-        districtNames: {} as EssentialDataAllAll[],
+        serviceTypes: {} as EssentialDataAll[],
+        districtNames: {} as EssentialDataAll[],
         listServices: () => get().serviceTypes.map(service => service.value),
         listDistricts: () => get().districtNames.map(district => district.value) 
       }),
-      {
-        name: "essentials", // name of the item in the storage (must be unique)
-      }
-    )
+    //   {
+    //     name: "essentials", // name of the item in the storage (must be unique)
+    //   }
+    // )
   )
 );

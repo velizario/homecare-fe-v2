@@ -12,16 +12,16 @@ type UserState = {
 
 export const userState = create<UserState>()(
   storeLogger(
-    persist(
+    // persist(
       (set) => ({
         isLoggedIn: false,
         userData: {} as User,
         setIsLoggedIn: (status) => set({ isLoggedIn: status }),
         setUserData: (data) => set({ userData: data }),
       }),
-      {
-        name: "user", // name of the item in the storage (must be unique)
-      }
-    )
+    //   {
+    //     name: "user", // name of the item in the storage (must be unique)
+    //   }
+    // )
   )
 );
