@@ -1,10 +1,11 @@
 import { Dispatch, Fragment, MouseEventHandler, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { cancelOrder, getAllOrders } from "../model/orderModel";
+import { changeOrderStatus, getAllOrders } from "../model/orderModel";
 import { orderState } from "../store/orderState";
 import Modal from "./Modal";
 import { Link } from "react-router-dom";
+import { ORDER_STATUS } from "../types/types";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -30,7 +31,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
 
   const callCancelOrder = async () => {
     if (!orderAnullment) return;
-    await cancelOrder(orderId);
+    await changeOrderStatus({ orderId: orderId, newStatus: ORDER_STATUS.CANCELLED });
     const orders = await getAllOrders();
     if (orders) updateOrderData(orders);
   };

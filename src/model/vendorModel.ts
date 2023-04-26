@@ -1,5 +1,6 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { Vendor } from "../types/types";
+import { VendorProfileForm } from "../structure/dashboard/account/profile/ProfileVendor";
+import { User, Vendor } from "../types/types";
 
 // export interface Vendor {
 //     id: string;
@@ -21,4 +22,11 @@ import { Vendor } from "../types/types";
 export const getVendor = async (vendorId: string) => {
   const res = await requestToAPI(`vendors/${vendorId}`, "GET");
   return (await res.data) as Vendor;
+};
+
+
+export const updateVendorData = async (data: VendorProfileForm) => {
+  const resData = await requestToAPI(`users`, "PATCH", data);
+  // if (resData.status === 'success')
+  return (await resData.data) as User;
 };

@@ -1,4 +1,7 @@
 import axios from "axios";
+import { ClientProfileForm } from "../structure/dashboard/account/profile/ProfileClient";
+import { VendorProfileForm } from "../structure/dashboard/account/profile/ProfileVendor";
+import { Client, User, Vendor } from "../types/types";
 import { BACKEND_URL } from "./envVariables";
 
 export const getToken = () => {
@@ -41,7 +44,46 @@ export function sortObjArrDesc<T extends Record<any, any> & { id: number }>(obje
   return [...objectToSort].sort((a, b) => b.id - a.id);
 }
 
-
 export function toggleFilterSelection(selectedId: number, selection: number[]) {
   return selection?.includes(selectedId) ? selection.filter((id) => id !== selectedId) : [...selection, selectedId];
 }
+
+// export function hydrateFormToUser(formData: Partial<VendorProfileForm & ClientProfileForm>) {
+//   const {
+//     firstName,
+//     lastName,
+//     about,
+//     address,
+//     city,
+//     companyName,
+//     district,
+//     facebook,
+//     instagram,
+//     phone,
+//     servedDistrict,
+//     website,
+//   } = formData;
+
+//   const hydratedUser = {} as Partial<User>;
+//   const hydratedVendor = {} as Partial<Vendor>
+//   const hydratedClient = {} as Partial<Client>
+
+//   address && (hydratedClient.address = address)
+//   city && (hydratedClient.city = city)
+//   district && (hydratedClient.district = district)
+
+//   about && (hydratedVendor.about = about)
+//   companyName && (hydratedVendor.companyName = companyName)
+//   instagram && (hydratedVendor.instagram = instagram)
+//   facebook && (hydratedVendor.facebook = facebook)
+//   website && (hydratedVendor.website = website)
+//   servedDistrict && (hydratedVendor.servedDistrict = servedDistrict)
+
+//   firstName && (hydratedUser.firstName = firstName)
+//   lastName && (hydratedUser.lastName = lastName)
+//   phone && (hydratedUser.phone = phone)
+
+//   hydratedUser.client = hydratedClient;
+
+
+// }

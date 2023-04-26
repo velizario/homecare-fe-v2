@@ -35,7 +35,7 @@ export interface User {
   imageUrl: string
   email: string
   isSuspended: boolean
-  roles: UserRole
+  roles: UserRole[]
   createdAt: string
   client: Client
   clientId: number
@@ -52,7 +52,7 @@ export interface Vendor {
   website: string
   instagram: string
   facebook: string
-  servedDistrict: District
+  servedDistrict: District[]
   user: User
 }
 
@@ -73,15 +73,18 @@ export interface OrderComment {
 
 export enum OrderHistoryLogType {
   NEW = 1,
-  UPDATED,
   OFFER,
+  RESERVATION,
+  ACTIVE,
   COMPLETE,
-  CANCELLED
+  CANCELLED,
+  UPDATED
 }
 
 export enum ORDER_STATUS {
   NEW = 1,
   OFFER,
+  RESERVATION,
   ACTIVE,
   COMPLETE,
   CANCELLED,

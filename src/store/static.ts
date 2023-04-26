@@ -1,5 +1,5 @@
 
-
+// TODO can I get rid of the static data since I already get it in the requests?
 
 // if changed here, needs to be changed on the BE too
 // if changed here, revise SelectFrequency.tsx component too (frequencyOptions variables)
@@ -20,14 +20,6 @@ export const weekDaySelections = [
   { id: 7, value: "Неделя" },
 ];
 
-
-// if changed here, needs to be changed on the BE too
-export const orderStatusSelections = [
-  { id: 1, value: "Нова" },
-  { id: 2, value: "Активна" },
-  { id: 3, value: "Завършена" },
-  { id: 4, value: "Анулирана" },
-]
 
 // if changed here, needs to be changed on the BE too
 export const hourDaySelections = [

@@ -18,7 +18,7 @@ export default function SelectionDropdown({
   setSelected,
   selections,
   validOptions,
-  selectClass
+  selectClass,
 }: SelectionProps) {
   const [open, setOpen] = useState(false);
   function updateSelection(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -27,20 +27,19 @@ export default function SelectionDropdown({
     if (!selectedChoice) return;
     setSelected(selectedChoice);
   }
-    
+
   const dismissDropdown = (e: MouseEvent) => {
     const clickedOutside = (e.target as HTMLElement).closest(`${`.` + selectClass}`) == null;
-    console.log(clickedOutside)
     if (clickedOutside) setOpen(false);
   };
-  
+
   useEffect(() => {
-    document.addEventListener("click", dismissDropdown);
+    if (open) document.addEventListener("click", dismissDropdown);
     return () => {
       document.removeEventListener("click", dismissDropdown);
     };
-  }, []);
-  
+  }, [open]);
+
   // TODO: handle click outside
   return (
     <div className="relative w-full">
@@ -50,8 +49,10 @@ export default function SelectionDropdown({
           className={classNames(
             disabled
               ? "bg-gray-50 text-gray-600"
-              : open ?" ring-2 ring-inset ring-indigo-600" : "cursor-pointer bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
-            "w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
+              : open
+              ? " ring-2 ring-inset ring-indigo-600"
+              : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
+            "w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6"
           )}
         >
           {`${selected?.value || "(избери)"}`}
@@ -68,7 +69,7 @@ export default function SelectionDropdown({
 
       <div
         className={classNames(
-          "max-h-64 z-10 mt-1 flex w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
+          "z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
           open ? "absolute" : "hidden"
         )}
       >

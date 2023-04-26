@@ -1,7 +1,8 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { ApiError, User, UserRole } from "../types/types";
-import { ProfileForm } from "../structure/dashboard/account/profile/Profile";
 import { userState } from "../store/userState";
+import { ClientProfileForm } from "../structure/dashboard/account/profile/ProfileClient";
+import { VendorProfileForm } from "../structure/dashboard/account/profile/ProfileVendor";
 
 // export interface Client {
 //   id: string;
@@ -51,7 +52,7 @@ export const userDataRefresh = async () => {
   return await handleRequest(`userAuthenticate`, "GET");
 };
 
-export const userEdit = async (data: ProfileForm) => {
+export const updateUserData = async (data: ClientProfileForm | VendorProfileForm) => {
   const resData = await requestToAPI(`users`, "PATCH", data);
   // if (resData.status === 'success')
   return (await resData.data) as User;

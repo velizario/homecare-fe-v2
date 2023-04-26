@@ -11,6 +11,8 @@ interface StatusBadgeProps {
 
 const statusStyles = new Map([
   ["Нова", "text-violet-500 bg-violet-50"],
+  ["Оферта", "text-sky-500 bg-sky-50"],
+  ["Резервация", "text-sky-500 bg-sky-50"],
   ["Активна", "text-sky-500 bg-sky-50"],
   ["Завършена", "text-green-500 bg-green-50"],
   ["Анулирана", "text-orange-500 bg-orange-50"],

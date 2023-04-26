@@ -2,12 +2,12 @@ import { Transition } from "@headlessui/react";
 import { PaperClipIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { format, parseJSON } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { createFullName } from "../../../../helpers/helperFunctions";
-import { addOrderComment, createOffer, getOrder, updateOrder } from "../../../../model/orderModel";
+import { addOrderComment, changeOrderStatus, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import {
   estateSizeSelections,
@@ -18,12 +18,12 @@ import {
 import { userState } from "../../../../store/userState";
 import { Order, ORDER_STATUS, SelectionOption } from "../../../../types/types";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
+import Modal from "../../../../utilityComponents/Modal";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { toasted } from "../../../../utilityComponents/Toast";
-import SelectionDropdown from "./SelectionDropdown";
 import OrderComments from "./OrderComments";
 import OrderTimeline from "./OrderTimeline";
-import Modal from "../../../../utilityComponents/Modal";
+import SelectionDropdown from "./SelectionDropdown";
 
 const attachments = [
   { name: "resume_front_end_developer.pdf", href: "#" },
@@ -34,8 +34,11 @@ type OrderDetailsProps = {
   //   isShowing: boolean;
 };
 
+const conditionals = {};
+
 export default function OrderDetails({}: OrderDetailsProps) {
   // TODO: handle wrong params for order - fetch order and return error if not found
+  // TODO see how I can optimize the page with useReducer
   const { orderId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,6 +52,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const [districtNames] = essentialsStore((essentials) => [essentials.districtNames]);
   const [userData] = userState((state) => [state.userData]);
   const queryClient = useQueryClient();
+  const orderDataRef = useRef<HTMLDivElement>(null);
 
   const isVendor = Boolean(userData.vendorId);
 
@@ -97,36 +101,44 @@ export default function OrderDetails({}: OrderDetailsProps) {
     },
   });
 
-  const updateOrderMutation = useMutation({
-    mutationFn: updateOrder,
-    onSuccess: (data) => {
-      console.log(data);
-      queryClient.setQueryData(["orders", orderId], data);
-      queryClient.invalidateQueries(["orders", orderId], { exact: true });
-      setEditMode(false);
-      setOrderDataChanged(false);
-      console.log("Edit mode disabled");
-      toasted("Информацията е променена успешно.");
-    },
-  });
-
   const addComment = async (commentText: string) => {
     const orderComment = { user: { id: userData.id }, comment: commentText, order: { id: orderId } };
     addCommentMutation.mutate(orderComment);
   };
 
-  const setUserConfirmed = () => {
-    createOffer(Number(orderId))
-    console.log("confirmed");
+  const updateOrderMutation = useMutation({
+    mutationFn: updateOrder,
+    onSuccess: (data) => {
+      queryClient.setQueryData(["orders", orderId], data);
+      queryClient.invalidateQueries(["orders", orderId], { exact: true });
+      setEditMode(false);
+      setOrderDataChanged(false);
+      toasted("Информацията е променена успешно.");
+    },
+  });
+
+  const changeStatusMutation = useMutation({
+    mutationFn: changeOrderStatus,
+    onSuccess: (data) => {
+      console.log("changed order", data);
+      queryClient.setQueryData(["orders", orderId], data);
+      // queryClient.invalidateQueries(["orders", orderId], { exact: true });
+      toasted("Статусът на поръчката е променен успешно.");
+    },
+  });
+
+  const changeStatus = (newStatus: ORDER_STATUS) => {
+    if (!orderId) return;
+    changeStatusMutation.mutate({ orderId: Number(orderId), newStatus: newStatus });
   };
 
   const toggleEditMode = () => {
-    setEditMode((mode) => !mode);
+    setEditMode((mode) => {
+      // if (!mode)  window.scrollTo({bottom: orderDataRef.current?.offsetTop, left: 0, behavior: "smooth"})
+      if (!mode)  orderDataRef.current?.scrollIntoView({behavior: "smooth"})
+      return !mode;
+    });
   };
-
-  useEffect(() => {
-    console.log(editMode);
-  }, [editMode]);
 
   useEffect(() => {
     const isChanged =
@@ -151,11 +163,23 @@ export default function OrderDetails({}: OrderDetailsProps) {
     <div className="min-h-screen">
       <Modal
         messageType="info"
-        title="Изпращане оферта към клиента"
-        description={selectedVisitDay && selectedVisitHour ? "След потвърждаване, офертата ще бъде изпратена към клиента за одобрение." : "Попълнете всички данни за да изпратим конкретно предложение към клиента"}
+        title={
+          orderData?.orderStatusId === ORDER_STATUS.RESERVATION
+            ? "Потвърждение на резервация"
+            : "Изпращане оферта към клиента"
+        }
+        description={
+          selectedVisitDay && selectedVisitHour
+            ? orderData?.orderStatusId === ORDER_STATUS.RESERVATION
+              ? "След потвърждаване на резервацията, започва изпълнението на поръчката според уговорените условия."
+              : "След потвърждаване, офертата ще бъде изпратена към клиента за одобрение."
+            : "Попълнете всички данни за да изпратим конкретно предложение към клиента"
+        }
         btnAckText={selectedVisitDay && selectedVisitHour ? "Потвърди" : undefined}
         btnCloseText="Затвори"
-        confirmAction={setUserConfirmed}
+        confirmAction={() =>
+          changeStatus(orderData?.orderStatusId === ORDER_STATUS.RESERVATION ? ORDER_STATUS.ACTIVE : ORDER_STATUS.OFFER)
+        }
         isOpen={modalOpen}
         setModalOpen={setModalOpen}
       />
@@ -192,13 +216,16 @@ export default function OrderDetails({}: OrderDetailsProps) {
                     type="button"
                     onClick={() => setModalOpen(true)}
                     className={classNames(
-                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset hover:bg-gray-50 md:mt-0 transition-all",
-                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED || orderData.orderStatus.id === ORDER_STATUS.OFFER || editMode
+                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset transition-all hover:bg-gray-50 md:mt-0",
+                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED ||
+                        orderData.orderStatus.id === ORDER_STATUS.OFFER ||
+                        orderData.orderStatus.id === ORDER_STATUS.ACTIVE ||
+                        editMode
                         ? "pointer-events-none text-gray-400 ring-gray-100"
-                        : "cursor-pointer bg-blue-600 text-white hover:bg-blue-500  ring-gray-300"
+                        : "cursor-pointer bg-blue-600 text-white ring-gray-300  hover:bg-blue-500"
                     )}
                   >
-                    Изпрати оферта
+                    {orderData.orderStatusId === ORDER_STATUS.RESERVATION ? "Потвърди резервация" : "Изпрати оферта"}
                   </button>
                   <button
                     type="button"
@@ -207,8 +234,9 @@ export default function OrderDetails({}: OrderDetailsProps) {
                     }}
                     className={classNames(
                       "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:mt-0 ",
-                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED
-                        ? "pointer-events-none text-gray-400"
+                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED ||
+                        orderData.orderStatus.id === ORDER_STATUS.ACTIVE
+                        ? "pointer-events-none text-gray-400 ring-gray-100"
                         : orderDataChanged
                         ? "cursor-pointer bg-blue-600 text-white hover:bg-blue-500"
                         : "text-gray-900 shadow-sm"
@@ -224,7 +252,10 @@ export default function OrderDetails({}: OrderDetailsProps) {
                   {/* Description list*/}
                   <section aria-labelledby="applicant-information-title">
                     <div className="bg-white shadow sm:rounded-lg">
-                      <div className="flex  flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
+                      <div
+                        ref={orderDataRef}
+                        className="flex flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6"
+                      >
                         <div className="flex items-center space-x-5">
                           <div className="flex-shrink-0">
                             <div className="relative">
