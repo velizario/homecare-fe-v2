@@ -6,7 +6,7 @@ import { updateUserData } from "../../../../model/clientModel";
 import { updateVendorData } from "../../../../model/vendorModel";
 import { userState } from "../../../../store/userState";
 import { District } from "../../../../types/types";
-import ButtonDefault from "../../../../utilityComponents/ButtonDefault";
+import CustomButton from "../../../../utilityComponents/CustomButton";
 import InputField from "../../../../utilityComponents/InputField";
 import { toasted } from "../../../../utilityComponents/Toast";
 import ComboSelectBox from "./ComboSelectBoxMultiple";
@@ -61,7 +61,7 @@ const profileInputValues = {
   },
 };
 
-export type VendorProfileForm = {
+export type ProfileInputForm = {
   // id: string;
   firstName: string;
   lastName: string;
@@ -107,7 +107,7 @@ export default function ProfileVendor() {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<VendorProfileForm>({
+  } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
   });
 
@@ -115,7 +115,7 @@ export default function ProfileVendor() {
     reset(userData);
   }, [userData]);
 
-  const submitFormHandler = async (vendorData: VendorProfileForm) => {
+  const submitFormHandler = async (vendorData: ProfileInputForm) => {
     const editedUser = await updateUserData(vendorData);
     if (!editedUser.hasOwnProperty("id")) {
       console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.");
@@ -188,8 +188,9 @@ export default function ProfileVendor() {
               />
             </div>
             <div className="flex justify-end gap-4 pt-8">
-              <ButtonDefault type="primary">Запиши</ButtonDefault>
-              <ButtonDefault type="secondary">Отмени</ButtonDefault>
+              <CustomButton type="submit" category="primary">
+                Запиши
+              </CustomButton>
             </div>
           </form>
         </div>

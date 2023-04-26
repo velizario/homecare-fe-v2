@@ -82,7 +82,7 @@ export default function Security() {
 
   return (
     <>
-      <div className="flex-1 py-4 px-4 md:px-6 lg:px-8">
+      <div className="flex-1 py-4">
         <form onSubmit={handleSubmit(submitFormHandler)} className="max-w-3xl space-y-8 divide-y">
           <div className="flex flex-col gap-4">
             <p className="text-sm text-gray-500 sm:col-span-6">Промяна на мейл, парола и т.н.</p>

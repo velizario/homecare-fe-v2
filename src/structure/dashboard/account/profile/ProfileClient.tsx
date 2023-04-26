@@ -5,7 +5,7 @@ import { z } from "zod";
 import { updateUserData } from "../../../../model/clientModel";
 import { userState } from "../../../../store/userState";
 import { District } from "../../../../types/types";
-import ButtonDefault from "../../../../utilityComponents/ButtonDefault";
+import CustomButton from "../../../../utilityComponents/CustomButton";
 import InputField from "../../../../utilityComponents/InputField";
 import { toasted } from "../../../../utilityComponents/Toast";
 import ProfilePhoto from "./ProfilePhoto";
@@ -48,7 +48,7 @@ const profileInputValues = {
   },
 };
 
-export type ClientProfileForm = {
+export type ProfileInputForm = {
   // id: string;
   firstName: string;
   lastName: string;
@@ -86,29 +86,16 @@ export default function ProfileClient() {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<ClientProfileForm>({
+  } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
-    // defaultValues: userData,
-    // {
-    //   firstName: userData.firstName || "",
-    //   lastName: userData.lastName || "",
-    //   phone: userData.phone || "",
-    //   companyName: userData.vendor?.companyName || "",
-    //   district: "",
-    //   facebook: "",
-    //   instagram: "",
-    //   url: "",
-    //   userImage: "",
-    // },
-    // values: userData,
-    // resolver: zodResolver(ActiveValidationSchema),
+
   });
 
   useEffect(() => {
     reset(userData);
   }, [userData]);
 
-  const submitFormHandler = async (clientData: ClientProfileForm) => {
+  const submitFormHandler = async (clientData: ProfileInputForm) => {
     const editedUser = await updateUserData(clientData);
     if (!editedUser.hasOwnProperty("id")) {
       console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.");
@@ -146,7 +133,6 @@ export default function ProfileClient() {
                 defaultValue={userData.lastName}
                 control={control}
               />
-
               <InputField
                 {...profileInputValues.phone}
                 {...register("phone")}
@@ -168,8 +154,8 @@ export default function ProfileClient() {
               />
             </div>
             <div className="flex justify-end gap-4 pt-8">
-              <ButtonDefault type="primary">Запиши</ButtonDefault>
-              <ButtonDefault type="secondary">Отмени</ButtonDefault>
+              <CustomButton  category="primary">Запиши</CustomButton>
+              <CustomButton category="secondary">Отмени</CustomButton>
             </div>
           </form>
         </div>

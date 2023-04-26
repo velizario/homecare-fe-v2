@@ -1,8 +1,7 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { ApiError, User, UserRole } from "../types/types";
+import { ApiError, ProfileInputForm, User } from "../types/types";
 import { userState } from "../store/userState";
-import { ClientProfileForm } from "../structure/dashboard/account/profile/ProfileClient";
-import { VendorProfileForm } from "../structure/dashboard/account/profile/ProfileVendor";
+
 
 // export interface Client {
 //   id: string;
@@ -52,7 +51,8 @@ export const userDataRefresh = async () => {
   return await handleRequest(`userAuthenticate`, "GET");
 };
 
-export const updateUserData = async (data: ClientProfileForm | VendorProfileForm) => {
+export const updateUserData = async (data: Partial<ProfileInputForm>) => {
+  console.log("data to update with", data)
   const resData = await requestToAPI(`users`, "PATCH", data);
   // if (resData.status === 'success')
   return (await resData.data) as User;

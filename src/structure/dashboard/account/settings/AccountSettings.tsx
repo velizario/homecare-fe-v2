@@ -1,6 +1,6 @@
 export default function AccountSettings() {
   return (
-    <fieldset className="space-y-5 flex-1 py-4 px-4 md:px-6 lg:px-8">
+    <fieldset className="space-y-5 flex-1 py-4 ">
       <p className="sm:col-span-6 text-sm text-gray-500">
         Настройки на изглед, нотификации и т.н.
       </p>

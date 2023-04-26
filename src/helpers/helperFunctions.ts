@@ -1,6 +1,6 @@
 import axios from "axios";
-import { ClientProfileForm } from "../structure/dashboard/account/profile/ProfileClient";
-import { VendorProfileForm } from "../structure/dashboard/account/profile/ProfileVendor";
+import { ProfileInputForm } from "../structure/dashboard/account/profile/ProfileClient";
+import { ProfileInputForm } from "../structure/dashboard/account/profile/ProfileVendor";
 import { Client, User, Vendor } from "../types/types";
 import { BACKEND_URL } from "./envVariables";
 
@@ -48,7 +48,7 @@ export function toggleFilterSelection(selectedId: number, selection: number[]) {
   return selection?.includes(selectedId) ? selection.filter((id) => id !== selectedId) : [...selection, selectedId];
 }
 
-// export function hydrateFormToUser(formData: Partial<VendorProfileForm & ClientProfileForm>) {
+// export function hydrateFormToUser(formData: Partial<ProfileInputForm & ProfileInputForm>) {
 //   const {
 //     firstName,
 //     lastName,

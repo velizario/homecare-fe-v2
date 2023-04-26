@@ -26,7 +26,7 @@ export default function TabsMenu({ tabs, defaultTab }: TabsMenuProps) {
   return (
     <div>
       <div className="border-b border-gray-200">
-        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+        <nav className="flex space-x-8" aria-label="Tabs">
           {tabs.map((tab) => (
             <Link
               key={tab.id}

@@ -9,14 +9,10 @@ import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { createFullName } from "../../../../helpers/helperFunctions";
 import { addOrderComment, changeOrderStatus, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
-import {
-  estateSizeSelections,
-  hourDaySelections,
-  visitFrequencySelections,
-  weekDaySelections,
-} from "../../../../store/static";
+import { estateSizeSelections, hourDaySelections, visitFrequencySelections, weekDaySelections } from "../../../../store/static";
 import { userState } from "../../../../store/userState";
 import { Order, ORDER_STATUS, SelectionOption } from "../../../../types/types";
+import CustomButton from "../../../../utilityComponents/CustomButton";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import Modal from "../../../../utilityComponents/Modal";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
@@ -135,7 +131,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
   const toggleEditMode = () => {
     setEditMode((mode) => {
       // if (!mode)  window.scrollTo({bottom: orderDataRef.current?.offsetTop, left: 0, behavior: "smooth"})
-      if (!mode)  orderDataRef.current?.scrollIntoView({behavior: "smooth"})
+      if (!mode) orderDataRef.current?.scrollIntoView({ behavior: "smooth" });
       return !mode;
     });
   };
@@ -149,25 +145,14 @@ export default function OrderDetails({}: OrderDetailsProps) {
       selectedVisitDay !== orderData?.visitDay ||
       selectedVisitHour !== orderData?.visitHour;
     setOrderDataChanged(isChanged);
-  }, [
-    selectedDistrict,
-    selectedEstateSize,
-    selectedVisitFrequency,
-    selectedAdditionalInfo,
-    selectedVisitDay,
-    selectedVisitHour,
-  ]);
+  }, [selectedDistrict, selectedEstateSize, selectedVisitFrequency, selectedAdditionalInfo, selectedVisitDay, selectedVisitHour]);
 
   //   TODO: Order should be reported differently whether it is looked by vendor or user
   return (
     <div className="min-h-screen">
       <Modal
         messageType="info"
-        title={
-          orderData?.orderStatusId === ORDER_STATUS.RESERVATION
-            ? "Потвърждение на резервация"
-            : "Изпращане оферта към клиента"
-        }
+        title={orderData?.orderStatusId === ORDER_STATUS.RESERVATION ? "Потвърждение на резервация" : "Изпращане оферта към клиента"}
         description={
           selectedVisitDay && selectedVisitHour
             ? orderData?.orderStatusId === ORDER_STATUS.RESERVATION
@@ -177,9 +162,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
         }
         btnAckText={selectedVisitDay && selectedVisitHour ? "Потвърди" : undefined}
         btnCloseText="Затвори"
-        confirmAction={() =>
-          changeStatus(orderData?.orderStatusId === ORDER_STATUS.RESERVATION ? ORDER_STATUS.ACTIVE : ORDER_STATUS.OFFER)
-        }
+        confirmAction={() => changeStatus(orderData?.orderStatusId === ORDER_STATUS.RESERVATION ? ORDER_STATUS.ACTIVE : ORDER_STATUS.OFFER)}
         isOpen={modalOpen}
         setModalOpen={setModalOpen}
       />
@@ -212,38 +195,28 @@ export default function OrderDetails({}: OrderDetailsProps) {
                 <div className="flex gap-2">
                   {/* send button for vendors */}
 
-                  <button
-                    type="button"
-                    onClick={() => setModalOpen(true)}
-                    className={classNames(
-                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset transition-all hover:bg-gray-50 md:mt-0",
+                  <CustomButton
+                    category={"primary"}
+                    disabled={
                       orderData.orderStatus.id === ORDER_STATUS.CANCELLED ||
-                        orderData.orderStatus.id === ORDER_STATUS.OFFER ||
-                        orderData.orderStatus.id === ORDER_STATUS.ACTIVE ||
-                        editMode
-                        ? "pointer-events-none text-gray-400 ring-gray-100"
-                        : "cursor-pointer bg-blue-600 text-white ring-gray-300  hover:bg-blue-500"
-                    )}
+                      orderData.orderStatus.id === ORDER_STATUS.OFFER ||
+                      orderData.orderStatus.id === ORDER_STATUS.ACTIVE ||
+                      editMode
+                    }
+                    onClick={() => setModalOpen(true)}
                   >
                     {orderData.orderStatusId === ORDER_STATUS.RESERVATION ? "Потвърди резервация" : "Изпрати оферта"}
-                  </button>
-                  <button
-                    type="button"
+                  </CustomButton>
+
+                  <CustomButton
+                    category={orderDataChanged ? "primary" : "secondary"}
+                    disabled={orderData.orderStatus.id === ORDER_STATUS.CANCELLED || orderData.orderStatus.id === ORDER_STATUS.ACTIVE}
                     onClick={() => {
                       orderDataChanged ? handleOrderUpdate() : toggleEditMode();
                     }}
-                    className={classNames(
-                      "mt-4 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 hover:bg-gray-50 md:mt-0 ",
-                      orderData.orderStatus.id === ORDER_STATUS.CANCELLED ||
-                        orderData.orderStatus.id === ORDER_STATUS.ACTIVE
-                        ? "pointer-events-none text-gray-400 ring-gray-100"
-                        : orderDataChanged
-                        ? "cursor-pointer bg-blue-600 text-white hover:bg-blue-500"
-                        : "text-gray-900 shadow-sm"
-                    )}
                   >
                     {`${orderDataChanged ? "Запиши промените" : "Редактирай"}`}
-                  </button>
+                  </CustomButton>
                 </div>
               </div>
 
@@ -252,27 +225,20 @@ export default function OrderDetails({}: OrderDetailsProps) {
                   {/* Description list*/}
                   <section aria-labelledby="applicant-information-title">
                     <div className="bg-white shadow sm:rounded-lg">
-                      <div
-                        ref={orderDataRef}
-                        className="flex flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6"
-                      >
+                      <div ref={orderDataRef} className="flex flex-wrap items-center justify-between gap-4 px-4 py-5 sm:px-6">
                         <div className="flex items-center space-x-5">
                           <div className="flex-shrink-0">
                             <div className="relative">
                               <img
                                 className="h-16 w-16 rounded-full"
-                                src={`${BACKEND_URL}/users/public/${
-                                  orderData.vendor.user.imageUrl || "defaultImage.png"
-                                }`}
+                                src={`${BACKEND_URL}/users/public/${orderData.vendor.user.imageUrl || "defaultImage.png"}`}
                                 alt=""
                               />
                               <span className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
                             </div>
                           </div>
                           <div>
-                            <h1 className="text-lg font-semibold text-gray-900">
-                              {createFullName(orderData.vendor.user)}
-                            </h1>
+                            <h1 className="text-lg font-semibold text-gray-900">{createFullName(orderData.vendor.user)}</h1>
                           </div>
                         </div>
                         <StatusBadge label="Нова">{orderData.orderStatus.value}</StatusBadge>
@@ -347,9 +313,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                             </dd>
                           </div>
                           <div className="sm:col-span-2">
-                            <dt className="block text-sm font-medium leading-6 text-gray-900">
-                              Допълнителна информация
-                            </dt>
+                            <dt className="block text-sm font-medium leading-6 text-gray-900">Допълнителна информация</dt>
                             <textarea
                               id="comment"
                               name="comment"
@@ -372,22 +336,13 @@ export default function OrderDetails({}: OrderDetailsProps) {
                             <dd className="mt-1 text-base font-semibold text-gray-900">
                               <ul role="list" className="divide-y divide-gray-200 rounded-md border border-gray-200">
                                 {attachments.map((attachment) => (
-                                  <li
-                                    key={attachment.name}
-                                    className="flex items-center justify-between py-3 pl-3 pr-4 text-sm"
-                                  >
+                                  <li key={attachment.name} className="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
                                     <div className="flex w-0 flex-1 items-center">
-                                      <PaperClipIcon
-                                        className="h-5 w-5 flex-shrink-0 text-gray-400"
-                                        aria-hidden="true"
-                                      />
+                                      <PaperClipIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
                                       <span className="ml-2 w-0 flex-1 truncate">{attachment.name}</span>
                                     </div>
                                     <div className="ml-4 flex-shrink-0">
-                                      <a
-                                        href={attachment.href}
-                                        className="font-medium text-blue-600 hover:text-blue-500"
-                                      >
+                                      <a href={attachment.href} className="font-medium text-blue-600 hover:text-blue-500">
                                         Изтегли
                                       </a>
                                     </div>

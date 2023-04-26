@@ -120,6 +120,23 @@ export interface Order {
   visitFrequency: EssentialDataAll;
 }
 
+
+export type ProfileInputForm = {
+  // id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  companyName: string;
+  facebook: string;
+  instagram: string;
+  website: string;
+  about: string;
+  servedDistrict: District[];
+  district: string;
+  city: string;
+  address: string;
+};
+
 // export const areaSizes = new Map([
 //   ["1", "0"],
 //   ["2", "20"],
