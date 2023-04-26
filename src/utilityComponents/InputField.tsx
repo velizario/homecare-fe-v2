@@ -16,18 +16,7 @@ interface InputFieldProps<T extends FieldValues> {
 }
 
 function InputFieldInner<K extends FieldValues>(
-  {
-    control,
-    label,
-    name,
-    id,
-    autoComplete,
-    className,
-    include,
-    defaultValue,
-    type = "text",
-    ...props
-  }: InputFieldProps<K>,
+  { control, label, name, id, autoComplete, className, include, defaultValue, type = "text", ...props }: InputFieldProps<K>,
   _ref: React.ForwardedRef<HTMLInputElement>
 ) {
   const { errors } = useFormState({ control });

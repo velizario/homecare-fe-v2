@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updateUserData } from "../../../../model/clientModel";
@@ -7,6 +7,7 @@ import { userState } from "../../../../store/userState";
 import { ProfileInputForm } from "../../../../types/types";
 import CustomButton from "../../../../utilityComponents/CustomButton";
 import InputField from "../../../../utilityComponents/InputField";
+import InputFieldNew from "../../../../utilityComponents/InputFieldNew";
 import { toasted } from "../../../../utilityComponents/Toast";
 import ComboSelectBox from "./ComboSelectBoxMultiple";
 import ProfileAbout from "./ProfileAbout";
@@ -15,17 +16,15 @@ import RegionSelection from "./RegionSelection";
 
 const profileInputValues = {
   firstName: { className: "sm:col-span-3", name: "firstName", id: "first-name", label: "Име*", autoComplete: "given-name" },
-  lastName: { className: "sm:col-span-3", name: "last-name", id: "last-name", label: "Фамилия*", autoComplete: "family-name" },
+  lastName: { className: "sm:col-span-3", name: "lastName", id: "last-name", label: "Фамилия*", autoComplete: "family-name" },
   companyName: { className: "sm:col-span-6", name: "company", id: "company", label: "Име на фирма" },
   website: { className: "sm:col-span-3", name: "website", id: "website", label: "Уеб сайт" },
   facebook: { className: "sm:col-span-3", name: "facebook", id: "facebook", label: "Фейсбук" },
   instagram: { className: "sm:col-span-3", name: "instagram", id: "instagram", label: "Инстаграм" },
-  phone: { className: "sm:col-span-3", name: "phone-number", id: "phone-number", label: "Телефонен номер*", autoComplete: "tel" },
+  phone: { className: "sm:col-span-3", name: "phone", id: "phone-number", label: "Телефонен номер*", autoComplete: "tel" },
   address: { className: "sm:col-span-3", name: "address", id: "address", label: "Адрес", autoComplete: "street-address" },
   city: { className: "sm:col-span-3", name: "city", id: "city", label: "Град" },
 };
-
-
 
 let ValidationSchema = z.object({
   firstName: z
@@ -53,6 +52,22 @@ export default function Profile() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const isVendor = Boolean(userData.vendorId);
 
+  const formDefaultValues = {
+    firstName: userData.firstName || "",
+    lastName: userData.lastName || "",
+    phone: userData.phone || "",
+    companyName: userData.vendor?.companyName || "",
+    district: userData.client?.district || "",
+    facebook: userData.vendor?.facebook || "",
+    instagram: userData.vendor?.instagram || "",
+    website: userData.vendor?.website || "",
+    servedDistrict: userData.vendor?.servedDistrict,
+    city: userData.client?.city || "",
+    address: userData.client?.address || "",
+    userImage: userData.imageUrl || "",
+    about: userData.vendor?.about || "",
+  };
+
   const {
     control,
     register,
@@ -62,10 +77,26 @@ export default function Profile() {
     formState: { errors },
   } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
+    defaultValues: formDefaultValues,
   });
 
   useEffect(() => {
-    reset(userData);
+    const formDefaultValues = {
+      firstName: userData.firstName || "",
+      lastName: userData.lastName || "",
+      phone: userData.phone || "",
+      companyName: userData.vendor?.companyName || "",
+      district: userData.client?.district || "",
+      facebook: userData.vendor?.facebook || "",
+      instagram: userData.vendor?.instagram || "",
+      website: userData.vendor?.website || "",
+      servedDistrict: userData.vendor?.servedDistrict,
+      city: userData.client?.city || "",
+      address: userData.client?.address || "",
+      userImage: userData.imageUrl || "",
+      about: userData.vendor?.about || "",
+    };
+    reset(formDefaultValues);
   }, [userData]);
 
   const submitFormHandler = async (vendorData: ProfileInputForm) => {
@@ -86,21 +117,19 @@ export default function Profile() {
           <p className="text-sm text-gray-500">Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.</p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <ProfilePhoto />
-            <InputField {...profileInputValues.firstName} {...register("firstName")} defaultValue={userData.firstName} control={control} />
-            <InputField {...profileInputValues.lastName} {...register("lastName")} defaultValue={userData.lastName} control={control} />
-            {isVendor && (
-              <InputField {...profileInputValues.companyName} {...register("companyName")} defaultValue={userData.vendor.companyName} control={control} />
-            )}
-            <InputField {...profileInputValues.phone} {...register("phone")} defaultValue={userData.phone} control={control} />
-            {!isVendor && <InputField {...profileInputValues.city} {...register("city")} defaultValue={userData.client.city} control={control} />}
-            {isVendor && <InputField {...profileInputValues.city} {...register("city")} defaultValue={userData.vendor.city} control={control} />}
+            <InputFieldNew {...profileInputValues.firstName} register={register} errors={errors} />
+            <InputFieldNew {...profileInputValues.lastName} register={register} errors={errors} />
+            {isVendor && <InputFieldNew {...profileInputValues.companyName} register={register} errors={errors} />}
+            <InputFieldNew {...profileInputValues.phone} register={register} errors={errors} />
+            {!isVendor && <InputFieldNew {...profileInputValues.city} register={register} errors={errors}/>}
+            {isVendor && <InputFieldNew {...profileInputValues.city} register={register} errors={errors} />}
             {!isVendor && <RegionSelection {...register("district")} defaultValue={userData.client.district} control={control} />}
-            {!isVendor && <InputField {...profileInputValues.address} {...register("address")} defaultValue={userData.client.address} control={control} />}
+            {!isVendor && <InputFieldNew {...profileInputValues.address} register={register} errors={errors} />}
             {isVendor && <ProfileAbout {...register("about")} defaultValue={userData.vendor.about} control={control} />}
             {isVendor && <ComboSelectBox defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
-            {isVendor && <InputField {...profileInputValues.facebook} {...register("facebook")} defaultValue={userData.vendor.facebook} control={control} />}
-            {isVendor && <InputField {...profileInputValues.instagram} {...register("instagram")} defaultValue={userData.vendor.instagram} control={control} />}
-            {isVendor && <InputField {...profileInputValues.website} {...register("website")} defaultValue={userData.vendor.website} control={control} />}
+            {isVendor && <InputFieldNew {...profileInputValues.facebook} register={register} errors={errors}/>}
+            {isVendor && <InputFieldNew {...profileInputValues.instagram} register={register} errors={errors} />}
+            {isVendor && <InputFieldNew {...profileInputValues.website} register={register} errors={errors}/>}
           </div>
           <div className="flex justify-end gap-4 pt-8">
             <CustomButton type="submit" category="primary">
