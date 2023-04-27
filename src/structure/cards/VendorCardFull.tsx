@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import classNames from "../../helpers/classNames";
 import { BACKEND_URL } from "../../helpers/envVariables";
 import { createFullName } from "../../helpers/helperFunctions";
+import { fetchServiceTypes } from "../../model/essentialsModel";
 import { getVendor } from "../../model/vendorModel";
 import { Vendor } from "../../types/types";
 import RatingCard from "../../utilityComponents/RatingCard";
@@ -21,11 +22,15 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
   const [requestActive, setRequestActive] = useState(false);
   const [vendor, setVendor] = useState<Vendor>();
 
+  const handleCreateRequest = async () => {
+    setRequestActive(true);
+  };
+
   const closeModal = () => setRequestActive(false);
 
   const fetchVendorData = async () => {
     const vendorData = await getVendor(vendorId);
-    console.log(vendorData)
+    console.log(vendorData);
     setVendor(vendorData);
   };
 
@@ -46,18 +51,13 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
                 <div className="flex flex-col">
                   <div className="-mt-28 flex min-h-[10rem] w-full flex-col items-center justify-center self-center sm:mt-0 sm:max-w-full sm:self-auto">
                     <img
-                      className={classNames(
-                        "w-full rounded-md object-cover [aspect-ratio:_1_/_1]",
-                        !vendor.user.imageUrl ? "h-14 w-14" : ""
-                      )}
+                      className={classNames("w-full rounded-md object-cover [aspect-ratio:_1_/_1]", !vendor.user.imageUrl ? "h-14 w-14" : "")}
                       src={`${BACKEND_URL}/users/public/${vendor.user.imageUrl || "defaultImage.png"}`}
                       alt=""
                     />
                   </div>
                   <div className="flex flex-col items-center px-3 md:px-5">
-                    <h2 className="mt-2 text-center text-xl font-bold tracking-tight text-gray-900">
-                      {createFullName(vendor.user)}
-                    </h2>
+                    <h2 className="mt-2 text-center text-xl font-bold tracking-tight text-gray-900">{createFullName(vendor.user)}</h2>
                     <p className="self-center text-sm text-gray-400">{vendor.city}</p>
                     <SingleRating />
                   </div>
@@ -70,7 +70,7 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
 
                 {/* Contact Buttons */}
                 <div className="sm:px-3 md:px-5">
-                  <ContactButtons openRequest={setRequestActive} />
+                  <ContactButtons openRequest={handleCreateRequest} />
                 </div>
 
                 {/* Portfolio */}
@@ -83,10 +83,7 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
                   <h2 className="mb-4 text-xl font-semibold tracking-tight text-gray-700">Контакти</h2>
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
-                      <img
-                        className="h-6 w-6"
-                        src="https://img.icons8.com/3d-plastilina/69/null/instagram-new--v1.png"
-                      />{" "}
+                      <img className="h-6 w-6" src="https://img.icons8.com/3d-plastilina/69/null/instagram-new--v1.png" />{" "}
                       <p className="text-sm">{vendor.instagram}</p>
                     </div>
                     <div className="flex items-center gap-2">

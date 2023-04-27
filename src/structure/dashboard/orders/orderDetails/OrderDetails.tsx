@@ -13,13 +13,16 @@ import { estateSizeSelections, hourDaySelections, visitFrequencySelections, week
 import { userState } from "../../../../store/userState";
 import { Order, ORDER_STATUS, SelectionOption } from "../../../../types/types";
 import CustomButton from "../../../../utilityComponents/CustomButton";
-import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
+import ComboSingleSelectOld from "../../../../utilityComponents/ComboSingleSelectOld";
 import Modal from "../../../../utilityComponents/Modal";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { toasted } from "../../../../utilityComponents/Toast";
 import OrderComments from "./OrderComments";
 import OrderTimeline from "./OrderTimeline";
 import SelectionDropdown from "./SelectionDropdown";
+
+// TODO replace ComboSingleSelectOld with the new component CombosingleSelect
+// Use React-hook-form
 
 const attachments = [
   { name: "resume_front_end_developer.pdf", href: "#" },
@@ -256,7 +259,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="block text-sm font-medium leading-6 text-gray-900">Честота</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              <ComboSingleSelect
+                              <ComboSingleSelectOld
                                 disabled={!editMode}
                                 selections={visitFrequencySelections}
                                 selected={selectedVisitFrequency}
@@ -293,7 +296,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="block text-sm font-medium leading-6 text-gray-900">Квартал</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              <ComboSingleSelect
+                              <ComboSingleSelectOld
                                 disabled={!editMode}
                                 selections={districtNames}
                                 selected={selectedDistrict}
@@ -304,7 +307,7 @@ export default function OrderDetails({}: OrderDetailsProps) {
                           <div className="sm:col-span-1">
                             <dt className="block text-sm font-medium leading-6 text-gray-900">Размер, кв.м.</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
-                              <ComboSingleSelect
+                              <ComboSingleSelectOld
                                 disabled={!editMode}
                                 selections={estateSizeSelections}
                                 selected={selectedEstateSize}

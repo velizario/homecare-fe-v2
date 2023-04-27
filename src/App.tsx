@@ -24,17 +24,8 @@ function App() {
   const queryClient = new QueryClient();
 
   // do I need to refresh user? How is data lost? Added only for development purposes
-  const refreshUser = async () => {
-    const user = await userDataRefresh();
-  };
-
-  const getServices = async () => {
-    const services = await fetchServiceTypes();
-  };
-
   useEffect(() => {
-    refreshUser();
-    getServices();
+    userDataRefresh();
   }, []);
 
   return (

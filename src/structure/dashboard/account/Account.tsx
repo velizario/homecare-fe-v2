@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { userState } from "../../../store/userState";
 import TabsMenu from "../../../utilityComponents/TabsMenu";
 import Profile from "./profile/Profile";
+import RenderTest from "./RenderTest";
 import Security from "./security/Security";
 import AccountSettings from "./settings/AccountSettings";
 
@@ -12,8 +13,7 @@ const tabs = [
 ];
 
 export default function Account() {
-  const vendorId = userState((state) => state.userData.vendorId);
-  const isVendor = Boolean(vendorId);
+
 
   return (
     <>

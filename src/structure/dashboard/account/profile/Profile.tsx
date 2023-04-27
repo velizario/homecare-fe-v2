@@ -1,23 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updateUserData } from "../../../../model/clientModel";
+import { fetchDistrictNames } from "../../../../model/essentialsModel";
+import { essentialsStore } from "../../../../store/essentialsStore";
 import { userState } from "../../../../store/userState";
 import { ProfileInputForm } from "../../../../types/types";
 import CustomButton from "../../../../utilityComponents/CustomButton";
 import InputField from "../../../../utilityComponents/InputField";
-import InputFieldNew from "../../../../utilityComponents/InputFieldNew";
 import { toasted } from "../../../../utilityComponents/Toast";
-import ComboSelectBox from "./ComboSelectBoxMultiple";
+import ComboMultipleSelect from "../../../../utilityComponents/ComboMultipleSelect";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
+import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import RegionSelection from "./RegionSelection";
 
 const profileInputValues = {
   firstName: { className: "sm:col-span-3", name: "firstName", id: "first-name", label: "Име*", autoComplete: "given-name" },
   lastName: { className: "sm:col-span-3", name: "lastName", id: "last-name", label: "Фамилия*", autoComplete: "family-name" },
-  companyName: { className: "sm:col-span-6", name: "company", id: "company", label: "Име на фирма" },
+  district: { className: "sm:col-span-3", name: "district", id: "district", label: "Квартал/Район*", autoComplete: "country-name" },
+  companyName: { className: "sm:col-span-6", name: "companyName", id: "company", label: "Име на фирма" },
   website: { className: "sm:col-span-3", name: "website", id: "website", label: "Уеб сайт" },
   facebook: { className: "sm:col-span-3", name: "facebook", id: "facebook", label: "Фейсбук" },
   instagram: { className: "sm:col-span-3", name: "instagram", id: "instagram", label: "Инстаграм" },
@@ -51,22 +54,8 @@ let ValidationSchema = z.object({
 export default function Profile() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const isVendor = Boolean(userData.vendorId);
-
-  const formDefaultValues = {
-    firstName: userData.firstName || "",
-    lastName: userData.lastName || "",
-    phone: userData.phone || "",
-    companyName: userData.vendor?.companyName || "",
-    district: userData.client?.district || "",
-    facebook: userData.vendor?.facebook || "",
-    instagram: userData.vendor?.instagram || "",
-    website: userData.vendor?.website || "",
-    servedDistrict: userData.vendor?.servedDistrict,
-    city: userData.client?.city || "",
-    address: userData.client?.address || "",
-    userImage: userData.imageUrl || "",
-    about: userData.vendor?.about || "",
-  };
+  const formDefaultValues = { ...userData, ...userData.client, ...userData.vendor };
+  const districts = essentialsStore(store => store.districtNames)
 
   const {
     control,
@@ -77,27 +66,9 @@ export default function Profile() {
     formState: { errors },
   } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
-    defaultValues: formDefaultValues,
+    defaultValues: {},
+    values: formDefaultValues
   });
-
-  useEffect(() => {
-    const formDefaultValues = {
-      firstName: userData.firstName || "",
-      lastName: userData.lastName || "",
-      phone: userData.phone || "",
-      companyName: userData.vendor?.companyName || "",
-      district: userData.client?.district || "",
-      facebook: userData.vendor?.facebook || "",
-      instagram: userData.vendor?.instagram || "",
-      website: userData.vendor?.website || "",
-      servedDistrict: userData.vendor?.servedDistrict,
-      city: userData.client?.city || "",
-      address: userData.client?.address || "",
-      userImage: userData.imageUrl || "",
-      about: userData.vendor?.about || "",
-    };
-    reset(formDefaultValues);
-  }, [userData]);
 
   const submitFormHandler = async (vendorData: ProfileInputForm) => {
     const editedUser = await updateUserData(vendorData);
@@ -109,27 +80,33 @@ export default function Profile() {
     toasted("Информацията е записана успешно", "success");
   };
 
+  useEffect(() => {
+    fetchDistrictNames();
+  }, []);
+
+  
   return (
     <>
-      {!userData.id && <div>loading</div>}
-      {userData.id && (
+      {!userData.id || districts.length<1 && <div>loading</div>}
+      {userData.id && districts.length>0 && (
         <form className="max-w-3xl flex-1 space-y-8 py-4 " encType="multipart/form-data" onSubmit={handleSubmit(submitFormHandler)}>
           <p className="text-sm text-gray-500">Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.</p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <ProfilePhoto />
-            <InputFieldNew {...profileInputValues.firstName} register={register} errors={errors} />
-            <InputFieldNew {...profileInputValues.lastName} register={register} errors={errors} />
-            {isVendor && <InputFieldNew {...profileInputValues.companyName} register={register} errors={errors} />}
-            <InputFieldNew {...profileInputValues.phone} register={register} errors={errors} />
-            {!isVendor && <InputFieldNew {...profileInputValues.city} register={register} errors={errors}/>}
-            {isVendor && <InputFieldNew {...profileInputValues.city} register={register} errors={errors} />}
-            {!isVendor && <RegionSelection {...register("district")} defaultValue={userData.client.district} control={control} />}
-            {!isVendor && <InputFieldNew {...profileInputValues.address} register={register} errors={errors} />}
+            <InputField {...profileInputValues.firstName} register={register} errors={errors} />
+            <InputField {...profileInputValues.lastName} register={register} errors={errors} />
+            {isVendor && <InputField {...profileInputValues.companyName} register={register} errors={errors} />}
+            <InputField {...profileInputValues.phone} register={register} errors={errors} />
+            {!isVendor && <InputField {...profileInputValues.city} register={register} errors={errors} />}
+            {isVendor && <InputField {...profileInputValues.city} register={register} errors={errors} />}
+            {!isVendor && <ComboSingleSelect selections={districts} {...profileInputValues.district} defaultValue={userData.client.district} setValue={setValue} />}
+            {!isVendor && <RegionSelection {...profileInputValues.district} options={districts} register={register} errors={errors} />}
+            {!isVendor && <InputField {...profileInputValues.address} register={register} errors={errors} />}
             {isVendor && <ProfileAbout {...register("about")} defaultValue={userData.vendor.about} control={control} />}
-            {isVendor && <ComboSelectBox defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
-            {isVendor && <InputFieldNew {...profileInputValues.facebook} register={register} errors={errors}/>}
-            {isVendor && <InputFieldNew {...profileInputValues.instagram} register={register} errors={errors} />}
-            {isVendor && <InputFieldNew {...profileInputValues.website} register={register} errors={errors}/>}
+            {isVendor && <ComboMultipleSelect defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
+            {isVendor && <InputField {...profileInputValues.facebook} register={register} errors={errors} />}
+            {isVendor && <InputField {...profileInputValues.instagram} register={register} errors={errors} />}
+            {isVendor && <InputField {...profileInputValues.website} register={register} errors={errors} />}
           </div>
           <div className="flex justify-end gap-4 pt-8">
             <CustomButton type="submit" category="primary">

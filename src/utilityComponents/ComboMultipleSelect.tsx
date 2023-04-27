@@ -1,18 +1,11 @@
-import { ChangeEvent, forwardRef, useEffect, useRef, useState } from "react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { Combobox } from "@headlessui/react";
-import Badge from "../../../../utilityComponents/Badge";
-import {
-  Control,
-  FieldPath,
-  FieldValues,
-  Path,
-  PathValue,
-  UseFormSetValue,
-} from "react-hook-form";
-import { District } from "../../../../types/types";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { useEffect, useRef, useState } from "react";
+import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
+import { District } from "../types/types";
+import Badge from "./Badge";
 
-
+// TODO: replace with ComboSingleSelect by making it multiple, or create separte ComboSelect based on ComboSingleSelect practices
 
 const districts: District[] = [
   { id: 1, districtName: "Leslie Alexander" },
@@ -37,15 +30,12 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-interface ComboSelectBoxProps<T extends FieldValues> {
+interface ComboMultipleSelectProps<T extends FieldValues> {
   defaultValue?: District[];
   setValue: UseFormSetValue<T>;
 }
 
-export default function ComboSelectBox<K extends FieldValues>({
-  setValue,
-  defaultValue,
-}: ComboSelectBoxProps<K>) {
+export default function ComboMultipleSelect<K extends FieldValues>({ setValue, defaultValue }: ComboMultipleSelectProps<K>) {
   const [query, setQuery] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState<District[]>([]);
   const comboRef = useRef<null | HTMLUListElement>(null);
@@ -68,9 +58,7 @@ export default function ComboSelectBox<K extends FieldValues>({
     query === ""
       ? districts
       : districts.filter((person) => {
-          return person.districtName
-            .toLowerCase()
-            .includes(query.toLowerCase());
+          return person.districtName.toLowerCase().includes(query.toLowerCase());
         });
 
   useEffect(() => {
@@ -80,14 +68,8 @@ export default function ComboSelectBox<K extends FieldValues>({
   useEffect(() => {
     defaultValue &&
       //   need to use original district array otherwize combobox value will not work
-      setSelectedDistrict(() =>
-        districts.filter(
-          (district) =>
-            defaultValue.findIndex((value) => value.id === district.id) >= 0
-        )
-      );
+      setSelectedDistrict(() => districts.filter((district) => defaultValue.findIndex((value) => value.id === district.id) >= 0));
   }, [defaultValue]);
-
 
   const changeHandler = (value: District[]) => {
     setSelectedDistrict(value);
@@ -106,15 +88,11 @@ export default function ComboSelectBox<K extends FieldValues>({
     >
       <>
         <div className="flex flex-row justify-between gap-2 ">
-          <p className="block text-sm font-normal text-gray-900">
-            Квартали на покритие
-          </p>
+          <p className="block text-sm font-normal text-gray-900">Квартали на покритие</p>
           <button
             type="button"
             onClick={() => {
-              changeHandler(
-                selectedDistrict.length !== districts.length ? districts : []
-              );
+              changeHandler(selectedDistrict.length !== districts.length ? districts : []);
             }}
             className="inline-flex h-full items-center text-xs font-medium text-gray-600 underline  hover:text-black "
           >
@@ -139,10 +117,7 @@ export default function ComboSelectBox<K extends FieldValues>({
             }
             className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
           >
-            <ChevronUpDownIcon
-              className="h-5 w-5 text-gray-500"
-              aria-hidden="true"
-            />
+            <ChevronUpDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
           </Combobox.Button>
           {filteredPeople.length > 0 && (
             <Combobox.Options
@@ -154,29 +129,14 @@ export default function ComboSelectBox<K extends FieldValues>({
                   key={person.id}
                   value={person}
                   className={({ active }) =>
-                    classNames(
-                      "relative cursor-default select-none py-2 pl-3 pr-9",
-                      active ? "bg-indigo-600 text-white" : "text-gray-900"
-                    )
+                    classNames("relative cursor-default select-none py-2 pl-3 pr-9", active ? "bg-indigo-600 text-white" : "text-gray-900")
                   }
                 >
                   {({ active, selected }) => (
                     <>
-                      <span
-                        className={classNames(
-                          "block truncate",
-                          selected ? "font-semibold" : ""
-                        )}
-                      >
-                        {person.districtName}
-                      </span>
+                      <span className={classNames("block truncate", selected ? "font-semibold" : "")}>{person.districtName}</span>
                       {selected && (
-                        <span
-                          className={classNames(
-                            "absolute inset-y-0 right-0 flex items-center pr-4",
-                            active ? "text-white" : "text-indigo-600"
-                          )}
-                        >
+                        <span className={classNames("absolute inset-y-0 right-0 flex items-center pr-4", active ? "text-white" : "text-indigo-600")}>
                           <CheckIcon className="h-5 w-5" aria-hidden="true" />
                         </span>
                       )}

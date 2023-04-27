@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import classNames from "../../../../helpers/classNames";
 import { SelectionOption } from "../../../../types/types";
 
+// TODO use ComboSingleSelect practices
+
 type SelectionProps = {
   disabled: boolean;
   selected: SelectionOption | null;

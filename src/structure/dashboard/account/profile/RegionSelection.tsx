@@ -1,57 +1,78 @@
-import { forwardRef } from "react";
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import { FieldErrors, FieldValues, Path, UseFormRegister } from "react-hook-form";
+import classNames from "../../../../helpers/classNames";
+import { SelectionOption } from "../../../../types/types";
+import InputErrorMessage from "../../../../utilityComponents/InputErrorMessage";
 
-interface RegionSelectionProps<T extends FieldValues> {
-  control: Control<T, object>;
-  name: FieldPath<T>;
-  defaultValue?: string;
+// TODO replace SelectionDropdown with this??
+
+interface TInputField<T extends FieldValues> {
+  name: string;
+  label: string;
+  register: UseFormRegister<T>;
+  className: string;
+  errors: FieldErrors<T>;
+  options: SelectionOption[];
+  autoComplete?: string;
+  disabled?: boolean;
 }
 
-function RegionSelectionInner<K extends FieldValues>(
-  { control, name, defaultValue, ...props }: RegionSelectionProps<K>,
-  _ref: React.ForwardedRef<HTMLSelectElement>
-) {
-
-  const options = [
-    {id: 1, value: "Витоша"},
-    {id: 1, value: "Банишора"},
-    {id: 1, value: "Триъгълниците"},
-    {id: 1, value: "Център"},
-    {id: 1, value: "Лозенец"},
-  ]
-
+export default function InputField<K extends FieldValues>({
+  options,
+  className,
+  name,
+  label,
+  register,
+  errors,
+  autoComplete,
+  disabled = false,
+}: TInputField<K>) {
+  const errorMessage = errors[name]?.message?.toString();
   return (
-    <div className="sm:col-span-3">
-      <label htmlFor="country" className="block text-sm text-gray-900">
-        Квартал/Район
+    <div className={className}>
+      <label htmlFor={name} className="block text-sm font-normal text-gray-900">
+        {label}
       </label>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field: { onChange, value, ref } }) => (
-          <select
-            {...props}
-            defaultValue={defaultValue}
-            value={value}
-            id="country"
-            autoComplete="country-name"
-            className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            ref={ref}
-            onChange={onChange}
-          >
-            <option />
-            {options.map((option) => <option key={option.value} >{option.value}</option>)}
-
-          </select>
-          
+      <select
+        className={classNames(
+          disabled
+            ? "bg-gray-50 text-gray-600"
+            : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600",
+          "mt-1 w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
         )}
-      />
+        id={name}
+        autoComplete={autoComplete}
+        {...register(name as Path<K>)}
+      >
+        <span
+          className={classNames(
+            "absolute z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            // open ? "absolute" : "hidden"
+          )}
+        >
+          {options.map((option) => (
+            <div
+              // onClick={updateSelection}
+              data-id={option.id}
+              key={option.id}
+              className={classNames(
+                "p-2 text-sm ",
+                // selected?.id === item.id
+                // ? "cursor-pointer bg-indigo-600 text-white"
+                // : validOptions.find((option) => option.id === item.id)
+                // ? "cursor-pointer hover:bg-neutral-100"
+                "pointer-events-none cursor-default text-gray-400  line-through"
+              )}
+            >
+              <option key={option.value}>{option.value}</option>
+            </div>
+          ))}
+        </span>
+        {/* {options.map((option) => (
+          <option  key={option.value}>{option.value}</option>
+        ))} */}
+      </select>
+
+      <InputErrorMessage>{errorMessage}</InputErrorMessage>
     </div>
   );
 }
-
-const RegionSelection = forwardRef(RegionSelectionInner) as <T extends FieldValues>(
-  props: RegionSelectionProps<T> & { ref?: React.ForwardedRef<HTMLInputElement> }
-) => ReturnType<typeof RegionSelectionInner>;
-
-export default RegionSelection;

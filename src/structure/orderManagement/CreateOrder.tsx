@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { fetchServiceTypes } from "../../model/essentialsModel";
 import { createOrder } from "../../model/orderModel";
 import ModalContainer from "../../utilityComponents/ModalContainer";
 import { toasted } from "../../utilityComponents/Toast";
@@ -25,6 +26,7 @@ export type CreateOrderForm = {
 };
 
 export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) {
+
   const [orderStep, setOrderStep] = useState<number>(1);
 
   const { watch, setValue } = useForm<CreateOrderForm>();
