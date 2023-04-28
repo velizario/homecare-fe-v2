@@ -14,12 +14,13 @@ import ComboMultipleSelect from "../../../../utilityComponents/ComboMultipleSele
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
-import RegionSelection from "./RegionSelection";
+import DropdownMultiSelect from "../../../../utilityComponents/DropdownMultiSelect";
 
 const profileInputValues = {
   firstName: { className: "sm:col-span-3", name: "firstName", id: "first-name", label: "Име*", autoComplete: "given-name" },
   lastName: { className: "sm:col-span-3", name: "lastName", id: "last-name", label: "Фамилия*", autoComplete: "family-name" },
-  district: { className: "sm:col-span-3", name: "district", id: "district", label: "Квартал/Район*", autoComplete: "country-name" },
+  district: { className: "sm:col-span-3", name: "district", id: "district", label: "Квартал/Район", autoComplete: "country-name" },
+  servedDistrict: { className: "sm:col-span-3", name: "servedDistrict", id: "servedDistrict", label: "Райони на покритие", autoComplete: "country-name" },
   companyName: { className: "sm:col-span-6", name: "companyName", id: "company", label: "Име на фирма" },
   website: { className: "sm:col-span-3", name: "website", id: "website", label: "Уеб сайт" },
   facebook: { className: "sm:col-span-3", name: "facebook", id: "facebook", label: "Фейсбук" },
@@ -44,7 +45,7 @@ let ValidationSchema = z.object({
   city: z.string().optional(),
   about: z.string().optional(),
   address: z.string().optional(),
-  servedDistrict: z.array(z.object({ id: z.number(), districtName: z.string() })).optional(),
+  servedDistrict: z.array(z.object({ id: z.number(), value: z.string() })).optional(),
   companyName: z.string().max(40, "Maximum allowed characters are 40").optional(),
   // email: z.string({ required_error: "Required field" }).email({ message: "Invalid email address" }),
   // password: z.string({ required_error: "Required field" }).min(8, "Password should be at least 8 characters long"),
@@ -55,7 +56,7 @@ export default function Profile() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const isVendor = Boolean(userData.vendorId);
   const formDefaultValues = { ...userData, ...userData.client, ...userData.vendor };
-  const districts = essentialsStore(store => store.districtNames)
+  const districts = essentialsStore((store) => store.districtNames);
 
   const {
     control,
@@ -63,11 +64,12 @@ export default function Profile() {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
     defaultValues: {},
-    values: formDefaultValues
+    values: formDefaultValues,
   });
 
   const submitFormHandler = async (vendorData: ProfileInputForm) => {
@@ -84,11 +86,14 @@ export default function Profile() {
     fetchDistrictNames();
   }, []);
 
-  
+  useEffect(() => {
+    console.log(watch("district"));
+  }, [watch("district")]);
+
   return (
     <>
-      {!userData.id || districts.length<1 && <div>loading</div>}
-      {userData.id && districts.length>0 && (
+      {!userData.id || (districts.length < 1 && <div>loading</div>)}
+      {userData.id && districts.length > 0 && (
         <form className="max-w-3xl flex-1 space-y-8 py-4 " encType="multipart/form-data" onSubmit={handleSubmit(submitFormHandler)}>
           <p className="text-sm text-gray-500">Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.</p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
@@ -99,11 +104,13 @@ export default function Profile() {
             <InputField {...profileInputValues.phone} register={register} errors={errors} />
             {!isVendor && <InputField {...profileInputValues.city} register={register} errors={errors} />}
             {isVendor && <InputField {...profileInputValues.city} register={register} errors={errors} />}
-            {!isVendor && <ComboSingleSelect selections={districts} {...profileInputValues.district} defaultValue={userData.client.district} setValue={setValue} />}
-            {!isVendor && <RegionSelection {...profileInputValues.district} options={districts} register={register} errors={errors} />}
+            {!isVendor && (
+              <ComboSingleSelect options={districts} {...profileInputValues.district} control={control}  />
+            )}
+            {isVendor && <DropdownMultiSelect {...profileInputValues.servedDistrict} options={districts} control={control}  />}
             {!isVendor && <InputField {...profileInputValues.address} register={register} errors={errors} />}
             {isVendor && <ProfileAbout {...register("about")} defaultValue={userData.vendor.about} control={control} />}
-            {isVendor && <ComboMultipleSelect defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
+            {isVendor && <ComboMultipleSelect {...profileInputValues.servedDistrict} defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
             {isVendor && <InputField {...profileInputValues.facebook} register={register} errors={errors} />}
             {isVendor && <InputField {...profileInputValues.instagram} register={register} errors={errors} />}
             {isVendor && <InputField {...profileInputValues.website} register={register} errors={errors} />}

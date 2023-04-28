@@ -1,52 +1,61 @@
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
-import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
+import { Control, FieldValues, Path, PathValue, useController, UseFormSetValue } from "react-hook-form";
 import classNames from "../helpers/classNames";
 import { SelectionOption } from "../types/types";
 
-
-// TODO check where else to use this component
+// TODO forbid entering free text, maybe via some validation
+// TODO enable mouse events - mouse up/down, enter, escape
 interface TSelectionDropdown<T extends FieldValues> {
-  setValue: UseFormSetValue<T>;
-  defaultValue: string;
   name: string;
   disabled?: boolean;
-  selections: SelectionOption[];
+  control: Control<T, any>;
+  options: SelectionOption[];
   validOptions?: SelectionOption[];
   label: string;
 }
 
 export default function ComboSingleSelect<K extends FieldValues>({
-  selections,
+  options,
   label,
   name,
-  defaultValue,
-  setValue,
+  control,
   validOptions,
   disabled = false,
 }: TSelectionDropdown<K>) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [selection, setSelection] = useState(defaultValue);
 
-  const filteredSelections =
+  useEffect(() => {
+    console.log(query)
+  }, [query])
+
+  const {
+    field: { value, onChange },
+    fieldState: { error },
+  } = useController({
+    name: name as Path<K>,
+    control,
+  });
+
+  const filteredOptions =
     query === ""
-      ? selections
-      : selections.filter((selection) => {
-          return selection.value.toLowerCase().includes(query.toLowerCase());
+      ? options
+      : options.filter((option) => {
+          return option.value.toLowerCase().includes(query.toLowerCase());
         });
 
   useEffect(() => {
     if (query.length > 0 && open === false) setOpen(true);
-  }, [filteredSelections]);
+  }, [filteredOptions]);
 
   function updateSelection(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const selectedId = Number(e.currentTarget.dataset.id);
-    const selectedChoice = selections.find((item) => item.id === selectedId);
+    const selectedChoice = options.find((item) => item.id === selectedId);
     if (!selectedChoice) return;
     setQuery("");
-    setSelection(selectedChoice.value);
-    setValue(name as Path<K>, selectedChoice.value as PathValue<K, Path<K>>);
+    onChange(selectedChoice.value);
+    // setValue(name as Path<K>, selectedChoice.value as PathValue<K, Path<K>>);
   }
 
   const dismissDropdown = (e: MouseEvent) => {
@@ -78,11 +87,11 @@ export default function ComboSingleSelect<K extends FieldValues>({
           onChange={(event) => {
             const newValue = event.target.value;
             setQuery(newValue);
-            setSelection(newValue);
-            setValue(name as Path<K>, newValue as PathValue<K, Path<K>>);
+            onChange(newValue);
+            // setValue(name as Path<K>, newValue as PathValue<K, Path<K>>);
             // setValue("visitFrequency" as Path<K>, { id: selectedId } as PathValue<K, Path<K>>);
           }}
-          value={selection}
+          value={value || ""}
         />
         <button
           type="button"
@@ -102,7 +111,7 @@ export default function ComboSingleSelect<K extends FieldValues>({
           open ? "opacity-100" : " invisible opacity-0"
         )}
       >
-        {filteredSelections.map((item) => (
+        {filteredOptions.map((item) => (
           <div
             onClick={updateSelection}
             data-id={item.id}
@@ -111,7 +120,7 @@ export default function ComboSingleSelect<K extends FieldValues>({
               "p-2 text-sm ",
               query === item.value
                 ? "cursor-pointer bg-indigo-600 text-white"
-                : (validOptions || selections).find((option) => option.id === item.id)
+                : (validOptions || options).find((option) => option.id === item.id)
                 ? "cursor-pointer hover:bg-neutral-100"
                 : "pointer-events-none cursor-default text-gray-400  line-through"
             )}

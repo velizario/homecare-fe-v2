@@ -1,7 +1,4 @@
 import axios from "axios";
-import { ProfileInputForm } from "../structure/dashboard/account/profile/ProfileClient";
-import { ProfileInputForm } from "../structure/dashboard/account/profile/ProfileVendor";
-import { Client, User, Vendor } from "../types/types";
 import { BACKEND_URL } from "./envVariables";
 
 export const getToken = () => {
@@ -44,8 +41,8 @@ export function sortObjArrDesc<T extends Record<any, any> & { id: number }>(obje
   return [...objectToSort].sort((a, b) => b.id - a.id);
 }
 
-export function toggleFilterSelection(selectedId: number, selection: number[]) {
-  return selection?.includes(selectedId) ? selection.filter((id) => id !== selectedId) : [...selection, selectedId];
+export function toggleFilterSelection(selectedItem: number | string, currentSelection: (number | string)[]) {
+  return currentSelection?.includes(selectedItem) ? currentSelection.filter((item) => item !== selectedItem) : [...currentSelection, selectedItem];
 }
 
 // export function hydrateFormToUser(formData: Partial<ProfileInputForm & ProfileInputForm>) {

@@ -5,7 +5,7 @@ import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import { District } from "../types/types";
 import Badge from "./Badge";
 
-// TODO: replace with ComboSingleSelect by making it multiple, or create separte ComboSelect based on ComboSingleSelect practices
+// TODO: replace with ComboSingleSelect by making it multiple, or create separte ComboSelect based on ComboSingleSelect
 
 const districts: District[] = [
   { id: 1, districtName: "Leslie Alexander" },

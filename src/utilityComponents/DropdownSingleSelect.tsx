@@ -1,35 +1,52 @@
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
-import classNames from "../../../../helpers/classNames";
-import { SelectionOption } from "../../../../types/types";
+import { Control, useController, FieldErrors, FieldValues, Path, PathValue, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import classNames from "../helpers/classNames";
+import { SelectionOption } from "../types/types";
+import InputErrorMessage from "./InputErrorMessage";
 
 // TODO use ComboSingleSelect practices
 
-type SelectionProps = {
-  disabled: boolean;
-  selected: SelectionOption | null;
-  setSelected: React.Dispatch<React.SetStateAction<SelectionOption | null>>;
-  selections: SelectionOption[];
-  validOptions: SelectionOption[];
-  selectClass: string;
-};
+interface TDropdownSingleSelect<T extends FieldValues> {
+  name: string;
+  label: string;
+  control: Control<T, any>;
+  className: string;
+  options: SelectionOption[];
+  validOptions?: SelectionOption[];
+  disabled?: boolean;
+}
 
-export default function SelectionDropdown({ selected, disabled, setSelected, selections, validOptions, selectClass }: SelectionProps) {
+export default function DropdownSingleSelect<K extends FieldValues>({
+  options,
+  className,
+  name,
+  label,
+  control,
+  validOptions = options,
+  disabled = false,
+}: TDropdownSingleSelect<K>) {
   const [open, setOpen] = useState(false);
-  
-  function updateSelection(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    const selectedId = Number(e.currentTarget.dataset.id);
-    const selectedChoice = selections.find((item) => item.id === selectedId);
-    if (!selectedChoice) return;
-    setSelected(selectedChoice);
-  }
+
+  const {
+    field: { value, onChange },
+    fieldState: { error },
+  } = useController({
+    name: name as Path<K>,
+    control,
+  });
+
+
+  // I dont need error, but will leave it for building other components from this
+  const errorMessage = error?.message?.toString();
 
   const dismissDropdown = (e: MouseEvent) => {
-    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + selectClass}`) == null;
+    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + name}`) == null;
     if (clickedOutside) setOpen(false);
   };
 
   useEffect(() => {
+    console.log(open);
     if (open) document.addEventListener("click", dismissDropdown);
     return () => {
       document.removeEventListener("click", dismissDropdown);
@@ -37,8 +54,12 @@ export default function SelectionDropdown({ selected, disabled, setSelected, sel
   }, [open]);
 
   return (
-    <div className="relative w-full">
-      <div className={selectClass}>
+    <div className={classNames("relative", className)}>
+      <label htmlFor={name} className="block text-sm font-normal text-gray-900">
+        {label}
+      </label>
+
+      <div className={classNames("relative mt-1", name)}>
         <div
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(
@@ -50,9 +71,10 @@ export default function SelectionDropdown({ selected, disabled, setSelected, sel
             "w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6"
           )}
         >
-          {`${selected?.value || "(избери)"}`}
+          {`${value}`}
         </div>
         <button
+          type="button"
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >
@@ -66,24 +88,26 @@ export default function SelectionDropdown({ selected, disabled, setSelected, sel
           open ? "absolute" : "hidden"
         )}
       >
-        {selections.map((item) => (
+        {options.map((option) => (
           <div
-            onClick={updateSelection}
-            data-id={item.id}
-            key={item.id}
+            onClick={() => onChange(option.value)}
+            data-id={option.id}
+            key={option.id}
             className={classNames(
               "p-2 text-sm ",
-              selected?.id === item.id
+              value?.id === option.id
                 ? "cursor-pointer bg-indigo-600 text-white"
-                : validOptions.find((option) => option.id === item.id)
+                : validOptions.find((option) => option.id === option.id)
                 ? "cursor-pointer hover:bg-neutral-100"
                 : "pointer-events-none cursor-default text-gray-400  line-through"
             )}
           >
-            <p>{item.value}</p>
+            <p>{option.value}</p>
           </div>
         ))}
       </div>
+
+      <InputErrorMessage>{errorMessage}</InputErrorMessage>
     </div>
   );
 }
