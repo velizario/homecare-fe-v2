@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { orderState } from "../../../store/orderState";
 import TabsMenu from "../../../utilityComponents/TabsMenu";
-import OrderDetails from "./orderDetails/OrderDetails";
+import OrderDetailsNew from "./orderDetails/OrderDetailsNew";
 import OrderlistGrid from "./orderlist/OrderlistGrid";
 import OrderSchedule from "./orderschedule/OrderSchedule";
 
@@ -22,7 +22,7 @@ export default function Orders() {
         <Route path="/" element={<OrderSchedule />} />
         <Route path="schedule" element={<OrderSchedule />} />
         <Route path="list" element={<OrderlistGrid />} />
-        <Route path=":orderId" element={<OrderDetails />} />
+        <Route path=":orderId" element={<OrderDetailsNew />} />
       </Routes>
     </div>
   );

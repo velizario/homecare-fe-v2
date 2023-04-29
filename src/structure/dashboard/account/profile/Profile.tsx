@@ -7,16 +7,16 @@ import { fetchDistrictNames } from "../../../../model/essentialsModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import { userState } from "../../../../store/userState";
 import { ProfileInputForm } from "../../../../types/types";
+import ComboMultipleSelect from "../../../../utilityComponents/ComboMultipleSelect";
+import ComboMultiSelect from "../../../../utilityComponents/ComboMultiSelect";
+import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import CustomButton from "../../../../utilityComponents/CustomButton";
 import InputField from "../../../../utilityComponents/InputField";
 import { toasted } from "../../../../utilityComponents/Toast";
-import ComboMultipleSelect from "../../../../utilityComponents/ComboMultipleSelect";
 import ProfileAbout from "./ProfileAbout";
 import ProfilePhoto from "./ProfilePhoto";
-import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
-import DropdownMultiSelect from "../../../../utilityComponents/DropdownMultiSelect";
 
-const profileInputValues = {
+const formTemplate = {
   firstName: { className: "sm:col-span-3", name: "firstName", id: "first-name", label: "Име*", autoComplete: "given-name" },
   lastName: { className: "sm:col-span-3", name: "lastName", id: "last-name", label: "Фамилия*", autoComplete: "family-name" },
   district: { className: "sm:col-span-3", name: "district", id: "district", label: "Квартал/Район", autoComplete: "country-name" },
@@ -55,6 +55,7 @@ let ValidationSchema = z.object({
 export default function Profile() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const isVendor = Boolean(userData.vendorId);
+  //TODO: I'm flattening the form here, but unflattening on the BE, so acting on two places. Is this well managed?
   const formDefaultValues = { ...userData, ...userData.client, ...userData.vendor };
   const districts = essentialsStore((store) => store.districtNames);
 
@@ -62,7 +63,6 @@ export default function Profile() {
     control,
     register,
     handleSubmit,
-    reset,
     setValue,
     watch,
     formState: { errors },
@@ -72,8 +72,8 @@ export default function Profile() {
     values: formDefaultValues,
   });
 
-  const submitFormHandler = async (vendorData: ProfileInputForm) => {
-    const editedUser = await updateUserData(vendorData);
+  const submitFormHandler = async (userData: ProfileInputForm) => {
+    const editedUser = await updateUserData(userData);
     if (!editedUser.hasOwnProperty("id")) {
       console.log("Apperror in Profile.tsx - could not update Profile. Possibly DB constraints not met.");
       return;
@@ -98,22 +98,22 @@ export default function Profile() {
           <p className="text-sm text-gray-500">Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.</p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <ProfilePhoto />
-            <InputField {...profileInputValues.firstName} register={register} errors={errors} />
-            <InputField {...profileInputValues.lastName} register={register} errors={errors} />
-            {isVendor && <InputField {...profileInputValues.companyName} register={register} errors={errors} />}
-            <InputField {...profileInputValues.phone} register={register} errors={errors} />
-            {!isVendor && <InputField {...profileInputValues.city} register={register} errors={errors} />}
-            {isVendor && <InputField {...profileInputValues.city} register={register} errors={errors} />}
+            <InputField {...formTemplate.firstName} register={register} errors={errors} />
+            <InputField {...formTemplate.lastName} register={register} errors={errors} />
+            {isVendor && <InputField {...formTemplate.companyName} register={register} errors={errors} />}
+            <InputField {...formTemplate.phone} register={register} errors={errors} />
+            {!isVendor && <InputField {...formTemplate.city} register={register} errors={errors} />}
+            {isVendor && <InputField {...formTemplate.city} register={register} errors={errors} />}
             {!isVendor && (
-              <ComboSingleSelect options={districts} {...profileInputValues.district} control={control}  />
+              <ComboSingleSelect  {...formTemplate.district} control={control} options={districts}  />
             )}
-            {isVendor && <DropdownMultiSelect {...profileInputValues.servedDistrict} options={districts} control={control}  />}
-            {!isVendor && <InputField {...profileInputValues.address} register={register} errors={errors} />}
+            {!isVendor && <InputField {...formTemplate.address} register={register} errors={errors} />}
             {isVendor && <ProfileAbout {...register("about")} defaultValue={userData.vendor.about} control={control} />}
-            {isVendor && <ComboMultipleSelect {...profileInputValues.servedDistrict} defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
-            {isVendor && <InputField {...profileInputValues.facebook} register={register} errors={errors} />}
-            {isVendor && <InputField {...profileInputValues.instagram} register={register} errors={errors} />}
-            {isVendor && <InputField {...profileInputValues.website} register={register} errors={errors} />}
+            {isVendor && <ComboMultipleSelect {...formTemplate.servedDistrict} defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
+            {isVendor && <ComboMultiSelect {...formTemplate.servedDistrict} control={control} options={districts}  />}
+            {isVendor && <InputField {...formTemplate.facebook} register={register} errors={errors} />}
+            {isVendor && <InputField {...formTemplate.instagram} register={register} errors={errors} />}
+            {isVendor && <InputField {...formTemplate.website} register={register} errors={errors} />}
           </div>
           <div className="flex justify-end gap-4 pt-8">
             <CustomButton type="submit" category="primary">

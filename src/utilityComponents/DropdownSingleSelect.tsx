@@ -11,18 +11,18 @@ interface TDropdownSingleSelect<T extends FieldValues> {
   name: string;
   label: string;
   control: Control<T, any>;
-  className: string;
   options: SelectionOption[];
+  className?: string;
   validOptions?: SelectionOption[];
   disabled?: boolean;
 }
 
 export default function DropdownSingleSelect<K extends FieldValues>({
   options,
-  className,
   name,
   label,
   control,
+  className,
   validOptions = options,
   disabled = false,
 }: TDropdownSingleSelect<K>) {
@@ -54,7 +54,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
   }, [open]);
 
   return (
-    <div className={classNames("relative", className)}>
+    <div className={classNames("relative", className || "")}>
       <label htmlFor={name} className="block text-sm font-normal text-gray-900">
         {label}
       </label>

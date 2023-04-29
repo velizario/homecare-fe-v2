@@ -15,20 +15,13 @@ interface TSelectionDropdown<T extends FieldValues> {
   label: string;
 }
 
-export default function ComboSingleSelect<K extends FieldValues>({
-  options,
-  label,
-  name,
-  control,
-  validOptions,
-  disabled = false,
-}: TSelectionDropdown<K>) {
+export default function ComboSingleSelect<K extends FieldValues>({ options, label, name, control, validOptions, disabled = false }: TSelectionDropdown<K>) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    console.log(query)
-  }, [query])
+    console.log(query);
+  }, [query]);
 
   const {
     field: { value, onChange },
@@ -55,7 +48,6 @@ export default function ComboSingleSelect<K extends FieldValues>({
     if (!selectedChoice) return;
     setQuery("");
     onChange(selectedChoice.value);
-    // setValue(name as Path<K>, selectedChoice.value as PathValue<K, Path<K>>);
   }
 
   const dismissDropdown = (e: MouseEvent) => {
@@ -88,8 +80,6 @@ export default function ComboSingleSelect<K extends FieldValues>({
             const newValue = event.target.value;
             setQuery(newValue);
             onChange(newValue);
-            // setValue(name as Path<K>, newValue as PathValue<K, Path<K>>);
-            // setValue("visitFrequency" as Path<K>, { id: selectedId } as PathValue<K, Path<K>>);
           }}
           value={value || ""}
         />

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SelectionOption } from "../types/types";
 import { BACKEND_URL } from "./envVariables";
 
 export const getToken = () => {
@@ -44,6 +45,16 @@ export function sortObjArrDesc<T extends Record<any, any> & { id: number }>(obje
 export function toggleFilterSelection(selectedItem: number | string, currentSelection: (number | string)[]) {
   return currentSelection?.includes(selectedItem) ? currentSelection.filter((item) => item !== selectedItem) : [...currentSelection, selectedItem];
 }
+
+export const toggleSelectionOption = (selectedItem: SelectionOption, selection: SelectionOption[]) => {
+  const foundItemIndex = selection.findIndex((item) => item.id === selectedItem.id);
+  if (foundItemIndex < 0) return [...selection, selectedItem];
+  else {
+    const newSelection = [...selection];
+    newSelection.splice(foundItemIndex, 1);
+    return newSelection;
+  }
+};
 
 // export function hydrateFormToUser(formData: Partial<ProfileInputForm & ProfileInputForm>) {
 //   const {

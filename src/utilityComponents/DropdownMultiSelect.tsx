@@ -2,6 +2,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 import classNames from "../helpers/classNames";
+import { toggleSelectionOption } from "../helpers/helperFunctions";
 import { SelectionOption } from "../types/types";
 import InputErrorMessage from "./InputErrorMessage";
 
@@ -46,15 +47,7 @@ export default function DropdownMultiSelect<K extends FieldValues>({
 
   const selections = (value || []) as SelectionOption[];
 
-  const toggleFilterSelection = (selectedItem: SelectionOption, selection: SelectionOption[]) => {
-    const foundItemIndex = selection.findIndex((item) => item.id === selectedItem.id);
-    if (foundItemIndex < 0) return [...selection, selectedItem];
-    else {
-      const newSelection = [...selection];
-      newSelection.splice(foundItemIndex, 1);
-      return newSelection;
-    }
-  };
+
 
   const selectionIncludes = (selectedItem: SelectionOption, selection: SelectionOption[]) => {
     return selection.findIndex((item) => item.id === selectedItem.id) >= 0;
@@ -113,7 +106,7 @@ export default function DropdownMultiSelect<K extends FieldValues>({
       >
         {options.map((option) => (
           <div
-            onClick={() => (multiSelect ? onChange(toggleFilterSelection(option, selections || [])) : onChange([option]))}
+            onClick={() => (multiSelect ? onChange(toggleSelectionOption(option, selections || [])) : onChange([option]))}
             data-id={option.id}
             key={option.id}
             className={classNames(
