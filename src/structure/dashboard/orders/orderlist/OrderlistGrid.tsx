@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { ClipboardDocumentCheckIcon, HomeIcon, MapPinIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useEffect } from "react";
 import { createFullName, sortObjArrDesc } from "../../../../helpers/helperFunctions";
-import { getAllOrders } from "../../../../model/orderModel";
+import { fetchOrderState } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { userState } from "../../../../store/userState";
 import { Order } from "../../../../types/types";
@@ -14,14 +14,9 @@ export default function OrderlistGrid() {
   const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
   const [userRoles] = userState((state) => [state.userData.roles]);
 
-  const fetchOrders = async () => {
-    // const order = await getOrder("4");
-    const orders = await getAllOrders();
-    if (orders) updateOrderData(orders);
-  };
 
   useEffect(() => {
-    fetchOrders();
+    fetchOrderState();
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
 import classNames from "../../helpers/classNames";
-import { fetchServiceTypes } from "../../model/essentialsModel";
+import { fetchServiceTypeState } from "../../model/essentialsModel";
 import { essentialsStore } from "../../store/essentialsStore";
 import { EssentialDataServiceType } from "../../types/types";
 
@@ -12,7 +12,7 @@ interface SelectserviceProps<T extends FieldValues> {
 
 export default function SelectService<K extends FieldValues>({ setValue, setNextStep }: SelectserviceProps<K>) {
   useEffect(() => {
-    fetchServiceTypes();
+    fetchServiceTypeState();
   }, []);
 
   const serviceTypeChoices = essentialsStore((store) => store.serviceTypes);

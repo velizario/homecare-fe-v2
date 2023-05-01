@@ -17,11 +17,7 @@ interface TSelectionDropdown<T extends FieldValues> {
 
 export default function ComboSingleSelect<K extends FieldValues>({ options, label, name, control, validOptions, disabled = false }: TSelectionDropdown<K>) {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    console.log(query);
-  }, [query]);
+  const [query, setQuery] = useState<string | null>(null);
 
   const {
     field: { value, onChange },
@@ -32,27 +28,30 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
   });
 
   const filteredOptions =
-    query === ""
+    query === "" || query === null
       ? options
       : options.filter((option) => {
           return option.value.toLowerCase().includes(query.toLowerCase());
         });
 
   useEffect(() => {
-    if (query.length > 0 && open === false) setOpen(true);
+    if (query && query.length > 0 && open === false) setOpen(true);
   }, [filteredOptions]);
 
   function updateSelection(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     const selectedId = Number(e.currentTarget.dataset.id);
     const selectedChoice = options.find((item) => item.id === selectedId);
     if (!selectedChoice) return;
-    setQuery("");
-    onChange(selectedChoice.value);
+    setQuery(null);
+    onChange(selectedChoice);
   }
 
   const dismissDropdown = (e: MouseEvent) => {
     const clickedOutside = (e.target as HTMLElement).closest(`${`.` + name}`) == null;
-    if (clickedOutside) setOpen(false);
+    if (clickedOutside) {
+      setQuery(null);
+      setOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
         <input
           className={classNames(
             disabled
-              ? "bg-gray-50 text-gray-600"
+              ? "bg-gray-50 text-gray-600 pointer-events-none"
               : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600",
             open ? "ring-2 ring-inset ring-indigo-600" : "",
             "w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
@@ -79,15 +78,14 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
           onChange={(event) => {
             const newValue = event.target.value;
             setQuery(newValue);
-            onChange(newValue);
           }}
-          value={value || ""}
+          value={`${query ?? (value?.value || "")}`}
         />
         <button
           type="button"
           onClick={() => {
             !disabled && setOpen((isOpen) => !isOpen);
-            setQuery("");
+            setQuery(null);
           }}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >

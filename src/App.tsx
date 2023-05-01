@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { userDataRefresh } from "./model/clientModel";
-import { fetchServiceTypes } from "./model/essentialsModel";
+import { fetchServiceTypeState } from "./model/essentialsModel";
 import About from "./structure/about/About";
 import VendorCard from "./structure/cards/VendorCard";
 import VendorCardFull from "./structure/cards/VendorCardFull";

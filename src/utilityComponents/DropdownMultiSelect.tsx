@@ -1,4 +1,4 @@
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
 import classNames from "../helpers/classNames";
@@ -93,7 +93,7 @@ export default function DropdownMultiSelect<K extends FieldValues>({
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >
-          <ChevronUpDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+          <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
         </button>
       </div>
 

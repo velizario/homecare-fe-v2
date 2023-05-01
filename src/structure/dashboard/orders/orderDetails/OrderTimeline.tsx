@@ -3,7 +3,7 @@ import { format, parseJSON } from "date-fns";
 import { useState } from "react";
 
 import classNames from "../../../../helpers/classNames";
-import { createFullName, sortObjArrDesc } from "../../../../helpers/helperFunctions";
+import { createFullName, dateFormatted, sortObjArrDesc } from "../../../../helpers/helperFunctions";
 import { OrderHistory, OrderHistoryLogType } from "../../../../types/types";
 
 const eventTypes: Record<number, {updateType: string, icon: JSX.Element; style: string }> = {
@@ -61,10 +61,10 @@ export default function OrderTimeline({ orderHistory }: OrderTimelineProps) {
                       </div>
                       <div className="text-right text-xs text-gray-500 flex-wrap">
                         <time dateTime={entry.createdAt} className="whitespace-nowrap">
-                          {format(parseJSON(entry.createdAt), "dd MMM")}
+                          {dateFormatted(entry.createdAt, "dd MMM")}
                         </time>{" "}
                         <time dateTime={entry.createdAt} className="whitespace-nowrap">
-                          {format(parseJSON(entry.createdAt), "HH:mm")}
+                          {dateFormatted(entry.createdAt, "HH:mm")}
                         </time>
                       </div>
                     </div>

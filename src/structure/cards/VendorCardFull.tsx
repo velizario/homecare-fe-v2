@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import classNames from "../../helpers/classNames";
 import { BACKEND_URL } from "../../helpers/envVariables";
 import { createFullName } from "../../helpers/helperFunctions";
-import { fetchServiceTypes } from "../../model/essentialsModel";
+import { fetchServiceTypeState } from "../../model/essentialsModel";
 import { getVendor } from "../../model/vendorModel";
 import { Vendor } from "../../types/types";
 import RatingCard from "../../utilityComponents/RatingCard";

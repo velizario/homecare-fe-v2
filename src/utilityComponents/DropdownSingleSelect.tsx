@@ -1,6 +1,6 @@
-import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
-import { Control, useController, FieldErrors, FieldValues, Path, PathValue, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import { Control, FieldValues, Path, useController } from "react-hook-form";
 import classNames from "../helpers/classNames";
 import { SelectionOption } from "../types/types";
 import InputErrorMessage from "./InputErrorMessage";
@@ -36,7 +36,6 @@ export default function DropdownSingleSelect<K extends FieldValues>({
     control,
   });
 
-
   // I dont need error, but will leave it for building other components from this
   const errorMessage = error?.message?.toString();
 
@@ -46,7 +45,6 @@ export default function DropdownSingleSelect<K extends FieldValues>({
   };
 
   useEffect(() => {
-    console.log(open);
     if (open) document.addEventListener("click", dismissDropdown);
     return () => {
       document.removeEventListener("click", dismissDropdown);
@@ -64,21 +62,21 @@ export default function DropdownSingleSelect<K extends FieldValues>({
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(
             disabled
-              ? "bg-gray-50 text-gray-600"
+              ? "pointer-events-none bg-gray-50 text-gray-600"
               : open
               ? " ring-2 ring-inset ring-indigo-600"
               : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
             "w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6"
           )}
         >
-          {`${value}`}
+          {`${value?.value || value || "(избери)"}`}
         </div>
         <button
           type="button"
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >
-          <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </button>
       </div>
 
@@ -90,7 +88,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
       >
         {options.map((option) => (
           <div
-            onClick={() => onChange(option.value)}
+            onClick={() => onChange(option)}
             data-id={option.id}
             key={option.id}
             className={classNames(

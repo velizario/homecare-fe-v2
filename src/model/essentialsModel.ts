@@ -2,7 +2,7 @@ import { requestToAPI } from "../helpers/helperFunctions";
 import { essentialsStore } from "../store/essentialsStore";
 import { EssentialDataAll, EssentialDataServiceType } from "../types/types";
 
-export const fetchServiceTypes = async () => {
+export const fetchServiceTypeState = async () => {
   const res = (await requestToAPI(`essentials/getServiceTypes`, "GET")).data as EssentialDataServiceType[];
 
   // Do I want an indexed object?

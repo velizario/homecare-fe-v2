@@ -1,4 +1,5 @@
 import axios from "axios";
+import { format, parseJSON } from "date-fns";
 import { SelectionOption } from "../types/types";
 import { BACKEND_URL } from "./envVariables";
 
@@ -56,6 +57,12 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
   }
 };
 
+export const userImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "defaultImage.png"}`;
+
+export const dateFormatted = (dateString: string | Date, dateFormat : string = "dd.MM.yyyy HH:mm") => {
+  return format(parseJSON(dateString), dateFormat);
+};
+
 // export function hydrateFormToUser(formData: Partial<ProfileInputForm & ProfileInputForm>) {
 //   const {
 //     firstName,
@@ -92,6 +99,5 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
 //   phone && (hydratedUser.phone = phone)
 
 //   hydratedUser.client = hydratedClient;
-
 
 // }

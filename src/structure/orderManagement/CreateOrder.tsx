@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { fetchServiceTypes } from "../../model/essentialsModel";
+import { fetchServiceTypeState } from "../../model/essentialsModel";
 import { createOrder } from "../../model/orderModel";
 import ModalContainer from "../../utilityComponents/ModalContainer";
 import { toasted } from "../../utilityComponents/Toast";

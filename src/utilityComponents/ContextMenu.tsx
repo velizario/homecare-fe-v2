@@ -1,7 +1,7 @@
 import { Dispatch, Fragment, MouseEventHandler, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { changeOrderStatus, getAllOrders } from "../model/orderModel";
+import { changeOrderStatus, fetchOrderState } from "../model/orderModel";
 import { orderState } from "../store/orderState";
 import Modal from "./Modal";
 import { Link } from "react-router-dom";
@@ -32,8 +32,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
   const callCancelOrder = async () => {
     if (!orderAnullment) return;
     await changeOrderStatus({ orderId: orderId, newStatus: ORDER_STATUS.CANCELLED });
-    const orders = await getAllOrders();
-    if (orders) updateOrderData(orders);
+    fetchOrderState();
   };
 
   const handleCancelOrder: MouseEventHandler<HTMLAnchorElement> = async (e) => {
@@ -82,7 +81,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
                     "block cursor-pointer px-4 py-2 text-sm"
                   )}
                 >
-                  Редактиране
+                  Детайли и управление
                 </Link>
               )}
             </Menu.Item>

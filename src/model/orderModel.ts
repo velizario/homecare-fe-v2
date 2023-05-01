@@ -1,4 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
+import { orderState } from "../store/orderState";
 import { Order, OrderComment, ORDER_STATUS } from "../types/types";
 
 export const createOrder = async (vendorId: string, data: any) => {
@@ -23,9 +24,9 @@ export const changeOrderStatus = async ({orderId, newStatus} : {orderId: number,
   return resData.data as Order;
 };
 
-export const getAllOrders = async () => {
+export const fetchOrderState = async () => {
   const resData = await requestToAPI(`orders/getAllOrders`, "GET");
-  return resData.data as Order[];
+  orderState.setState({orderData : resData.data as Order[]})
 };
 
 export const addOrderComment = async (orderData: any) => {

@@ -4,7 +4,7 @@ import { FormEventHandler, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
-import { createFullName, sortObjArrAsc } from "../../../../helpers/helperFunctions";
+import { createFullName, dateFormatted, sortObjArrAsc } from "../../../../helpers/helperFunctions";
 import { OrderComment } from "../../../../types/types";
 
 type OrderCommentsProps = {
@@ -46,11 +46,7 @@ export default function OrderComments({ orderComment, addComment }: OrderComment
                 <li key={comment.id}>
                   <div className="flex space-x-3">
                     <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={`${BACKEND_URL}/users/public/${comment.user.imageUrl || "defaultImage.png"}`}
-                        alt=""
-                      />
+                      <img className="h-10 w-10 rounded-full" src={`${BACKEND_URL}/users/public/${comment.user.imageUrl || "defaultImage.png"}`} alt="" />
                     </div>
                     <div>
                       <div className="text-sm">
@@ -63,7 +59,7 @@ export default function OrderComments({ orderComment, addComment }: OrderComment
                       </div>
                       <div className="mt-2 space-x-2 text-sm">
                         <time dateTime={comment.createdAt} className="font-medium text-gray-500">
-                          {format(parseJSON(comment.createdAt), "dd.MM.yyyy HH:mm")}
+                          {dateFormatted(comment.createdAt)}
                         </time>{" "}
                         <span className="font-medium text-gray-500">&middot;</span>{" "}
                         <button type="button" className="font-medium text-gray-900">
@@ -98,10 +94,7 @@ export default function OrderComments({ orderComment, addComment }: OrderComment
                 {textareaError && <p>Попълнете полето за коментар</p>}
                 <div className="mt-3 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                   <div className="inline-flex items-start space-x-2 text-sm text-gray-500">
-                    <InformationCircleIcon
-                      className="-mr-1 h-5 w-5 flex-shrink-0 pb-0.5 text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <InformationCircleIcon className="-mr-1 h-5 w-5 flex-shrink-0 pb-0.5 text-gray-400" aria-hidden="true" />
                     <p>
                       Записки по поръчката. За чат, отиди{" "}
                       <Link to="/dashboard/chat" className="font-medium text-gray-900">
