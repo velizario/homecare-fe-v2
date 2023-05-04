@@ -99,10 +99,10 @@ export interface OrderHistory {
 
 export interface Order {
   id: number;
+  additionalInfo: string;
   additionalService?: string[];
   client: Client
   clientId: number;
-  additionalInfo: string;
   clientDayChoice: EssentialDataAll[];
   clientHourChoice: EssentialDataAll[];
   createdAt: string;

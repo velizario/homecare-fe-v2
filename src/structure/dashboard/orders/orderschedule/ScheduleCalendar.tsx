@@ -19,7 +19,7 @@ const today = new Date();
 const dateListFromWeekday = (weekDay: TWeekDay, startingDay: Date, frequency: number) => {
   const recurrenceEndDate = add(today, { days: 365 });
   const startingDate = dayToFn[weekDay](startingDay);
-  const calculateEventDays = eachDayOfInterval({ start: startingDate, end: recurrenceEndDate }, { step: frequency*7 });
+  const calculateEventDays = eachDayOfInterval({ start: startingDate, end: recurrenceEndDate }, { step: frequency * 7 });
   return calculateEventDays;
 };
 
@@ -30,7 +30,10 @@ export default function ScheduleCalendar() {
   useEffect(() => {
     // ORder should have a starting day. For now I'm using today as starting day
     if (orderData.length < 1) return;
-    const mapBookedDays = orderData.reduce((acc, order) => [...acc, ...dateListFromWeekday(order.visitDay.id as TWeekDay, today, order.visitFrequency.id)], [] as Date[]);
+    const mapBookedDays = orderData.reduce((acc, order) => {
+      if (!order.visitDay?.id) return acc;
+      return [...acc, ...dateListFromWeekday(order.visitDay.id as TWeekDay, today, order.visitFrequency.id)];
+    }, [] as Date[]);
     setEventDays(mapBookedDays);
   }, [orderData]);
 

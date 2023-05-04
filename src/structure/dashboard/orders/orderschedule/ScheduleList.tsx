@@ -87,7 +87,7 @@ const dayToFn = {
   2: nextTuesday,
   3: nextWednesday,
   4: nextThursday,
-  5: nextFriday,
+  5: nextFriday, 
   6: nextSaturday,
   7: nextSunday,
 };
@@ -101,6 +101,7 @@ const dateListFromWeekday = (weekDay: TWeekDay, start: Date, frequency: number) 
   const calculateEventDays = eachDayOfInterval({ start: startingDate, end: recurrenceEndDate }, { step: frequency * 7 });
   return calculateEventDays;
 };
+
 
 export default function ScheduleList() {
   const [dateRange] = dateRangeStore((store) => [store.dateRange]);
@@ -134,6 +135,7 @@ export default function ScheduleList() {
     if (orderData.length < 1) return;
     const mapBookedDays = orderData
       .reduce((acc, order) => {
+        if (!order.visitDay?.id) return acc;
         const orderEventsDates = dateListFromWeekday(order.visitDay.id as TWeekDay, today, order.visitFrequency.id);
         const ordersByDays = orderEventsDates.map((date) => ({ orderId: order.id, eventDate: parse(order.visitHour.value, "HH:mm", date) }));
         return [...acc, ...ordersByDays];
@@ -143,29 +145,30 @@ export default function ScheduleList() {
   }, [orderData]);
 
   // Transition on appear
-  const newspaperSpinning = [{ opacity: "0" }, {opacity: "0"}, {opacity: "0"}, { opacity: "100" }];
+  const newspaperSpinning = [{ opacity: "0" }, { opacity: "0" }, { opacity: "0" }, { opacity: "100" }];
   const newspaperTiming = {
     duration: 400,
     iterations: 1,
   };
   const newspaper = document.querySelector(".dizzy");
-   useEffect(() => {
-    newspaper?.getAnimations().map(animation => animation.cancel())
-    newspaper?.animate(newspaperSpinning, newspaperTiming)
+  useEffect(() => {
+    newspaper?.getAnimations().map((animation) => animation.cancel());
+    newspaper?.animate(newspaperSpinning, newspaperTiming);
   }, [eventsInRange.length]);
 
   // TODO: another scenario during loading time to show something like Suspense
   // When clicking on "изчисти", // When clicking on "изчисти", things are getting messy, because I'm triggering the above animation incorrectly
   return (
     <>
-       
-      {(eventsInRange.length === 0 && allEvents.length > 0)&& <div className="min-w-[30rem] px-10 py-20">Няма събития за избрания период</div>}
+      {eventsInRange.length === 0 && allEvents.length > 0 && <div className="min-w-[30rem] px-10 py-20">Няма събития за избрания период</div>}
       {eventsInRange.length > 0 && (
-        <div className={classNames("dizzy max-w-lg md:max-w-3xl lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid transition-opacity"
-        // , selectionChanged ? "opacity-0 invisible" : "opacity-100 visible"
-        )}>
+        <div
+          className={classNames(
+            "dizzy max-w-lg transition-opacity md:max-w-3xl lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
+            // , selectionChanged ? "opacity-0 invisible" : "opacity-100 visible"
+          )}
+        >
           <ol className="mt-4 flex flex-col gap-4 text-sm lg:col-span-7">
-            <Filters />
             {eventsInRange.map((event) => {
               const orderEntry = orderData.find((order) => order.id === event.orderId);
               if (!orderEntry) return <div>Ненамерена поръчка</div>;
