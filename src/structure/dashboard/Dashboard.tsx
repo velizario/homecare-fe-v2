@@ -15,7 +15,7 @@ export default function Dashboard() {
   return (
     <>
       <BreadCrumb />
-      <div className="flex max-w-7xl  bg-white">
+      <div className="flex max-w-[90rem]  bg-white">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
             <Transition.Child

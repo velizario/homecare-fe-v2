@@ -1,11 +1,20 @@
 import { Menu, Transition } from "@headlessui/react";
 import { CalendarIcon, ClockIcon, EllipsisHorizontalIcon, MapPinIcon, UserIcon } from "@heroicons/react/20/solid";
-import { add, eachDayOfInterval, endOfDay, nextFriday, nextMonday, nextSaturday, nextSunday, nextThursday, nextTuesday, nextWednesday, parse } from "date-fns";
+import {
+  addDays, nextFriday,
+  nextMonday,
+  nextSaturday,
+  nextSunday,
+  nextThursday,
+  nextTuesday,
+  nextWednesday
+} from "date-fns";
 import { Fragment, useEffect, useState } from "react";
 import classNames from "../../../../helpers/classNames";
 import { createFullName, dateFormatted, userImage } from "../../../../helpers/helperFunctions";
 import { orderState } from "../../../../store/orderState";
-import Filters from "../../../../utilityComponents/Filters";
+import { Order } from "../../../../types/types";
+import { createOrdersEvents } from "./CalendarLogic";
 import { dateRangeStore } from "./OrderSchedule";
 
 // const orderEntrys = [
@@ -87,7 +96,7 @@ const dayToFn = {
   2: nextTuesday,
   3: nextWednesday,
   4: nextThursday,
-  5: nextFriday, 
+  5: nextFriday,
   6: nextSaturday,
   7: nextSunday,
 };
@@ -95,54 +104,17 @@ const dayToFn = {
 type TWeekDay = keyof typeof dayToFn;
 const today = new Date();
 
-const dateListFromWeekday = (weekDay: TWeekDay, start: Date, frequency: number) => {
-  const recurrenceEndDate = add(today, { days: 365 });
-  const startingDate = dayToFn[weekDay](start);
-  const calculateEventDays = eachDayOfInterval({ start: startingDate, end: recurrenceEndDate }, { step: frequency * 7 });
-  return calculateEventDays;
-};
-
-
 export default function ScheduleList() {
   const [dateRange] = dateRangeStore((store) => [store.dateRange]);
   const [orderData] = orderState((state) => [state.orderData]);
-  const [allEvents, setAllEvents] = useState<{ orderId: number; eventDate: Date }[]>([]);
-  const [eventsInRange, setEventsInRange] = useState<{ orderId: number; eventDate: Date }[]>([]);
-  // const [selectionChanged, setSelectionChanged] = useState(false)
-
-  // useEffect(() => {
-  //   setSelectionChanged(true);
-  //   setTimeout(() => {
-  //     setSelectionChanged(false);
-  //   }, 200);
-  // }, [eventsInRange.length])
-
-  const filterEventsByRange = () => {
-    const filteredEvents = allEvents.filter((event) => {
-      const afterStartDate = !dateRange?.from ? true : event.eventDate.getTime() >= dateRange.from.getTime();
-      const beforeEndDate = !dateRange?.to ? true : event.eventDate.getTime() <= endOfDay(dateRange.to).getTime();
-      return afterStartDate && beforeEndDate;
-    });
-    setEventsInRange(filteredEvents);
-  };
+  const [events, setEvents] = useState<{ date: Date; order: Order }[]>([]);
 
   useEffect(() => {
-    filterEventsByRange();
-  }, [dateRange, allEvents]);
-
-  useEffect(() => {
-    // ORder should have a starting day. For now I'm using today as starting day
     if (orderData.length < 1) return;
-    const mapBookedDays = orderData
-      .reduce((acc, order) => {
-        if (!order.visitDay?.id) return acc;
-        const orderEventsDates = dateListFromWeekday(order.visitDay.id as TWeekDay, today, order.visitFrequency.id);
-        const ordersByDays = orderEventsDates.map((date) => ({ orderId: order.id, eventDate: parse(order.visitHour.value, "HH:mm", date) }));
-        return [...acc, ...ordersByDays];
-      }, [] as { orderId: number; eventDate: Date }[])
-      .sort((a, b) => a.eventDate.getTime() - b.eventDate.getTime());
-    setAllEvents(mapBookedDays);
-  }, [orderData]);
+    const range = {from: dateRange?.from || new Date(), to: dateRange?.to || addDays(new Date(), 30)}
+    const mapBookedDays = createOrdersEvents(orderData, range).sort((a, b) => a.date.getTime() - b.date.getTime());
+    setEvents(mapBookedDays);
+  }, [orderData, dateRange]);
 
   // Transition on appear
   const newspaperSpinning = [{ opacity: "0" }, { opacity: "0" }, { opacity: "0" }, { opacity: "100" }];
@@ -154,27 +126,27 @@ export default function ScheduleList() {
   useEffect(() => {
     newspaper?.getAnimations().map((animation) => animation.cancel());
     newspaper?.animate(newspaperSpinning, newspaperTiming);
-  }, [eventsInRange.length]);
+  }, [events.length]);
 
   // TODO: another scenario during loading time to show something like Suspense
   // When clicking on "изчисти", // When clicking on "изчисти", things are getting messy, because I'm triggering the above animation incorrectly
   return (
     <>
-      {eventsInRange.length === 0 && allEvents.length > 0 && <div className="min-w-[30rem] px-10 py-20">Няма събития за избрания период</div>}
-      {eventsInRange.length > 0 && (
+      {events.length === 0 && <div className="min-w-[30rem] px-10 py-20">Няма събития за избрания период</div>}
+      {events.length > 0 && (
         <div
           className={classNames(
-            "dizzy max-w-lg transition-opacity md:max-w-3xl lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
+            "dizzy min-w-[30rem] max-w-full transition-opacity lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
             // , selectionChanged ? "opacity-0 invisible" : "opacity-100 visible"
           )}
         >
           <ol className="mt-4 flex flex-col gap-4 text-sm lg:col-span-7">
-            {eventsInRange.map((event) => {
-              const orderEntry = orderData.find((order) => order.id === event.orderId);
+            {events.map((event) => {
+              const orderEntry = orderData.find((order) => order.id === event.order.id);
               if (!orderEntry) return <div>Ненамерена поръчка</div>;
               return (
                 <li
-                  key={event.eventDate.toString() + event.orderId.toString()}
+                  key={event.date.toString() + event.order.id.toString()}
                   className="relative flex items-center gap-y-10 space-x-6 rounded-xl border border-stone-200 p-8 shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.10)] hover:shadow-indigo-300 "
                 >
                   <img src={userImage(orderEntry.vendor.user.imageUrl)} alt="" className="w-28 self-stretch rounded-lg object-cover xl:w-20" />
@@ -186,13 +158,13 @@ export default function ScheduleList() {
                           <dt className="">
                             <CalendarIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
                           </dt>
-                          <dd>{dateFormatted(event.eventDate, "dd MMM")}</dd>
+                          <dd>{dateFormatted(event.date, "dd MMM")}</dd>
                         </div>
                         <div className="flex items-start space-x-1">
                           <dt className="">
                             <ClockIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
                           </dt>
-                          <dd>{dateFormatted(event.eventDate, "HH:mm")}</dd>
+                          <dd>{dateFormatted(event.date, "HH:mm")}</dd>
                         </div>
                       </div>
                       <div className="flex flex-col gap-2">

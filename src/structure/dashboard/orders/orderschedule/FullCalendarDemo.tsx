@@ -18,7 +18,7 @@ export default function FullCalendarDemo() {
   const days = createCalendarSchedule(orderData, getMonth(new Date()));
 
   return (
-    <div className="lg:flex lg:h-full lg:flex-col">
+    <div className="lg:flex lg:h-full lg:flex-col w-full">
       <header className="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
           <time dateTime="2022-01">January 2022</time>
@@ -175,8 +175,8 @@ export default function FullCalendarDemo() {
           </Menu>
         </div>
       </header>
-      <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
-        <div className="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
+      <div className="shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.1)] ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+        <div className=" grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
           <div className="bg-white py-2">
             M<span className="sr-only sm:not-sr-only">on</span>
           </div>
@@ -202,7 +202,7 @@ export default function FullCalendarDemo() {
         <div className="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
           <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
             {days.map((day) => (
-              <div key={day.date} className={classNames(day.isCurrentMonth ? "bg-white" : "bg-gray-50 text-gray-500", "relative min-h-[6rem] pr-1.5 pt-1")}>
+              <div key={day.date} className={classNames(day.isCurrentMonth ? "bg-white" : "bg-gray-50 text-gray-500", "relative pr-1.5 pt-1")}>
                 <time
                   dateTime={day.date}
                   className={day.isToday ? "flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white" : "pl-2 font-medium"}
@@ -211,7 +211,7 @@ export default function FullCalendarDemo() {
                 </time>
                 {day.events.length > 0 && (
                   <ol className="mt-1 flex flex-col divide-y divide-gray-400">
-                    {day.events.slice(0, 3).map((event) => (
+                    {day.events.slice(0, 2).map((event) => (
                       <Tooltip
                         styles="text-start max-w-[25rem] px-3 py-3 bg-gradient-to-tl from-indigo-50 from-10% via-sky-50 via-40% to-emerald-50 to-90%"
                         tooltipText={
@@ -222,7 +222,7 @@ export default function FullCalendarDemo() {
                             </div>
                             <div>
                               <span>Клиент/Доставчик: </span>
-                              <span  className="font-medium text-sm">{event.name}</span>
+                              <span  className="font-medium text-sm">{event.time}</span>
                             </div>
                             <div>
                               <span>Район: </span>
@@ -246,7 +246,7 @@ export default function FullCalendarDemo() {
                           <li key={event.id}>
                             <a href={event.href} className="group flex">
                               <p className="my-auto flex-auto items-center truncate border-l-4 border-emerald-600 bg-emerald-50 py-0.5 pl-1 text-xs font-medium text-black transition-colors group-hover:border-emerald-700 group-hover:bg-emerald-100">
-                                {event.name}
+                                {event.time}
                               </p>
                               <time dateTime={event.time} className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 ">
                                 {event.time}
@@ -256,9 +256,9 @@ export default function FullCalendarDemo() {
                         </Link>
                       </Tooltip>
                     ))}
-                    {day.events.length > 3 && (
+                    {day.events.length > 2 && (
                       <Link to="#">
-                        <li className="text-gray-500">+ {day.events.length - 3} още</li>
+                        <li className="text-gray-500">+ {day.events.length - 2} още</li>
                       </Link>
                     )}
                   </ol>

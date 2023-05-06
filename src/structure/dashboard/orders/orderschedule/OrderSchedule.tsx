@@ -24,12 +24,12 @@ export default function OrderSchedule() {
 
   return (
     <>
-      <FullCalendarDemo />
-      <div className="max-w-4xl">
+      <div className="">
         <Filters />
       </div>
-      <div className="max-w-4xl gap-6 sm:flex sm:flex-row-reverse sm:justify-end">
-        <ScheduleCalendar />
+
+      <div className="gap-6 sm:flex sm:flex-row-reverse sm:justify-end">
+      <FullCalendarDemo />
         <ScheduleList />
       </div>
     </>
