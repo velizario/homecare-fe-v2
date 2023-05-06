@@ -20,7 +20,7 @@ const tiers = [
       "Планиране на графика",
     ],
     featured: true,
-    frequencyOptions: [visitFrequencySelections[0], visitFrequencySelections[1]],
+    frequencyOptions: [visitFrequencySelections[1], visitFrequencySelections[2]],
   },
   {
     id: 1,
@@ -29,7 +29,7 @@ const tiers = [
     description: "Добър вариант, ако желаи да се запознаи с работата на изпълнителя",
     features: ["Вижте как работим", "Гъвкав избор на час"],
     featured: false,
-    frequencyOptions: [visitFrequencySelections[2]],
+    frequencyOptions: [visitFrequencySelections[0]],
   },
 ];
 

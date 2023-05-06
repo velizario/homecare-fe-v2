@@ -1,92 +1,21 @@
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
+import { addDays, getMonth } from "date-fns";
 import { Fragment, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { orderState } from "../../../../store/orderState";
 import Tooltip from "../../../cards/Tooltip";
+import { createCalendarSchedule, defineCalendarRange } from "./CalendarLogic";
 import { dateRangeStore } from "./OrderSchedule";
 
-
-const days = [
-  { date: "2021-12-27", events: [] },
-  { date: "2021-12-28", events: [] },
-  { date: "2021-12-29", events: [] },
-  { date: "2021-12-30", events: [] },
-  { date: "2021-12-31", events: [] },
-  { date: "2022-01-01", isCurrentMonth: true, events: [] },
-  { date: "2022-01-02", isCurrentMonth: true, events: [] },
-  {
-    date: "2022-01-03",
-    isCurrentMonth: true,
-    events: [
-      { id: 1, name: "Design review", time: "10AM", datetime: "2022-01-03T10:00", href: "#" },
-      { id: 2, name: "Sales meeting", time: "2PM", datetime: "2022-01-03T14:00", href: "#" },
-    ],
-  },
-  { date: "2022-01-04", isCurrentMonth: true, events: [] },
-  { date: "2022-01-05", isCurrentMonth: true, events: [] },
-  { date: "2022-01-06", isCurrentMonth: true, events: [] },
-  {
-    date: "2022-01-07",
-    isCurrentMonth: true,
-    events: [{ id: 3, name: "Date night", time: "6PM", datetime: "2022-01-08T18:00", href: "#" }],
-  },
-  { date: "2022-01-08", isCurrentMonth: true, events: [] },
-  { date: "2022-01-09", isCurrentMonth: true, events: [] },
-  { date: "2022-01-10", isCurrentMonth: true, events: [] },
-  { date: "2022-01-11", isCurrentMonth: true, events: [] },
-  {
-    date: "2022-01-12",
-    isCurrentMonth: true,
-    isToday: true,
-    events: [{ id: 6, name: "Sam's birthday party", time: "2PM", datetime: "2022-01-25T14:00", href: "#" }],
-  },
-  { date: "2022-01-13", isCurrentMonth: true, events: [] },
-  { date: "2022-01-14", isCurrentMonth: true, events: [] },
-  { date: "2022-01-15", isCurrentMonth: true, events: [] },
-  { date: "2022-01-16", isCurrentMonth: true, events: [] },
-  { date: "2022-01-17", isCurrentMonth: true, events: [] },
-  { date: "2022-01-18", isCurrentMonth: true, events: [] },
-  { date: "2022-01-19", isCurrentMonth: true, events: [] },
-  { date: "2022-01-20", isCurrentMonth: true, events: [] },
-  { date: "2022-01-21", isCurrentMonth: true, events: [] },
-  {
-    date: "2022-01-22",
-    isCurrentMonth: true,
-    isSelected: true,
-    events: [
-      { id: 4, name: "Maple syrup museum", time: "3PM", datetime: "2022-01-22T15:00", href: "#" },
-      { id: 5, name: "Hockey game", time: "7PM", datetime: "2022-01-22T19:00", href: "#" },
-    ],
-  },
-  { date: "2022-01-23", isCurrentMonth: true, events: [] },
-  { date: "2022-01-24", isCurrentMonth: true, events: [] },
-  { date: "2022-01-25", isCurrentMonth: true, events: [] },
-  { date: "2022-01-26", isCurrentMonth: true, events: [] },
-  { date: "2022-01-27", isCurrentMonth: true, events: [] },
-  { date: "2022-01-28", isCurrentMonth: true, events: [] },
-  { date: "2022-01-29", isCurrentMonth: true, events: [] },
-  { date: "2022-01-30", isCurrentMonth: true, events: [] },
-  { date: "2022-01-31", isCurrentMonth: true, events: [] },
-  { date: "2022-02-01", events: [] },
-  { date: "2022-02-02", events: [] },
-  { date: "2022-02-03", events: [] },
-  {
-    date: "2022-02-04",
-    events: [{ id: 7, name: "Cinema with friends", time: "9PM", datetime: "2022-02-04T21:00", href: "#" }],
-  },
-  { date: "2022-02-05", events: [] },
-  { date: "2022-02-06", events: [] },
-];
-const selectedDay = days.find((day) => day.isSelected);
-
-
-export default function Example() {
-
+export default function FullCalendarDemo() {
   const [dateRange] = dateRangeStore((store) => [store.dateRange]);
   const [orderData] = orderState((state) => [state.orderData]);
   const [allEvents, setAllEvents] = useState<{ orderId: number; eventDate: Date }[]>([]);
   const [eventsInRange, setEventsInRange] = useState<{ orderId: number; eventDate: Date }[]>([]);
+
+  const days = createCalendarSchedule(orderData, getMonth(new Date()));
 
   return (
     <div className="lg:flex lg:h-full lg:flex-col">
@@ -273,30 +202,65 @@ export default function Example() {
         <div className="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
           <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
             {days.map((day) => (
-              <div key={day.date} className={classNames(day.isCurrentMonth ? "bg-white" : "bg-gray-50 text-gray-500", "relative px-3 py-2")}>
+              <div key={day.date} className={classNames(day.isCurrentMonth ? "bg-white" : "bg-gray-50 text-gray-500", "relative min-h-[6rem] pr-1.5 pt-1")}>
                 <time
                   dateTime={day.date}
-                  className={day.isToday ? "flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white" : undefined}
+                  className={day.isToday ? "flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white" : "pl-2 font-medium"}
                 >
-                  {day.date.split("-").pop().replace(/^0/, "")}
+                  {parseInt(day.date.slice(0, 2)).toString()}
                 </time>
                 {day.events.length > 0 && (
-                  <ol className="flex flex-col mt-2 gap-y-1">
-                    {day.events.slice(0, 2).map((event) => (
-                      <Tooltip tooltipText="Няколко детайла като час, клиент и място">
-                        <li key={event.id}>
-                          <a href={event.href} className="group flex">
-                            <p className="my-auto flex-auto items-center truncate border-l-4 border-emerald-600 bg-emerald-50 py-0.5 pl-1 text-xs font-medium text-gray-900 transition-colors group-hover:border-emerald-700 group-hover:bg-emerald-100">
-                              {event.name}
-                            </p>
-                            <time dateTime={event.datetime} className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 ">
-                              {event.time}
-                            </time>
-                          </a>
-                        </li>
+                  <ol className="mt-1 flex flex-col divide-y divide-gray-400">
+                    {day.events.slice(0, 3).map((event) => (
+                      <Tooltip
+                        styles="text-start max-w-[25rem] px-3 py-3 bg-gradient-to-tl from-indigo-50 from-10% via-sky-50 via-40% to-emerald-50 to-90%"
+                        tooltipText={
+                          <div className="gap-1 flex flex-col">
+                            <div>
+                              <span>Вид поръчка: </span>
+                              <span  className="font-medium text-sm">{event.type}</span>
+                            </div>
+                            <div>
+                              <span>Клиент/Доставчик: </span>
+                              <span  className="font-medium text-sm">{event.name}</span>
+                            </div>
+                            <div>
+                              <span>Район: </span>
+                              <span  className="font-medium text-sm">{event.location}</span>
+                            </div>
+                            <div>
+                              <span>Ден: </span>
+                              <span  className="font-medium text-sm">{event.day}</span>
+                            </div>
+                            <div>
+                              <span>Час: </span>
+                              <span  className="font-medium text-sm">{event.time}</span>
+                            </div>
+                            <div>
+                              <span>(отвори за повече)</span>
+                            </div>
+                          </div>
+                        }
+                      >
+                        <Link to={event.href}>
+                          <li key={event.id}>
+                            <a href={event.href} className="group flex">
+                              <p className="my-auto flex-auto items-center truncate border-l-4 border-emerald-600 bg-emerald-50 py-0.5 pl-1 text-xs font-medium text-black transition-colors group-hover:border-emerald-700 group-hover:bg-emerald-100">
+                                {event.name}
+                              </p>
+                              <time dateTime={event.time} className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 ">
+                                {event.time}
+                              </time>
+                            </a>
+                          </li>
+                        </Link>
                       </Tooltip>
                     ))}
-                    {day.events.length > 2 && <li className="text-gray-500">+ {day.events.length - 2} more</li>}
+                    {day.events.length > 3 && (
+                      <Link to="#">
+                        <li className="text-gray-500">+ {day.events.length - 3} още</li>
+                      </Link>
+                    )}
                   </ol>
                 )}
               </div>
@@ -323,10 +287,10 @@ export default function Example() {
                     day.isSelected && "flex h-6 w-6 items-center justify-center rounded-full",
                     day.isSelected && day.isToday && "bg-indigo-600",
                     day.isSelected && !day.isToday && "bg-gray-900",
-                    "ml-auto"
+                    "ml-auto font-medium"
                   )}
                 >
-                  {day.date.split("-").pop().replace(/^0/, "")}
+                  {parseInt(day.date.slice(0, 2)).toString()}
                 </time>
                 <span className="sr-only">{day.events.length} events</span>
                 {day.events.length > 0 && (

@@ -2,11 +2,11 @@
 // TODO can I get rid of the static data since I already get it in the requests?
 
 // if changed here, needs to be changed on the BE too
-// if changed here, revise SelectFrequency.tsx component too (frequencyOptions variables)
+// if changed here, revise in 1. SelectFrequency.tsx  - frequencyOptions variables. 2. CalendarLogic - eachDayOfInterval (step)
 export const visitFrequencySelections = [
+  { id: 0, value: "Еднократно" },
   { id: 1, value: "Седмично" },
   { id: 2, value: "Двуседмично" },
-  { id: 3, value: "Еднократно" },
 ];
 
 // if changed here, needs to be changed on the BE too

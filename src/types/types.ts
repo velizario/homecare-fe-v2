@@ -118,6 +118,8 @@ export interface Order {
   visitDay: EssentialDataAll;
   visitHour: EssentialDataAll;
   visitFrequency: EssentialDataAll;
+  startDate: string
+  endDate: string
 }
 
 

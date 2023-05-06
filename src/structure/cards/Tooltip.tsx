@@ -1,22 +1,10 @@
 import { useState } from "react";
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
-  FloatingPortal,
-} from "@floating-ui/react";
+import { useFloating, autoUpdate, offset, flip, shift, useHover, useFocus, useDismiss, useRole, useInteractions, FloatingPortal } from "@floating-ui/react";
 import classNames from "../../helpers/classNames";
 
 interface TooltipProps {
   children: React.ReactNode;
-  tooltipText: string;
+  tooltipText: string | React.ReactNode;
   styles?: string;
 }
 
@@ -40,19 +28,20 @@ export default function Tooltip({ children, tooltipText, styles }: TooltipProps)
   });
 
   // Event listeners to change the open state
-  const hover = useHover(context, { move: false });
+  const hover = useHover(context, {
+    delay: {
+      open: 400,
+      close: 50,
+    },
+    move: false,
+  });
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
   // Role props for screen readers
   const role = useRole(context, { role: "tooltip" });
 
   // Merge all the interactions into prop getters
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    focus,
-    dismiss,
-    role,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
 
   return (
     <>
@@ -62,7 +51,10 @@ export default function Tooltip({ children, tooltipText, styles }: TooltipProps)
       <FloatingPortal>
         {open && (
           <div
-            className={classNames("Tooltip max-w-[200px] justify-center text-center shadow-lg ring-1 ring-black ring-opacity-5 rounded-md px-2 py-1 border bg-white text-gray-700 text-xs", styles ?? "")}
+            className={classNames(
+              "Tooltip max-w-[200px]  justify-center rounded-md border bg-white px-2 py-1 text-center text-xs text-gray-700 shadow-lg ring-1 ring-black ring-opacity-5 ",
+              styles ?? ""
+            )}
             ref={refs.setFloating}
             style={{
               // Positioning styles
