@@ -1,10 +1,7 @@
 import {
   addDays,
   compareAsc,
-  eachDayOfInterval,
-  fromUnixTime,
-  getUnixTime,
-  isSameDay,
+  eachDayOfInterval, isSameDay,
   isSameMonth,
   max,
   nextFriday,
@@ -14,11 +11,9 @@ import {
   nextThursday,
   nextTuesday,
   nextWednesday,
-  parseJSON,
-  setMonth,
-  startOfISOWeek,
+  parseJSON, startOfISOWeek,
   startOfMonth,
-  subDays,
+  subDays
 } from "date-fns";
 import { createFullName, dateFormatted } from "../../../../helpers/helperFunctions";
 import { Order } from "../../../../types/types";
@@ -69,8 +64,7 @@ export const createOrdersEvents = (orderData: Order[], range: { from: Date; to: 
   );
 };
 
-export const defineCalendarRange = (monthId: number) => {
-  const curentMonthDate = setMonth(new Date(), monthId);
+export const defineCalendarRange = (curentMonthDate: Date) => {
   const startDayOfMonth = startOfMonth(curentMonthDate);
   // const endDayOfMonth = lastDayOfMonth(curentMonthDate);
   const calendarStartDay = startOfISOWeek(startDayOfMonth);
@@ -78,8 +72,8 @@ export const defineCalendarRange = (monthId: number) => {
   return { from: calendarStartDay, to: addDays(calendarStartDay, 41) };
 };
 
-export const createCalendarSchedule = (orderData: Order[], monthId: number) => {
-  const range = defineCalendarRange(monthId);
+export const createCalendarSchedule = (orderData: Order[], calendarDate: Date) => {
+  const range = defineCalendarRange(calendarDate);
   const dateRange = eachDayOfInterval({ start: range.from, end: range.to });
   return dateRange.map((date) => {
     const ordersEvents = createOrdersEvents(orderData, range);
@@ -94,7 +88,7 @@ export const createCalendarSchedule = (orderData: Order[], monthId: number) => {
         day: event.order.visitDay.value,
         href: `/dashboard/orders/${event.order.id}`,
       }));
-    const isCurrentMonth = isSameMonth(date, setMonth(new Date(), monthId));
+    const isCurrentMonth = isSameMonth(date, calendarDate);
     return { date: dateFormatted(date), isCurrentMonth: isCurrentMonth, isSelected: false, isToday: false, events: ordersByDate };
   });
 };

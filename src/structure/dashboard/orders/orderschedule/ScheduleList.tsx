@@ -132,11 +132,11 @@ export default function ScheduleList() {
   // When clicking on "изчисти", // When clicking on "изчисти", things are getting messy, because I'm triggering the above animation incorrectly
   return (
     <>
-      {events.length === 0 && <div className="min-w-[30rem] px-10 py-20">Няма събития за избрания период</div>}
+      {events.length === 0 && <div className="lg:min-w-fitpx-10 py-20">Няма събития за избрания период</div>}
       {events.length > 0 && (
         <div
           className={classNames(
-            "dizzy min-w-[30rem] max-w-full transition-opacity lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
+            "dizzy w-full  transition-opacity lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
             // , selectionChanged ? "opacity-0 invisible" : "opacity-100 visible"
           )}
         >
@@ -147,13 +147,13 @@ export default function ScheduleList() {
               return (
                 <li
                   key={event.date.toString() + event.order.id.toString()}
-                  className="relative flex items-center gap-y-10 space-x-6 rounded-xl border border-stone-200 p-8 shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.10)] hover:shadow-indigo-300 "
+                  className="relative flex items-center gap-y-10 rounded-xl border border-stone-200 p-8 shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.10)] hover:shadow-indigo-300 "
                 >
                   <img src={userImage(orderEntry.vendor.user.imageUrl)} alt="" className="w-28 self-stretch rounded-lg object-cover xl:w-20" />
-                  <div className="flex-auto">
-                    <h3 className="pr-10 text-base font-semibold text-gray-900 xl:pr-0">{orderEntry.serviceType.value}</h3>
-                    <dl className="mt-2 flex flex-col gap-2 font-medium text-gray-500 xl:flex-row">
-                      <div className="flex flex-col gap-2">
+                  <div className="flex-auto ml-[min(5%,2rem)] ">
+                    <h3 className="text-base font-semibold text-gray-900 xl:pr-0">{orderEntry.serviceType.value}</h3>
+                    <dl className="mt-2 flex flex-row gap-2 font-medium text-gray-500 ">
+                      <div className="flex flex-col gap-2 whitespace-nowrap">
                         <div className="flex items-start space-x-1">
                           <dt className="">
                             <CalendarIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
@@ -167,15 +167,15 @@ export default function ScheduleList() {
                           <dd>{dateFormatted(event.date, "HH:mm")}</dd>
                         </div>
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-start space-x-1 xl:mt-0 xl:ml-3.5 xl:border-l xl:border-gray-400 xl:border-opacity-50 xl:pl-3.5">
+                      <div className="flex flex-col gap-2 ">
+                        <div className="flex items-start space-x-1 xl:mt-0 ">
                           <dt className="">
                             <span className="sr-only">Person</span>
                             <UserIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
                           </dt>
                           <dd>{createFullName(orderEntry.client.user)}</dd>
                         </div>
-                        <div className="flex items-start space-x-1 xl:mt-0 xl:ml-3.5 xl:border-l xl:border-gray-400 xl:border-opacity-50 xl:pl-3.5">
+                        <div className="flex items-start space-x-1 xl:mt-0 ">
                           <dt className="">
                             <span className="sr-only">Location</span>
                             <MapPinIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
@@ -187,7 +187,7 @@ export default function ScheduleList() {
                   </div>
                   <Menu as="div" className="self-start">
                     <div>
-                      <Menu.Button className="-m-2 flex items-center rounded-full p-2 text-gray-500 hover:text-gray-600">
+                      <Menu.Button className="-mr-6 -mt-6 flex items-center rounded-full p-2 text-gray-500 hover:text-gray-600">
                         <span className="sr-only">Open options</span>
                         <EllipsisHorizontalIcon className="h-5 w-5" aria-hidden="true" />
                       </Menu.Button>

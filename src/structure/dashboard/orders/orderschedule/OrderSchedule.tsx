@@ -24,12 +24,12 @@ export default function OrderSchedule() {
 
   return (
     <>
+      <p className="mb-4 mt-4 text-sm text-gray-500 sm:col-span-6">График нещо събитията</p>
       <div className="">
         <Filters />
       </div>
-
-      <div className="gap-6 sm:flex sm:flex-row-reverse sm:justify-end">
-      <FullCalendarDemo />
+      <div className="gap-6 xl:flex xl:flex-row-reverse xl:justify-end">
+        <FullCalendarDemo />
         <ScheduleList />
       </div>
     </>

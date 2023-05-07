@@ -1,5 +1,6 @@
 import axios from "axios";
 import { format, parseJSON } from "date-fns";
+import { bg } from "date-fns/locale";
 import { SelectionOption } from "../types/types";
 import { BACKEND_URL } from "./envVariables";
 
@@ -60,7 +61,8 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
 export const userImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "defaultImage.png"}`;
 
 export const dateFormatted = (dateString: string | Date, dateFormat : string = "dd.MM.yyyy HH:mm") => {
-  return format(parseJSON(dateString), dateFormat);
+  console.log(format(parseJSON(dateString), dateFormat, {locale: bg}))
+  return format(parseJSON(dateString), dateFormat, {locale: bg});
 };
 
 // export function hydrateFormToUser(formData: Partial<ProfileInputForm & ProfileInputForm>) {
