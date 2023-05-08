@@ -1,5 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { ProfileInputForm, User, Vendor } from "../types/types";
+import { Portfolio, PortfolioInputForm, ProfileInputForm, User, Vendor } from "../types/types";
 
 // export interface Vendor {
 //     id: string;
@@ -34,3 +34,8 @@ export const updateVendorData = async (data: ProfileInputForm) => {
   // if (resData.status === 'success')
   return (await resData.data) as User;
 };
+
+export const updateVendorPortfolio = async (data: PortfolioInputForm) => {
+  const resData = await requestToAPI('vendors/updatePortfolio', "PATCH", data)
+  return (await resData.data) as Portfolio
+}

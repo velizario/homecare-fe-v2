@@ -15,18 +15,21 @@ const ProfileInputValues = {
     id: "email-address",
     label: "Имейл адрес",
     autoComplete: "email",
+    type: "email"
   },
   password: {
     className: "col-start-1 sm:col-end-7",
     name: "password",
     id: "password",
     label: "Нова парола",
+    type: "password"
   },
   passwordConfirm: {
     className: "col-start-1 sm:col-end-7",
     name: "passwordConfirm",
     id: "passwordConfirm",
     label: "Потвърди парола",
+    type: "password"
   },
 };
 
@@ -73,7 +76,7 @@ export default function Security() {
     }
 
     setUserData(editedUser);
-    toasted("Промените са записани")
+    toasted("Промените са записани");
   };
 
   useEffect(() => {
@@ -86,35 +89,21 @@ export default function Security() {
         <form onSubmit={handleSubmit(submitFormHandler)} className="max-w-3xl space-y-8 divide-y">
           <div className="flex flex-col gap-4">
             <p className="text-sm text-gray-500 sm:col-span-6">Промяна на мейл, парола и т.н.</p>
-            <InputField
-              {...ProfileInputValues.email}
-              control={control}
-              name="email"
-            />
-            <InputField
-              {...ProfileInputValues.password}
-              control={control}
-              name="password"
-              type="password"
-            />
-            <InputField
-              {...ProfileInputValues.passwordConfirm}
-              control={control}
-              name="passwordConfirm"
-              type="password"
-            />
+            <InputField {...ProfileInputValues.email} control={control} name="email" />
+            <InputField {...ProfileInputValues.password} control={control} name="password" type="password" />
+            <InputField {...ProfileInputValues.passwordConfirm} control={control} />
           </div>
 
           <div className="flex justify-end gap-4 pt-8">
             <button
               type="submit"
-              className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 "
+              className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 "
             >
               Запиши
             </button>
             <button
               type="button"
-              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 "
+              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 "
             >
               Отмени
             </button>

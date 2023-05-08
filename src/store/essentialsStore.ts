@@ -15,8 +15,8 @@ export const essentialsStore = create<EssentialsState>()(
   storeLogger(
     // persist(
       (set, get) => ({
-        serviceTypes: {} as EssentialDataAll[],
-        districtNames: {} as EssentialDataAll[],
+        serviceTypes: [] as EssentialDataAll[],
+        districtNames: [] as EssentialDataAll[],
         listServices: () => get().serviceTypes.map(service => service.value),
         listDistricts: () => get().districtNames.map(district => district.value) 
       }),

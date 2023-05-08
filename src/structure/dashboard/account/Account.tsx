@@ -10,7 +10,8 @@ import Services from "./services/Services"
 const tabs = [
   { id: 1, name: "Профил", href: "/dashboard/account/profile" },
   { id: 2, name: "Сигурност", href: "/dashboard/account/security" },
-  { id: 3, name: "Нотификации", href: "/dashboard/account/settings" },
+  { id: 3, name: "Услуги", href: "/dashboard/account/services" },
+  { id: 4, name: "Нотификации", href: "/dashboard/account/settings" },
 ];
 
 export default function Account() {

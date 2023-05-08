@@ -83,9 +83,6 @@ export default function Profile() {
     fetchDistrictNames();
   }, []);
 
-  useEffect(() => {
-    console.log(watch("district"));
-  }, [watch("district")]);
 
   return (
     <>

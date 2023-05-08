@@ -139,6 +139,16 @@ export type ProfileInputForm = {
   address: string;
 };
 
+export type Portfolio = {
+  service : EssentialDataAll;
+  price: number
+}
+
+export type PortfolioInputForm = {
+  service : EssentialDataAll;
+  price: number
+}
+
 // export const areaSizes = new Map([
 //   ["1", "0"],
 //   ["2", "20"],
