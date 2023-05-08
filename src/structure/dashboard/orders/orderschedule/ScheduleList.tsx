@@ -1,17 +1,9 @@
 import { Menu, Transition } from "@headlessui/react";
-import { CalendarIcon, ClockIcon, EllipsisHorizontalIcon, MapPinIcon, UserIcon } from "@heroicons/react/20/solid";
-import {
-  addDays, nextFriday,
-  nextMonday,
-  nextSaturday,
-  nextSunday,
-  nextThursday,
-  nextTuesday,
-  nextWednesday
-} from "date-fns";
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, EllipsisHorizontalIcon, MapPinIcon, UserIcon } from "@heroicons/react/20/solid";
+import { addDays, nextFriday, nextMonday, nextSaturday, nextSunday, nextThursday, nextTuesday, nextWednesday } from "date-fns";
 import { Fragment, useEffect, useState } from "react";
 import classNames from "../../../../helpers/classNames";
-import { createFullName, dateFormatted, userImage } from "../../../../helpers/helperFunctions";
+import { createFullName, dateFormatted, publicImage } from "../../../../helpers/helperFunctions";
 import { orderState } from "../../../../store/orderState";
 import { Order } from "../../../../types/types";
 import { createOrdersEvents } from "./CalendarLogic";
@@ -111,7 +103,7 @@ export default function ScheduleList() {
 
   useEffect(() => {
     if (orderData.length < 1) return;
-    const range = {from: dateRange?.from || new Date(), to: dateRange?.to || addDays(new Date(), 30)}
+    const range = { from: dateRange?.from || new Date(), to: dateRange?.to || addDays(new Date(), 30) };
     const mapBookedDays = createOrdersEvents(orderData, range).sort((a, b) => a.date.getTime() - b.date.getTime());
     setEvents(mapBookedDays);
   }, [orderData, dateRange]);
@@ -131,16 +123,39 @@ export default function ScheduleList() {
   // TODO: another scenario during loading time to show something like Suspense
   // When clicking on "изчисти", // When clicking on "изчисти", things are getting messy, because I'm triggering the above animation incorrectly
   return (
-    <>
-      {events.length === 0 && <div className="lg:min-w-fitpx-10 py-20">Няма събития за избрания период</div>}
+    <div className="w-full">
+      <header className="flex items-center justify-between  border-gray-200 py-4 lg:flex-none">
+        <div className=" relative ml-auto  mr-0 flex items-center rounded-md bg-white shadow-sm md:items-stretch">
+          <div className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300" aria-hidden="true" />
+          <button
+            type="button"
+            className="flex items-center justify-center rounded-l-md py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500  md:w-9 md:px-2 md:hover:bg-gray-50"
+          >
+            <span className="sr-only">Previous month</span>
+            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <button className="hidden px-3.5 text-sm font-semibold text-gray-900  hover:bg-gray-50 md:block ">
+            <p>стр. 1/2</p>
+          </button>
+          <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
+          <button
+            type="button"
+            className="flex items-center justify-center rounded-r-md py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500  md:w-9 md:px-2 md:hover:bg-gray-50"
+          >
+            <span className="sr-only">Next month</span>
+            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
+      </header>
+      {events.length === 0 && <div className="px-10 py-20 lg:min-w-fit">Няма събития за избрания период</div>}
       {events.length > 0 && (
         <div
           className={classNames(
-            "dizzy w-full  transition-opacity lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
+            "dizzy w-full transition-opacity lg:grid-cols-12 lg:gap-x-16 first-letter:lg:grid"
             // , selectionChanged ? "opacity-0 invisible" : "opacity-100 visible"
           )}
         >
-          <ol className="mt-4 flex flex-col gap-4 text-sm lg:col-span-7">
+          <ol className="flex flex-col gap-4 text-sm lg:col-span-7">
             {events.map((event) => {
               const orderEntry = orderData.find((order) => order.id === event.order.id);
               if (!orderEntry) return <div>Ненамерена поръчка</div>;
@@ -149,8 +164,8 @@ export default function ScheduleList() {
                   key={event.date.toString() + event.order.id.toString()}
                   className="relative flex items-center gap-y-10 rounded-xl border border-stone-200 p-8 shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.10)] hover:shadow-indigo-300 "
                 >
-                  <img src={userImage(orderEntry.vendor.user.imageUrl)} alt="" className="w-28 self-stretch rounded-lg object-cover xl:w-20" />
-                  <div className="flex-auto ml-[min(5%,2rem)] ">
+                  <img src={publicImage(orderEntry.vendor.user.imageUrl)} alt="" className="w-28 self-stretch rounded-lg object-cover xl:w-20" />
+                  <div className="ml-[min(5%,2rem)] flex-auto ">
                     <h3 className="text-base font-semibold text-gray-900 xl:pr-0">{orderEntry.serviceType.value}</h3>
                     <dl className="mt-2 flex flex-row gap-2 font-medium text-gray-500 ">
                       <div className="flex flex-col gap-2 whitespace-nowrap">
@@ -228,6 +243,6 @@ export default function ScheduleList() {
           </ol>
         </div>
       )}
-    </>
+    </div>
   );
 }

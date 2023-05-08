@@ -1,8 +1,9 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { userDataRefresh } from "./model/clientModel";
-import { fetchServiceTypeState } from "./model/essentialsModel";
 import About from "./structure/about/About";
 import VendorCard from "./structure/cards/VendorCard";
 import VendorCardFull from "./structure/cards/VendorCardFull";
@@ -16,8 +17,6 @@ import SignIn from "./structure/login/SignIn";
 import Register from "./structure/register/Register";
 import VendorList from "./structure/searchOrders/VendorList";
 import Toaster from "./utilityComponents/Toast";
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,8 +41,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="dashboard/*" element={<Dashboard />} />
-          <Route path="vendor-card-full/*" element={<VendorCardFull vendorId="1" />} />
-          <Route path="vendor-card/*" element={<VendorCard />} />
+          <Route path="vendor-card/:id" element={<VendorCardFull/>} />
           <Route path="vendor-list/*" element={<VendorList />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

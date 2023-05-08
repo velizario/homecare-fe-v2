@@ -10,7 +10,7 @@ import InputErrorMessage from "./InputErrorMessage";
 interface TDropdownSingleSelect<T extends FieldValues> {
   name: string;
   label: string;
-  control: Control<T, any>;
+  control: Control<T, object>;
   options: SelectionOption[];
   className?: string;
   validOptions?: SelectionOption[];

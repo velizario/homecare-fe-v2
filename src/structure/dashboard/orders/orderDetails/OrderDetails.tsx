@@ -65,8 +65,7 @@ export default function OrderDetails() {
 
   const {
     data: orderData,
-    error,
-    status: orderDataIn,
+    isSuccess,
   } = useQuery({
     queryKey: ["orders", orderId],
     queryFn: () => getOrder(orderId as string),
@@ -162,7 +161,7 @@ export default function OrderDetails() {
         leaveFrom="opacity-100 translate-x-0"
         leaveTo="opacity-0 translate-x-full"
       >
-        {orderDataIn === "success" && (
+        {isSuccess && (
           <div className="min-h-full">
             <main className="py-10">
               {/* Page header */}

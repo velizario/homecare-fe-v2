@@ -11,7 +11,7 @@ import InputErrorMessage from "./InputErrorMessage";
 interface TDropdownMultiSelect<T extends FieldValues> {
   name: string;
   label: string;
-  control: Control<T, any>;
+  control: Control<T, object>;
   className: string;
   options: SelectionOption[];
   validOptions?: SelectionOption[];

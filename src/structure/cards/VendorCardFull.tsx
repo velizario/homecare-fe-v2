@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import classNames from "../../helpers/classNames";
 import { BACKEND_URL } from "../../helpers/envVariables";
-import { createFullName } from "../../helpers/helperFunctions";
+import { createFullName, publicImage } from "../../helpers/helperFunctions";
 import { fetchServiceTypeState } from "../../model/essentialsModel";
 import { getVendor } from "../../model/vendorModel";
 import { Vendor } from "../../types/types";
@@ -14,10 +15,12 @@ import PortfolioTags from "./PortfolioTags";
 import SingleRating from "./SingleRating";
 import VendorPrices from "./VendorPrices";
 
-export default function VendorCardFull({ vendorId }: { vendorId: string }) {
+export default function VendorCardFull() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // TODO do something with this var
   // console.log(sidebarOpen);
+
+  const {id : vendorId} = useParams()
 
   const [requestActive, setRequestActive] = useState(false);
   const [vendor, setVendor] = useState<Vendor>();
@@ -29,8 +32,8 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
   const closeModal = () => setRequestActive(false);
 
   const fetchVendorData = async () => {
+    if (!vendorId) return;
     const vendorData = await getVendor(vendorId);
-    console.log(vendorData);
     setVendor(vendorData);
   };
 
@@ -40,7 +43,7 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
 
   return (
     <>
-      {vendor && (
+      {vendorId && vendor && (
         <>
           {requestActive && <CreateOrder closeModal={closeModal} vendorId={vendorId} />}
           {/* Larger screen */}
@@ -51,8 +54,8 @@ export default function VendorCardFull({ vendorId }: { vendorId: string }) {
                 <div className="flex flex-col">
                   <div className="-mt-28 flex min-h-[10rem] w-full flex-col items-center justify-center self-center sm:mt-0 sm:max-w-full sm:self-auto">
                     <img
-                      className={classNames("w-full rounded-md object-cover [aspect-ratio:_1_/_1]", !vendor.user.imageUrl ? "h-14 w-14" : "")}
-                      src={`${BACKEND_URL}/users/public/${vendor.user.imageUrl || "defaultImage.png"}`}
+                      className={classNames("rounded-md object-cover [aspect-ratio:_1_/_1]", !vendor.user.imageUrl ? "h-14 w-14" : "w-full ")}
+                      src={publicImage(vendor.user.imageUrl)}
                       alt=""
                     />
                   </div>

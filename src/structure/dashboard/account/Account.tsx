@@ -5,6 +5,7 @@ import Profile from "./profile/Profile";
 import RenderTest from "./RenderTest";
 import Security from "./security/Security";
 import AccountSettings from "./settings/AccountSettings";
+import Services from "./services/Services"
 
 const tabs = [
   { id: 1, name: "Профил", href: "/dashboard/account/profile" },
@@ -21,6 +22,7 @@ export default function Account() {
       <Routes>
         <Route path="/" element={<Profile />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="services" element={<Services />} />
         <Route path="security" element={<Security />} />
         <Route path="settings" element={<AccountSettings />} />
       </Routes>

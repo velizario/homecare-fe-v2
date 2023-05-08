@@ -9,7 +9,7 @@ import { SelectionOption } from "../types/types";
 interface TSelectionDropdown<T extends FieldValues> {
   name: string;
   disabled?: boolean;
-  control: Control<T, any>;
+  control: Control<T, object>;
   options: SelectionOption[];
   validOptions?: SelectionOption[];
   label: string;

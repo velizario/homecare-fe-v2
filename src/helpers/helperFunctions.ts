@@ -58,10 +58,9 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
   }
 };
 
-export const userImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "defaultImage.png"}`;
+export const publicImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "defaultImage.png"}`;
 
 export const dateFormatted = (dateString: string | Date, dateFormat : string = "dd.MM.yyyy HH:mm") => {
-  console.log(format(parseJSON(dateString), dateFormat, {locale: bg}))
   return format(parseJSON(dateString), dateFormat, {locale: bg});
 };
 

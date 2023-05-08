@@ -3,7 +3,6 @@ import { DateRange } from "react-day-picker";
 import create from "zustand";
 import { fetchOrderState } from "../../../../model/orderModel";
 import Filters from "../../../../utilityComponents/Filters";
-import FullCalendarDemo from "./FullCalendarDemo";
 import ScheduleCalendar from "./ScheduleCalendar";
 import ScheduleList from "./ScheduleList";
 
@@ -29,7 +28,7 @@ export default function OrderSchedule() {
         <Filters />
       </div>
       <div className="gap-6 xl:flex xl:flex-row-reverse xl:justify-end">
-        <FullCalendarDemo />
+        <ScheduleCalendar />
         <ScheduleList />
       </div>
     </>

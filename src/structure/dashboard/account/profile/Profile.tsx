@@ -7,7 +7,6 @@ import { fetchDistrictNames } from "../../../../model/essentialsModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import { userState } from "../../../../store/userState";
 import { ProfileInputForm } from "../../../../types/types";
-import ComboMultipleSelect from "../../../../utilityComponents/ComboMultipleSelect";
 import ComboMultiSelect from "../../../../utilityComponents/ComboMultiSelect";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import CustomButton from "../../../../utilityComponents/CustomButton";
@@ -28,6 +27,7 @@ const formTemplate = {
   phone: { className: "sm:col-span-3", name: "phone", id: "phone-number", label: "Телефонен номер*", autoComplete: "tel" },
   address: { className: "sm:col-span-3", name: "address", id: "address", label: "Адрес", autoComplete: "street-address" },
   city: { className: "sm:col-span-3", name: "city", id: "city", label: "Град" },
+  about: { className: "sm:col-span-6", name: "about", id: "about", label: "Няколко думи за Вас*" },
 };
 
 let ValidationSchema = z.object({
@@ -41,7 +41,7 @@ let ValidationSchema = z.object({
   facebook: z.string().optional(),
   website: z.string().optional(),
   instagram: z.string().optional(),
-  district: z.string().optional(),
+  district: z.object({ id: z.number(), value: z.string() }).optional(),
   city: z.string().optional(),
   about: z.string().optional(),
   address: z.string().optional(),
@@ -61,11 +61,8 @@ export default function Profile() {
 
   const {
     control,
-    register,
     handleSubmit,
-    setValue,
     watch,
-    formState: { errors },
   } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
     defaultValues: {},
@@ -98,22 +95,19 @@ export default function Profile() {
           <p className="text-sm text-gray-500">Информацията ще бъде използвана за да съставим вашата &quot;Визитка&quot;.</p>
           <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
             <ProfilePhoto />
-            <InputField {...formTemplate.firstName} register={register} errors={errors} />
-            <InputField {...formTemplate.lastName} register={register} errors={errors} />
-            {isVendor && <InputField {...formTemplate.companyName} register={register} errors={errors} />}
-            <InputField {...formTemplate.phone} register={register} errors={errors} />
-            {!isVendor && <InputField {...formTemplate.city} register={register} errors={errors} />}
-            {isVendor && <InputField {...formTemplate.city} register={register} errors={errors} />}
-            {!isVendor && (
-              <ComboSingleSelect  {...formTemplate.district} control={control} options={districts}  />
-            )}
-            {!isVendor && <InputField {...formTemplate.address} register={register} errors={errors} />}
-            {isVendor && <ProfileAbout {...register("about")} defaultValue={userData.vendor.about} control={control} />}
-            {isVendor && <ComboMultipleSelect {...formTemplate.servedDistrict} defaultValue={userData.vendor.servedDistrict} setValue={setValue} />}
-            {isVendor && <ComboMultiSelect {...formTemplate.servedDistrict} control={control} options={districts}  />}
-            {isVendor && <InputField {...formTemplate.facebook} register={register} errors={errors} />}
-            {isVendor && <InputField {...formTemplate.instagram} register={register} errors={errors} />}
-            {isVendor && <InputField {...formTemplate.website} register={register} errors={errors} />}
+            <InputField {...formTemplate.firstName} control={control} />
+            <InputField {...formTemplate.lastName} control={control} />
+            {isVendor && <InputField {...formTemplate.companyName} control={control} />}
+            <InputField {...formTemplate.phone} control={control} />
+            {!isVendor && <InputField {...formTemplate.city} control={control} />}
+            {isVendor && <InputField {...formTemplate.city} control={control} />}
+            {!isVendor && <ComboSingleSelect {...formTemplate.district} control={control} options={districts} />}
+            {!isVendor && <InputField {...formTemplate.address} control={control} />}
+            {isVendor && <ProfileAbout {...formTemplate.about} control={control} />}
+            {isVendor && <ComboMultiSelect {...formTemplate.servedDistrict} control={control} options={districts} />}
+            {isVendor && <InputField {...formTemplate.facebook} control={control} />}
+            {isVendor && <InputField {...formTemplate.instagram} control={control} />}
+            {isVendor && <InputField {...formTemplate.website} control={control} />}
           </div>
           <div className="flex justify-end gap-4 pt-8">
             <CustomButton type="submit" category="primary">

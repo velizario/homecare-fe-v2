@@ -1,6 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { ProfileInputForm } from "../structure/dashboard/account/profile/ProfileVendor";
-import { User, Vendor } from "../types/types";
+import { ProfileInputForm, User, Vendor } from "../types/types";
 
 // export interface Vendor {
 //     id: string;
@@ -20,8 +19,13 @@ import { User, Vendor } from "../types/types";
 // }
 
 export const getVendor = async (vendorId: string) => {
-  const res = await requestToAPI(`vendors/${vendorId}`, "GET");
+  const res = await requestToAPI(`vendors/getVendor/${vendorId}`, "GET");
   return (await res.data) as Vendor;
+};
+
+export const getVendors = async () => {
+  const res = await requestToAPI(`vendors/getVendors`, "GET");
+  return (await res.data) as Vendor[];
 };
 
 

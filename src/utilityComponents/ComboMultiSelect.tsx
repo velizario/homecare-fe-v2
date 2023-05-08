@@ -10,7 +10,7 @@ import Badge from "./Badge";
 // TODO enable mouse events - mouse up/down, enter, escape
 interface TComboMultiSelect<T extends FieldValues> {
   name: string;
-  control: Control<T, any>;
+  control: Control<T, object>;
   options: SelectionOption[];
   label: string;
   validOptions?: SelectionOption[];

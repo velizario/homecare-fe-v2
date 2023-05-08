@@ -26,8 +26,8 @@ export default function ButtonDefault({
       onClick={onClick}
       type={type}
       className={classNames(
-        "flex-grow inline-flex justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium shadow-sm",
-        disabled ? "pointer-events-none text-gray-400 ring-gray-100" : buttonStyles[category]
+        "flex-grow inline-flex justify-center rounded-md border  py-2 px-4 text-sm font-medium shadow-sm",
+        disabled ? "pointer-events-none text-gray-400 ring-gray-100 border-transparent" : buttonStyles[category]
       )}
     >
       {children}

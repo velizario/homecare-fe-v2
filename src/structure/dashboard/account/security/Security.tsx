@@ -88,22 +88,19 @@ export default function Security() {
             <p className="text-sm text-gray-500 sm:col-span-6">Промяна на мейл, парола и т.н.</p>
             <InputField
               {...ProfileInputValues.email}
-              {...register("email")}
               control={control}
-              defaultValue={userData.email}
+              name="email"
             />
             <InputField
               {...ProfileInputValues.password}
-              {...register("password")}
-              defaultValue={""}
               control={control}
+              name="password"
               type="password"
             />
             <InputField
               {...ProfileInputValues.passwordConfirm}
-              {...register("passwordConfirm")}
-              defaultValue={""}
               control={control}
+              name="passwordConfirm"
               type="password"
             />
           </div>
