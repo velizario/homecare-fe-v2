@@ -153,14 +153,12 @@ export default function Register() {
               <InputField
                 {...RegisterInputValues.password}
                 {...register("password")}
-                defaultValue={""}
                 control={control}
                 type="password"
               />
               <InputField
                 {...RegisterInputValues.passwordConfirm}
                 {...register("passwordConfirm")}
-                defaultValue={""}
                 control={control}
                 type="password"
               />

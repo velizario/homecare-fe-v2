@@ -53,8 +53,6 @@ export default function DropdownSingleSelect<K extends FieldValues>({
     };
   }, [open]);
 
-  console.log(value)
-
   return (
     <div className={classNames("relative", className || "")}>
       <label htmlFor={id} className="block text-sm font-normal text-gray-900">
@@ -99,7 +97,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
               "p-2 text-sm ",
               value?.id === option.id
                 ? "cursor-pointer bg-indigo-600 text-white"
-                : validOptions.find((option) => option.id === option.id)
+                : validOptions.find((validOption) => validOption.id === option.id)
                 ? "cursor-pointer hover:bg-neutral-100"
                 : "pointer-events-none cursor-default text-gray-400  line-through"
             )}

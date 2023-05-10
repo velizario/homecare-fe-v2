@@ -25,15 +25,13 @@ import OrderComments from "./OrderComments";
 import OrderTimeline from "./OrderTimeline";
 
 const formTemplate = {
-  visitFrequency: { name: "visitFrequency", label: "Честота" },
-  districtName: { name: "districtName", label: "Район" },
-  estateSize: { name: "estateSize", label: "Площ на имота, кв.м." },
-  visitDay: { name: "visitDay", label: "Ден на посещение" },
-  visitHour: { name: "visitHour", label: "Час на посещение" },
-  additionalInfo: { name: "additionalInfo", label: "Допълнителна информация" },
+  visitFrequency: { name: "visitFrequency", id: "visitFrequency", label: "Честота" },
+  districtName: { name: "districtName", id: "districtName", label: "Район" },
+  estateSize: { name: "estateSize", id: "estateSize", label: "Площ на имота, кв.м." },
+  visitDay: { name: "visitDay", id: "visitDay", label: "Ден на посещение" },
+  visitHour: { name: "visitHour", id: "visitHour", label: "Час на посещение" },
+  additionalInfo: { name: "additionalInfo", id: "additionalInfo", label: "Допълнителна информация" },
 };
-
-
 
 let ValidationSchema = z.object({
   visitFrequency: z.object({ id: z.number(), value: z.string() }),
@@ -63,10 +61,7 @@ export default function OrderDetails() {
     fetchDistrictNames();
   }, []);
 
-  const {
-    data: orderData,
-    isSuccess,
-  } = useQuery({
+  const { data: orderData, isSuccess } = useQuery({
     queryKey: ["orders", orderId],
     queryFn: () => getOrder(orderId as string),
   });
@@ -251,7 +246,7 @@ export default function OrderDetails() {
                         <StatusBadge label="Нова">{orderData.orderStatus.value}</StatusBadge>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-                        <dl className="grid grid-cols-1  gap-x-4 gap-y-8 sm:grid-cols-[5fr_3fr]">
+                        <dl className="sm:grid-cols-[5fr_3fr] grid  grid-cols-1 gap-x-4 gap-y-8">
                           <div className="sm:col-span-1">
                             <dt className="block text-sm font-normal text-gray-900">Услуга</dt>
                             <dd className="mt-1 text-base font-semibold text-gray-900">
@@ -298,13 +293,13 @@ export default function OrderDetails() {
                                 !editMode
                                   ? "bg-gray-50 text-gray-600"
                                   : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600",
-                                "w-full mt-1 rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
+                                "mt-1 w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
                               )}
                               placeholder={`${editMode ? "Добави коментар" : ""}`}
                             />
                           </div>
                           <div className="sm:col-span-2">
-                             <FileAttachmentsList/>
+                            <FileAttachmentsList />
                           </div>
                         </dl>
                       </div>
