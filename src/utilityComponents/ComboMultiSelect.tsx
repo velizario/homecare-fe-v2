@@ -10,6 +10,7 @@ import Badge from "./Badge";
 // TODO enable mouse events - mouse up/down, enter, escape
 interface TComboMultiSelect<T extends FieldValues> {
   name: string;
+  id: string;
   control: Control<T, object>;
   options: SelectionOption[];
   label: string;
@@ -22,6 +23,7 @@ export default function ComboMultiSelect<K extends FieldValues>({
   options,
   label,
   name,
+  id,
   control,
   validOptions = options,
   disabled = false,
@@ -52,7 +54,7 @@ export default function ComboMultiSelect<K extends FieldValues>({
   }, [filteredOptions]);
 
   const dismissDropdown = (e: MouseEvent) => {
-    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + name}`) == null;
+    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + id}`) == null;
     if (clickedOutside) {
       setQuery(null);
       setOpen(false);
@@ -72,10 +74,10 @@ export default function ComboMultiSelect<K extends FieldValues>({
 
   return (
     <div className="relative sm:col-span-3">
-      <label htmlFor={name} className="block text-sm font-normal text-gray-900">
+      <label htmlFor={id} className="block text-sm font-normal text-gray-900">
         {label}
       </label>
-      <div className={classNames(`relative mt-1  ${name}`)}>
+      <div className={classNames(`relative mt-1  ${id}`)}>
         <input
           className={classNames(
             disabled
@@ -105,7 +107,7 @@ export default function ComboMultiSelect<K extends FieldValues>({
         className={classNames(
           "z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto overscroll-contain rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none  sm:text-sm",
           open ? "absolute" : "hidden",
-          multiSelect ? name : ""
+          multiSelect ? id : ""
         )}
       >
         {filteredOptions.map((option) => (

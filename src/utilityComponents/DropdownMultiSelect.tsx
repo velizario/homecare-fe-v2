@@ -12,6 +12,7 @@ interface TDropdownMultiSelect<T extends FieldValues> {
   name: string;
   label: string;
   control: Control<T, object>;
+  id: string;
   className: string;
   options: SelectionOption[];
   validOptions?: SelectionOption[];
@@ -29,6 +30,7 @@ export default function DropdownMultiSelect<K extends FieldValues>({
   options,
   className,
   name,
+  id,
   label,
   control,
   validOptions = options,
@@ -57,7 +59,7 @@ export default function DropdownMultiSelect<K extends FieldValues>({
   const errorMessage = error?.message?.toString();
 
   const dismissDropdown = (e: MouseEvent) => {
-    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + name}`) == null;
+    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + id}`) == null;
     if (clickedOutside) setOpen(false);
   };
 
@@ -70,11 +72,11 @@ export default function DropdownMultiSelect<K extends FieldValues>({
 
   return (
     <div className={classNames("relative", className)}>
-      <label htmlFor={name} className="block text-sm font-normal text-gray-900">
+      <label htmlFor={id} className="block text-sm font-normal text-gray-900">
         {label}
       </label>
 
-      <div className={classNames("relative mt-1", name)}>
+      <div className={classNames("relative mt-1", id)}>
         <div
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(
@@ -101,7 +103,7 @@ export default function DropdownMultiSelect<K extends FieldValues>({
         className={classNames(
           "z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
           open ? "absolute" : "hidden",
-          multiSelect ? name : ""
+          multiSelect ? id : ""
         )}
       >
         {options.map((option) => (

@@ -49,11 +49,13 @@ export interface Vendor {
   companyName: string
   city: string
   about: string
+  portfolio: Portfolio[]
   website: string
   instagram: string
   facebook: string
   servedDistrict: District[]
   user: User
+
 }
 
 export interface Client {
@@ -140,7 +142,7 @@ export type ProfileInputForm = {
 };
 
 export type Portfolio = {
-  service : EssentialDataAll;
+  service : EssentialDataServiceType;
   price: number
 }
 

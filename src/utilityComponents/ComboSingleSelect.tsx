@@ -8,6 +8,7 @@ import { SelectionOption } from "../types/types";
 // TODO enable mouse events - mouse up/down, enter, escape
 interface TSelectionDropdown<T extends FieldValues> {
   name: string;
+  id: string;
   disabled?: boolean;
   control: Control<T, object>;
   options: SelectionOption[];
@@ -15,7 +16,7 @@ interface TSelectionDropdown<T extends FieldValues> {
   label: string;
 }
 
-export default function ComboSingleSelect<K extends FieldValues>({ options, label, name, control, validOptions, disabled = false }: TSelectionDropdown<K>) {
+export default function ComboSingleSelect<K extends FieldValues>({ options, label, name, id, control, validOptions, disabled = false }: TSelectionDropdown<K>) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState<string | null>(null);
 
@@ -47,7 +48,7 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
   }
 
   const dismissDropdown = (e: MouseEvent) => {
-    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + name}`) == null;
+    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + id}`) == null;
     if (clickedOutside) {
       setQuery(null);
       setOpen(false);
@@ -63,10 +64,10 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
 
   return (
     <div className="relative sm:col-span-3">
-      <label htmlFor={name} className="block text-sm font-normal text-gray-900">
+      <label htmlFor={id} className="block text-sm font-normal text-gray-900">
         {label}
       </label>
-      <div className={classNames(`relative mt-1  ${name}`)}>
+      <div className={classNames(`relative mt-1  ${id}`)}>
         <input
           className={classNames(
             disabled

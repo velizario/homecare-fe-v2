@@ -36,6 +36,7 @@ export const updateVendorData = async (data: ProfileInputForm) => {
 };
 
 export const updateVendorPortfolio = async (data: PortfolioInputForm) => {
+  console.log(data);
   const resData = await requestToAPI('vendors/updatePortfolio', "PATCH", data)
   return (await resData.data) as Portfolio
 }

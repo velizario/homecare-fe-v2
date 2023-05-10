@@ -12,6 +12,7 @@ interface TDropdownSingleSelect<T extends FieldValues> {
   label: string;
   control: Control<T, object>;
   options: SelectionOption[];
+  id: string;
   className?: string;
   validOptions?: SelectionOption[];
   disabled?: boolean;
@@ -20,6 +21,7 @@ interface TDropdownSingleSelect<T extends FieldValues> {
 export default function DropdownSingleSelect<K extends FieldValues>({
   options,
   name,
+  id,
   label,
   control,
   className,
@@ -40,7 +42,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
   const errorMessage = error?.message?.toString();
 
   const dismissDropdown = (e: MouseEvent) => {
-    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + name}`) == null;
+    const clickedOutside = (e.target as HTMLElement).closest(`${`.` + id}`) == null;
     if (clickedOutside) setOpen(false);
   };
 
@@ -51,13 +53,15 @@ export default function DropdownSingleSelect<K extends FieldValues>({
     };
   }, [open]);
 
+  console.log(value)
+
   return (
     <div className={classNames("relative", className || "")}>
-      <label htmlFor={name} className="block text-sm font-normal text-gray-900">
+      <label htmlFor={id} className="block text-sm font-normal text-gray-900">
         {label}
       </label>
 
-      <div className={classNames("relative mt-1", name)}>
+      <div className={classNames("relative mt-1", id)}>
         <div
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(
