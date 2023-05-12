@@ -115,7 +115,7 @@ export default function VendorCardFull() {
 
             <div className="order-2 col-start-1 mt-8 px-4 sm:order-2 sm:col-start-2 sm:px-0">
               <h2 className="mb-2 text-xl font-semibold tracking-tight text-gray-700">Цени</h2>
-              <VendorPrices />
+              <VendorPrices portfolio={vendor.portfolio} />
             </div>
 
             <div className="order-3 col-start-1 mt-8 px-4 sm:order-3 sm:col-start-2 sm:px-0">

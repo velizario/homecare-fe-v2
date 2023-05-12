@@ -1,5 +1,4 @@
-import { forwardRef } from "react";
-import { Control, Controller, FieldPath, FieldValues, Path, useController } from "react-hook-form";
+import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 interface ProfileAboutProps<T extends FieldValues> {
   control: Control<T, object>;
@@ -11,7 +10,6 @@ interface ProfileAboutProps<T extends FieldValues> {
 export default function ProfileAbout<K extends FieldValues>({ name, control, label, className }: ProfileAboutProps<K>) {
   const {
     field: { value, onChange },
-    fieldState: { error },
   } = useController({
     name: name as Path<K>,
     control,

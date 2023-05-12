@@ -49,7 +49,7 @@ export default function VendorCard({ vendor }: TVendorCard) {
         </div>
         {/* more info */}
         {/* prices */}
-        <VendorPrices />
+        <VendorPrices portfolio={vendor.portfolio} />
         <Link to={`/vendor-card/${vendor.id}`} className="order-last col-span-2 col-start-1 row-start-[10]">
           <div className="mt-1 flex items-center text-indigo-600">
             <p className="font-serif text-sm">Още информация и услуги</p>
