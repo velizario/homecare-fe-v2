@@ -71,7 +71,6 @@ export default function OrderDetails() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isDirty, isValid },
   } = useForm<Order>({
     resolver: zodResolver(ValidationSchema),

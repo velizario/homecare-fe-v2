@@ -62,7 +62,6 @@ export default function Profile() {
   const {
     control,
     handleSubmit,
-    watch,
   } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
     defaultValues: {},

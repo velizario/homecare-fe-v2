@@ -10,17 +10,17 @@ export const getToken = () => {
   return bearerString;
 };
 
-export const requestToAPI = async (addrPath: string, method: string, body = {}) => {
+export const requestToAPI = async (addrPath: string, method: string, body = {}, fileUpload = false) => {
   const reqObject = {
     url: `${BACKEND_URL}/${addrPath}`,
     method: method,
     // cache: "no-cache",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": fileUpload ? 'multipart/form-data' : "application/json",
       Authorization: getToken() || "",
     },
     // credentials: "include",
-    data: JSON.stringify(body),
+    data: fileUpload ? body : JSON.stringify(body),
   };
 
   try {
@@ -31,6 +31,7 @@ export const requestToAPI = async (addrPath: string, method: string, body = {}) 
     console.log(error);
   }
 };
+
 
 export const createFullName = (objectWithNames: { firstName: string; lastName: string }) => {
   return `${objectWithNames.firstName}${objectWithNames.lastName ? " " + objectWithNames.lastName : ""}`;
@@ -60,8 +61,8 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
 
 export const publicImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "defaultImage.png"}`;
 
-export const dateFormatted = (dateString: string | Date, dateFormat : string = "dd.MM.yyyy HH:mm") => {
-  return format(parseJSON(dateString), dateFormat, {locale: bg});
+export const dateFormatted = (dateString: string | Date, dateFormat: string = "dd.MM.yyyy HH:mm") => {
+  return format(parseJSON(dateString), dateFormat, { locale: bg });
 };
 
 // export function hydrateFormToUser(formData: Partial<ProfileInputForm & ProfileInputForm>) {
