@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import { userDataRefresh } from "./model/clientModel";
+import { fetchUserState } from "./model/clientModel";
 import About from "./structure/about/About";
 import VendorCard from "./structure/cards/VendorCard";
 import VendorCardFull from "./structure/cards/VendorCardFull";
@@ -24,7 +24,7 @@ function App() {
 
   // do I need to refresh user? How is data lost? Added only for development purposes
   useEffect(() => {
-    userDataRefresh();
+    fetchUserState();
   }, []);
 
   return (

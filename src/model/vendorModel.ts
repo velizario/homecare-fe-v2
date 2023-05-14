@@ -1,5 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
-import { Portfolio, PortfolioInputForm, ProfileInputForm, User, Vendor } from "../types/types";
+import { Portfolio, PortfolioImage, ProfileInputForm, User, Vendor } from "../types/types";
 
 // export interface Vendor {
 //     id: string;
@@ -35,8 +35,14 @@ export const updateVendorData = async (data: ProfileInputForm) => {
   return (await resData.data) as User;
 };
 
-export const updateVendorPortfolio = async (data: PortfolioInputForm) => {
+export const updateVendorPortfolio = async (data: Portfolio) => {
   console.log(data);
   const resData = await requestToAPI('vendors/updatePortfolio', "PATCH", data)
-  return (await resData.data) as Portfolio
+  return (await resData.data) as Portfolio[]
 }
+
+export const deletePortfolioImage = async (image: PortfolioImage) => {
+  const resData = await requestToAPI('vendors/deleteImage', "PATCH", image)
+  return (await resData.data) as Vendor
+}
+

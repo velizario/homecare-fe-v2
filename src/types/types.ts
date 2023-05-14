@@ -45,16 +45,17 @@ export interface User {
 }
 
 export interface Vendor {
-  id: number
+  about: string
   companyName: string
   city: string
-  about: string
-  portfolio: Portfolio[]
-  website: string
-  instagram: string
   facebook: string
+  id: number
+  instagram: string
+  portfolio: Portfolio[]
+  portfolioImage: PortfolioImage[]
   servedDistrict: District[]
   user: User
+  website: string
 
 }
 
@@ -146,10 +147,11 @@ export type Portfolio = {
   price: number
 }
 
-export type PortfolioInputForm = {
-  service : EssentialDataAll;
-  price: number
+export type PortfolioImage = {
+  id: number;
+  imgUrl : string;
 }
+
 
 // export const areaSizes = new Map([
 //   ["1", "0"],

@@ -6,7 +6,7 @@ import { fetchServiceTypeState } from "../../../../model/essentialsModel";
 import { updateVendorPortfolio } from "../../../../model/vendorModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import { userState } from "../../../../store/userState";
-import { Portfolio, PortfolioInputForm } from "../../../../types/types";
+import { Portfolio } from "../../../../types/types";
 import ButtonDefault from "../../../../utilityComponents/CustomButton";
 import DropdownSingleSelect from "../../../../utilityComponents/DropdownSingleSelect";
 import InputField from "../../../../utilityComponents/InputField";
@@ -83,8 +83,11 @@ export default function Services() {
         <div className="flex-1 py-4">
           <form onSubmit={handleSubmit(submitFormHandler)} className="max-w-3xl">
             <p className="text-sm text-gray-500 sm:col-span-6 ">Тук определяте цени на услугите</p>
+            <ButtonDefault category="secondary" className="mt-2 whitespace-nowrap" onClick={() => append({} as Portfolio)}>
+              Добави услуга
+            </ButtonDefault>
             {fields.map((item, index) => (
-              <div key={item.id} className="mt-6 grid grid-cols-1 sm:grid-cols-6 sm:gap-x-6">
+              <div key={item.id} className="mt-4 grid grid-cols-1 sm:grid-cols-6 sm:gap-x-6">
                 <DropdownSingleSelect {...ProfileInputValues.service} name={`services.${index}.service` as const} control={control} options={serviceTypes} />
                 <InputField {...ProfileInputValues.price} name={`services.${index}.price` as const} control={control} />
                 <ButtonDefault
@@ -96,9 +99,6 @@ export default function Services() {
                 </ButtonDefault>
               </div>
             ))}
-            <ButtonDefault category="secondary" className="mt-8 whitespace-nowrap" onClick={() => append({} as Portfolio)}>
-              Добави услуга
-            </ButtonDefault>
 
             <div className="flex justify-end gap-4 pt-8">
               <button

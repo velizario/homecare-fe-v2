@@ -47,7 +47,7 @@ export const userLogin = async (data: {}) => {
   return await handleRequest("userLogin", "POST", data);
 };
 
-export const userDataRefresh = async () => {
+export const fetchUserState = async () => {
   return await handleRequest(`userAuthenticate`, "GET");
 };
 
