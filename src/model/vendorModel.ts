@@ -43,6 +43,6 @@ export const updateVendorPortfolio = async (data: Portfolio) => {
 
 export const deletePortfolioImage = async (image: PortfolioImage) => {
   const resData = await requestToAPI('vendors/deleteImage', "PATCH", image)
-  return (await resData.data) as Vendor
+  return (await resData.data) as PortfolioImage[]
 }
 

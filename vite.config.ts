@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, mergeConfig  } from 'vite'
 import react from '@vitejs/plugin-react'
 import {} from 'tailwindcss';
 

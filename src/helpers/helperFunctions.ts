@@ -16,7 +16,7 @@ export const requestToAPI = async (addrPath: string, method: string, body = {}, 
     method: method,
     // cache: "no-cache",
     headers: {
-      "Content-Type": fileUpload ? 'multipart/form-data' : "application/json",
+      "Content-Type": fileUpload ? "multipart/form-data" : "application/json",
       Authorization: getToken() || "",
     },
     // credentials: "include",
@@ -31,7 +31,6 @@ export const requestToAPI = async (addrPath: string, method: string, body = {}, 
     console.log(error);
   }
 };
-
 
 export const createFullName = (objectWithNames: { firstName: string; lastName: string }) => {
   return `${objectWithNames.firstName}${objectWithNames.lastName ? " " + objectWithNames.lastName : ""}`;
@@ -59,9 +58,9 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
   }
 };
 
-export const publicImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "defaultImage.png"}`;
+export const publicImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "common/defaultImage.png"}`;
 
-export const publicPortfolioImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "placeholder-image.png"}`;
+export const publicPortfolioImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "common/placeholder-image.png"}`;
 
 export const dateFormatted = (dateString: string | Date, dateFormat: string = "dd.MM.yyyy HH:mm") => {
   return format(parseJSON(dateString), dateFormat, { locale: bg });

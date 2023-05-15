@@ -31,6 +31,7 @@
     "emoji-mart": "^5.4.0",
     "emoji-picker-react": "^3.6.5",
     "emoji-regex": "^10.2.1",
+    "lightgallery": "^2.7.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "nanoid": "^4.0.2",
