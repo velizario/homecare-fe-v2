@@ -5,7 +5,7 @@ import classNames from "../../helpers/classNames";
 import { createFullName, publicImage, publicPortfolioImage, sortObjArrAsc } from "../../helpers/helperFunctions";
 import { getVendor } from "../../model/vendorModel";
 import { Vendor } from "../../types/types";
-import ImageGalleryComponent from "../../utilityComponents/ImageGalleryComponent";
+import ImageGallery from "../../utilityComponents/ImageGallery";
 import RatingCard from "../../utilityComponents/RatingCard";
 import CreateOrder from "../orderManagement/CreateOrder";
 import ContactButtons from "./ContactButtons";
@@ -17,8 +17,8 @@ import VendorPortfolioImages from "./VendorPortfolioImages";
 import VendorPrices from "./VendorPrices";
 
 export default function VendorCardFull() {
-  const galleryRef = useRef<any>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+   const testRef = useRef<any>(null)
   // TODO do something with this var
   // console.log(sidebarOpen);
 
@@ -43,11 +43,11 @@ export default function VendorCardFull() {
     fetchVendorData();
   }, []);
 
+
   return (
     <>
       {vendorId && vendor && (
         <>
-          <ImageGalleryComponent galleryRef={galleryRef} images={vendor.portfolioImage} />
           {requestActive && <CreateOrder closeModal={closeModal} vendorId={vendorId} />}
           {/* Larger screen */}
           <div className="mx-auto grid max-w-5xl gap-x-3 bg-white sm:grid-cols-[1fr_2fr] sm:px-4 md:gap-x-6 lg:gap-x-9">
@@ -121,23 +121,12 @@ export default function VendorCardFull() {
               <VendorPrices portfolio={vendor.portfolio} />
             </div>
 
-            {vendor.portfolioImage.length > 0 && <VendorPortfolioImages images={vendor.portfolioImage} galleryControl={galleryRef.current as LightGallery} />}
+            <div className="order-3 col-start-1 mt-8 px-4 sm:order-2 sm:col-start-2 sm:px-0">
+              <h2 className="mb-2 text-xl font-semibold tracking-tight text-gray-700">Работа</h2>
 
-            <div className="order-2 col-start-1 mt-8 px-4 sm:order-2 sm:col-start-2 sm:px-0">
-              <h2 className="mb-2 text-xl font-semibold tracking-tight text-gray-700">Портфолио</h2>
-              <div className=" order-3 mt-4 grid w-[calc(100%-3rem)] grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-y-8">
-                {vendor.portfolioImage?.length > 0 &&
-                  sortObjArrAsc(vendor.portfolioImage).map((image, index) => (
-                    <div
-                      onClick={() => galleryRef.current.openGallery(index)}
-                      key={image.id}
-                      className="group relative inline-flex h-[10rem] w-full min-w-[10rem] flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-gray-200 shadow-[-15px_5px_10px_-5px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-2 hover:shadow-[-5px_-0px_15px_0px_rgba(39,42,181,1)]"
-                    >
-                      <img src={publicPortfolioImage(image.imgUrl)} alt={image.imgUrl} className="h-full w-full object-cover" />
-                    </div>
-                  ))}
-              </div>
             </div>
+            <ImageGallery images={vendor.portfolioImage} />
+
 
             <div className="order-4 col-start-1 mt-8 px-4 sm:order-3 sm:col-start-2 sm:px-0">
               <h2 className="mb-3 text-xl font-semibold tracking-tight text-gray-700">Статистика</h2>

@@ -13,7 +13,7 @@ import lgZoom from "lightgallery/plugins/zoom";
 import { PortfolioImage } from "../../../../types/types";
 import { useCallback, useEffect, useRef } from "react";
 import { InitDetail } from "lightgallery/lg-events";
-import ImageGalleryComponent from "../../../../utilityComponents/ImageGalleryComponent";
+import ImageGallery from "../../../../utilityComponents/ImageGallery";
 import { GalleryItem } from "lightgallery/lg-utils";
 
 export default function Portfolio() {
@@ -36,7 +36,7 @@ export default function Portfolio() {
 
   return (
     <div className="mt-4 max-w-7xl">
-      {images?.length > 0 && <ImageGalleryComponent galleryRef={galleryRef} images={images} />}
+      {images?.length > 0 && <ImageGallery galleryRef={galleryRef} images={images} />}
       <p className="text-sm text-gray-500">Тук можете да добавите снимки от работата ви (максимум 12 снимки)</p>
       <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-x-6 gap-y-8">
         <div
