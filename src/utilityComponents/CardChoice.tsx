@@ -1,5 +1,4 @@
-import { MouseEventHandler, useState } from "react";
-import { FieldPath, FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import { type SelectionOption } from "../types/types";
 
 function classNames(...classes: string[]) {

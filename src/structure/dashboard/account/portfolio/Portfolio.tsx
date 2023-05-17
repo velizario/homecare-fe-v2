@@ -24,7 +24,6 @@ export default function Portfolio() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const images = userData?.vendor?.portfolioImage;
 
-
   const submitHandler = async (image: PortfolioImage) => {
     const resData = await deletePortfolioImage(image);
     if (!resData) {
@@ -37,7 +36,7 @@ export default function Portfolio() {
 
   return (
     <div className="mt-4 max-w-7xl">
-      <ImageGalleryComponent galleryRef={galleryRef} images={images} />
+      {images?.length > 0 && <ImageGalleryComponent galleryRef={galleryRef} images={images} />}
       <p className="text-sm text-gray-500">Тук можете да добавите снимки от работата ви (максимум 12 снимки)</p>
       <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-x-6 gap-y-8">
         <div
@@ -63,23 +62,23 @@ export default function Portfolio() {
 
         {images?.length > 0 &&
           sortObjArrAsc(images).map((image, index) => (
-              <div
-                onClick={() => galleryRef.current.openGallery(index)}
-                key={image.id}
-                className="group relative inline-flex h-[10rem] w-full min-w-[12rem]  flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-gray-50 ring-1 transition-colors hover:ring-2"
+            <div
+              onClick={() => galleryRef.current.openGallery(index)}
+              key={image.id}
+              className="group relative inline-flex h-[10rem] w-full min-w-[12rem]  flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-gray-50 ring-1 transition-colors hover:ring-2"
+            >
+              <img src={publicPortfolioImage(image.imgUrl)} alt={image.imgUrl} className="h-full w-full object-cover" />
+              <button
+                className="absolute"
+                data-id={image.id}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  submitHandler(image);
+                }}
               >
-                <img  src={publicPortfolioImage(image.imgUrl)} alt={image.imgUrl} className="h-full w-full object-cover" />
-                <button
-                  className="absolute"
-                  data-id={image.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    submitHandler(image);
-                  }}
-                >
-                  <TrashIcon className="h-9 w-9 rounded-full bg-gray-100 stroke-2 p-2 text-gray-600 opacity-0 transition-all hover:bg-white hover:text-gray-800 group-hover:opacity-100" />
-                </button>
-              </div>
+                <TrashIcon className="h-9 w-9 rounded-full bg-gray-100 stroke-2 p-2 text-gray-600 opacity-0 transition-all hover:bg-white hover:text-gray-800 group-hover:opacity-100" />
+              </button>
+            </div>
           ))}
       </div>
     </div>

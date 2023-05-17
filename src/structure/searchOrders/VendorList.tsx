@@ -180,7 +180,7 @@ export default function VendorList() {
         </Transition.Root>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pt-10 pb-6">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 className="text-3xl font-semibold tracking-tight text-gray-900">Предлагащи услуги</h1>
 
             <div className="flex items-center">
@@ -241,7 +241,7 @@ export default function VendorList() {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pt-6 pb-24">
+          <section aria-labelledby="products-heading" className="pb-24 pt-6">
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>

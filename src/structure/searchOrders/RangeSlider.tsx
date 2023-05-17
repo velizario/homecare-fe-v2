@@ -1,5 +1,4 @@
 import classNames from "../../helpers/classNames";
-import { EssentialDataAllAll } from "../../types/types";
 
 interface RangeSliderProps {
     options: string[];

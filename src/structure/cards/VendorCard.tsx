@@ -26,7 +26,7 @@ export default function VendorCard({ vendor }: TVendorCard) {
         {/* base info and rating */}
         <div className="col-start-2 flex flex-col">
           <h2 className="-mt-1.5 font-serif text-lg font-medium">{createFullName(vendor.user)}</h2>
-          <p className="text-sm text-gray-400">София</p>
+          <p className="text-sm text-gray-400">{vendor.city}</p>
           <div className="mt-1 flex items-end gap-1">
             <span className="text-sm font-medium text-yellow-400">4.8</span>
             <div className="mb-0.5 flex">

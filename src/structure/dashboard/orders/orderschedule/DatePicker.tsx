@@ -12,7 +12,7 @@ const pastMonth = new Date();
 // const bookedStyle = { color: 'blue', fontWeight: "600" };
 
 interface DatePickerProps {
-  bookedDays: Date[];
+  bookedDays?: Date[];
   close?: (focusableElement?: HTMLElement | React.MutableRefObject<HTMLElement | null> | undefined) => void;
 }
 
@@ -41,7 +41,7 @@ export default function DatePicker({ bookedDays, close }: DatePickerProps) {
         defaultMonth={pastMonth}
         selected={dateRange}
         onSelect={setDateRange}
-        modifiers={{ booked: bookedDays }}
+        modifiers={{ booked: bookedDays || [] }}
         // modifiersStyles={{ booked: styles.styler }}
         modifiersClassNames={{ booked: styles.styler }}
         showOutsideDays

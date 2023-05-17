@@ -20,10 +20,10 @@ export default function ToggleInput<K extends FieldValues>({
   name,
   visible,
 }: ToggleInputProps<K>) {
-  const [activeId, setActiveId] = useState<string[]>([]);
+  const [activeId, setActiveId] = useState<number[]>([]);
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    const selectedId = e.currentTarget.dataset.id;
+    const selectedId = Number(e.currentTarget.dataset.id);
     if (!selectedId) return;
     setActiveId((current) => {
       current.includes(selectedId) ? current.filter(item => item !== selectedId) : current.push(selectedId);

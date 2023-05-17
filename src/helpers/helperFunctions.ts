@@ -44,7 +44,7 @@ export function sortObjArrDesc<T extends Record<any, any> & { id: number }>(obje
   return [...objectToSort].sort((a, b) => b.id - a.id);
 }
 
-export function toggleFilterSelection(selectedItem: number | string, currentSelection: (number | string)[]) {
+export function toggleFilterSelection(selectedItem: number , currentSelection: (number)[]) {
   return currentSelection?.includes(selectedItem) ? currentSelection.filter((item) => item !== selectedItem) : [...currentSelection, selectedItem];
 }
 

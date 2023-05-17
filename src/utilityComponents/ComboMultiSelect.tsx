@@ -140,7 +140,7 @@ export default function ComboMultiSelect<K extends FieldValues>({
         ))}
       </div>
       {multiSelect && (
-        <div className="mt-1 flex flex-wrap space-y-1 space-y-reverse leading-relaxed line-clamp-2">
+        <div className="mt-1 flex flex-wrap gap-y-2 leading-relaxed line-clamp-2">
           {selections.map((selection) => (
             <Badge key={selection.id} styles="whitespace-nowrap">
               {selection?.value}
