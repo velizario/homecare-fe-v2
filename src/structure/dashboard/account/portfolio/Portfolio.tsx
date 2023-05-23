@@ -36,7 +36,6 @@ export default function Portfolio() {
 
   return (
     <div className="mt-4 max-w-7xl">
-      {images?.length > 0 && <ImageGallery galleryRef={galleryRef} images={images} />}
       <p className="text-sm text-gray-500">Тук можете да добавите снимки от работата ви (максимум 12 снимки)</p>
       <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-x-6 gap-y-8">
         <div
@@ -56,14 +55,15 @@ export default function Portfolio() {
             name="myFile"
             onChange={setUpload}
             accept="image/*"
-            className="absolute  inset-0 cursor-pointer opacity-0 [&::file-selector-button]:hidden"
+            className="absolute inset-0 cursor-pointer opacity-0 [&::file-selector-button]:hidden"
           />
         </div>
 
         {images?.length > 0 &&
           sortObjArrAsc(images).map((image, index) => (
-            <div
-              onClick={() => galleryRef.current.openGallery(index)}
+            <a
+              href={publicPortfolioImage(image.imgUrl)}
+              target="_blank"
               key={image.id}
               className="group relative inline-flex h-[10rem] w-full min-w-[12rem]  flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-gray-50 ring-1 transition-colors hover:ring-2"
             >
@@ -78,7 +78,7 @@ export default function Portfolio() {
               >
                 <TrashIcon className="h-9 w-9 rounded-full bg-gray-100 stroke-2 p-2 text-gray-600 opacity-0 transition-all hover:bg-white hover:text-gray-800 group-hover:opacity-100" />
               </button>
-            </div>
+            </a>
           ))}
       </div>
     </div>

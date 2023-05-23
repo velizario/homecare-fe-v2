@@ -18,8 +18,8 @@ import ProfilePhoto from "./ProfilePhoto";
 const formTemplate = {
   firstName: { className: "sm:col-span-3", name: "firstName", id: "first-name", label: "Име*", autoComplete: "given-name" },
   lastName: { className: "sm:col-span-3", name: "lastName", id: "last-name", label: "Фамилия*", autoComplete: "family-name" },
-  district: { className: "sm:col-span-3", name: "district", id: "district", label: "Квартал/Район", autoComplete: "country-name" },
-  servedDistrict: { className: "sm:col-span-3", name: "servedDistrict", id: "servedDistrict", label: "Райони на покритие", autoComplete: "country-name" },
+  district: { className: "sm:col-span-3", name: "district", id: "district", label: "Квартал/Район" },
+  servedDistrict: { className: "sm:col-span-3", name: "servedDistrict", id: "servedDistrict", label: "Райони на покритие" },
   companyName: { className: "sm:col-span-6", name: "companyName", id: "company", label: "Име на фирма" },
   website: { className: "sm:col-span-3", name: "website", id: "website", label: "Уеб сайт" },
   facebook: { className: "sm:col-span-3", name: "facebook", id: "facebook", label: "Фейсбук" },
@@ -59,10 +59,7 @@ export default function Profile() {
   const formDefaultValues = { ...userData, ...userData.client, ...userData.vendor };
   const districts = essentialsStore((store) => store.districtNames);
 
-  const {
-    control,
-    handleSubmit,
-  } = useForm<ProfileInputForm>({
+  const { control, handleSubmit } = useForm<ProfileInputForm>({
     resolver: zodResolver(ValidationSchema),
     defaultValues: {},
     values: formDefaultValues,
@@ -82,7 +79,6 @@ export default function Profile() {
     fetchDistrictNames();
   }, []);
 
-
   return (
     <>
       {!userData.id || (districts.length < 1 && <div>loading</div>)}
@@ -95,8 +91,8 @@ export default function Profile() {
             <InputField {...formTemplate.lastName} control={control} />
             {isVendor && <InputField {...formTemplate.companyName} control={control} />}
             <InputField {...formTemplate.phone} control={control} />
-            {!isVendor && <InputField {...formTemplate.city} control={control} />}
-            {isVendor && <InputField {...formTemplate.city} control={control} />}
+            <InputField {...formTemplate.city} control={control} />{" "}
+
             {!isVendor && <ComboSingleSelect {...formTemplate.district} control={control} options={districts} />}
             {!isVendor && <InputField {...formTemplate.address} control={control} />}
             {isVendor && <ProfileAbout {...formTemplate.about} control={control} />}

@@ -1,8 +1,7 @@
-import { LightGallery } from "lightgallery/lightgallery";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import classNames from "../../helpers/classNames";
-import { createFullName, publicImage, publicPortfolioImage, sortObjArrAsc } from "../../helpers/helperFunctions";
+import { createFullName, publicImage } from "../../helpers/helperFunctions";
 import { getVendor } from "../../model/vendorModel";
 import { Vendor } from "../../types/types";
 import ImageGallery from "../../utilityComponents/ImageGallery";
@@ -13,12 +12,10 @@ import DetailedInfo from "./DetailedInfo";
 import Perks from "./Perks";
 import PortfolioTags from "./PortfolioTags";
 import SingleRating from "./SingleRating";
-import VendorPortfolioImages from "./VendorPortfolioImages";
 import VendorPrices from "./VendorPrices";
 
 export default function VendorCardFull() {
-   const [sidebarOpen, setSidebarOpen] = useState(false);
-   const testRef = useRef<any>(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   // TODO do something with this var
   // console.log(sidebarOpen);
 
@@ -42,7 +39,6 @@ export default function VendorCardFull() {
   useEffect(() => {
     fetchVendorData();
   }, []);
-
 
   return (
     <>
@@ -123,11 +119,10 @@ export default function VendorCardFull() {
 
             <div className="order-3 col-start-1 mt-8 px-4 sm:order-2 sm:col-start-2 sm:px-0">
               <h2 className="mb-2 text-xl font-semibold tracking-tight text-gray-700">Работа</h2>
-
             </div>
-            <ImageGallery images={vendor.portfolioImage} />
-
-
+            <div className=" order-3 mt-4 grid w-[calc(100%-3rem)] grid-cols-[repeat(auto-fill,minmax(6rem,1fr))] gap-y-8">
+              <ImageGallery images={vendor.portfolioImage} />
+            </div>
             <div className="order-4 col-start-1 mt-8 px-4 sm:order-3 sm:col-start-2 sm:px-0">
               <h2 className="mb-3 text-xl font-semibold tracking-tight text-gray-700">Статистика</h2>
             </div>

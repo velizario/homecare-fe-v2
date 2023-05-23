@@ -56,7 +56,8 @@ export interface Vendor {
   servedDistrict: District[]
   user: User
   website: string
-
+  isAdhocEnabled: boolean;
+  isSubscriptionEnabled: boolean;
 }
 
 export interface Client {

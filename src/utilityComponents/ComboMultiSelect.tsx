@@ -13,21 +13,21 @@ interface TComboMultiSelect<T extends FieldValues> {
   id: string;
   control: Control<T, object>;
   options: SelectionOption[];
-  label: string;
   validOptions?: SelectionOption[];
   disabled?: boolean;
   multiSelect?: boolean;
+  label?: string;
 }
 
 export default function ComboMultiSelect<K extends FieldValues>({
   options,
-  label,
   name,
   id,
   control,
   validOptions = options,
   disabled = false,
   multiSelect = true,
+  label,
 }: TComboMultiSelect<K>) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState<string | null>(null);

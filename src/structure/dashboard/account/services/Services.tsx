@@ -25,6 +25,8 @@ const ProfileInputValues = {
   },
 };
 
+type TServicesForm = { services: Portfolio[]; isAdhocEnabled: boolean; isSubscriptionEnabled: boolean };
+
 let ValidationSchema = z
   .object({
     services: z
@@ -33,6 +35,8 @@ let ValidationSchema = z
         price: z.string().pipe(z.coerce.number({ invalid_type_error: "Въведете цяло число за цена" }).int().min(1, { message: "Въведете цяло число за цена" })),
       })
       .array(),
+    isSubscriptionEnabled: z.boolean(),
+    isAdhocEnabled: z.boolean(),
   })
   //   add validation for repeating values in service field
   .superRefine(
@@ -52,14 +56,16 @@ export default function Services() {
   const serviceTypes = essentialsStore((store) => store.serviceTypes);
   const userData = userState((state) => state.userData);
   const services = userData?.vendor?.portfolio;
+  const { isAdhocEnabled, isSubscriptionEnabled } = userData.vendor || {};
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ services: Portfolio[] }>({
-    defaultValues: { services },
-    values: { services },
+    register,
+  } = useForm<TServicesForm>({
+    defaultValues: { services, isAdhocEnabled, isSubscriptionEnabled },
+    values: { services, isAdhocEnabled, isSubscriptionEnabled },
     resolver: zodResolver(ValidationSchema),
   });
   const { fields, append, remove } = useFieldArray({
@@ -68,6 +74,7 @@ export default function Services() {
   });
 
   const submitFormHandler = async (data: any) => {
+    console.log(data);
     console.log(data);
     const portfolio = await updateVendorPortfolio(data);
     toasted("Промените са записани");
@@ -82,7 +89,49 @@ export default function Services() {
       {serviceTypes.length > 0 && (
         <div className="flex-1 py-4">
           <form onSubmit={handleSubmit(submitFormHandler)} className="max-w-3xl">
-            <p className="text-sm text-gray-500 sm:col-span-6 ">Тук определяте цени на услугите</p>
+            <p className="text-sm text-gray-500 sm:col-span-6 ">Типове услуги, които ще предлагате:</p>
+            {/* One-time and schedule services */}
+            <div className="col-span-6 mb-2 flex border-b pb-3">
+              <div className="relative mt-2 flex items-start">
+                <div className="flex h-5 items-center">
+                  <input
+                    id="subscription"
+                    aria-describedby="subscription-description"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600"
+                    {...register("isSubscriptionEnabled")}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="subscription" className="font-medium text-gray-700">
+                    Абонаментни планове
+                  </label>
+                  <p id="subscription-description" className="text-xs text-gray-500">
+                    Договаря се регулярен график на изпълнение в ден и час от седмицата. Подходящо за услуги като домашни помощници, офис почистване...
+                  </p>
+                </div>
+              </div>
+              <div className="relative mt-2 flex items-start">
+                <div className="flex h-5 items-center">
+                  <input
+                    id="adhoc"
+                    aria-describedby="adhoc-description"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 "
+                    {...register("isAdhocEnabled")}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="adhoc" className="font-medium text-gray-700">
+                    Еднократна услуга
+                  </label>
+                  <p id="adhoc-description" className="text-xs text-gray-500">
+                    Договаря се еднократно конретен ден и час за изъплнение на услугата. Подходящо за услуги като пране на килими, миене на прозорци...
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p className="text-sm text-gray-500 sm:col-span-6">Конретни услуги и цени:</p>
             <ButtonDefault category="secondary" className="mt-2 whitespace-nowrap" onClick={() => append({} as Portfolio)}>
               Добави услуга
             </ButtonDefault>
@@ -93,7 +142,7 @@ export default function Services() {
                 <ButtonDefault
                   onClick={() => remove(index)}
                   category="secondary"
-                  className="sm:mt-1.5 m-0 w-min place-self-center border-transparent p-0 px-0 shadow-none sm:-ml-10"
+                  className="m-0 w-min place-self-center border-transparent p-0 px-0 shadow-none sm:-ml-10 sm:mt-1.5"
                 >
                   Изтрий
                 </ButtonDefault>

@@ -19,9 +19,11 @@ export const fetchServiceTypeState = async () => {
   // let serviceMap = new Map(services.map(service => [service.id, service.serviceName]));
 
   essentialsStore.setState({ serviceTypes: res });
+  return res;
 };
 
 export const fetchDistrictNames = async () => {
   const res = (await requestToAPI('essentials/getDistrictNames', "GET")).data as EssentialDataAll[]
   essentialsStore.setState({districtNames: res})
+  return res;
 }
