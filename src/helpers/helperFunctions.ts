@@ -11,6 +11,9 @@ export const getToken = () => {
 };
 
 export const requestToAPI = async (addrPath: string, method: string, body = {}, fileUpload = false) => {
+
+  const data = fileUpload ? body : JSON.stringify(body)
+
   const reqObject = {
     url: `${BACKEND_URL}/${addrPath}`,
     method: method,
@@ -20,7 +23,7 @@ export const requestToAPI = async (addrPath: string, method: string, body = {}, 
       Authorization: getToken() || "",
     },
     // credentials: "include",
-    data: fileUpload ? body : JSON.stringify(body),
+    data,
   };
 
   try {

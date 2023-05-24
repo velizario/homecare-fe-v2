@@ -38,7 +38,7 @@ export default function VendorFilters<K extends FieldValues>({ id, label, option
                       type="checkbox"
                       defaultChecked={option.checked}
                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                      onChange={(e) => setValue(option.name as Path<K>, e.target.checked as PathValue<K, Path<K>>)}
+                      onChange={(e) => setValue(option.name as Path<K>, (e.target.checked || null) as PathValue<K, Path<K>>)}
                     />
                     <label htmlFor={`filter-${id}-${optionIdx}`} className="ml-3 text-sm text-gray-600">
                       {option.label}

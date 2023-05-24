@@ -6,6 +6,8 @@ import classNames from "../../../../helpers/classNames";
 import { createFullName, dateFormatted, publicImage } from "../../../../helpers/helperFunctions";
 import { orderState } from "../../../../store/orderState";
 import { Order } from "../../../../types/types";
+import ButtonDefault from "../../../../utilityComponents/CustomButton";
+import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { createOrdersEvents } from "./CalendarLogic";
 import { dateRangeStore } from "./OrderSchedule";
 
@@ -162,27 +164,30 @@ export default function ScheduleList() {
               return (
                 <li
                   key={event.date.toString() + event.order.id.toString()}
-                  className="relative flex items-center gap-y-10 rounded-xl border border-stone-200 p-8 shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.10)] hover:shadow-indigo-300 "
+                  className="relative items-center gap-y-10 rounded-xl border border-stone-200 p-8 shadow-[0px_5px_35px_-15px_rgba(0,0,0,0.10)] hover:shadow-indigo-300 "
                 >
-                  <img src={publicImage(orderEntry.vendor.user.imageUrl)} alt="" className="w-28 self-stretch rounded-lg object-cover xl:w-20" />
-                  <div className="ml-[min(5%,2rem)] flex-auto ">
-                    <h3 className="text-base font-semibold text-gray-900 xl:pr-0">{orderEntry.serviceType.value}</h3>
-                    <dl className="mt-2 flex flex-row gap-2 font-medium text-gray-500 ">
-                      <div className="flex flex-col gap-2 whitespace-nowrap">
-                        <div className="flex items-start space-x-1">
-                          <dt className="">
-                            <CalendarIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
-                          </dt>
-                          <dd>{dateFormatted(event.date, "dd MMM")}</dd>
-                        </div>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-lg font-normal text-gray-900 xl:pr-0">{orderEntry.serviceType.value}</h3>
+                      <div className="flex items-center space-x-1">
+                        <dt className="">
+                          <CalendarIcon className="h-4 w-4 text-indigo-500" aria-hidden="true" />
+                        </dt>
+                        <dd className="text-lg font-semibold text-gray-900">{dateFormatted(event.date, "dd MMM")}</dd>
+                      </div>
+                    </div>
+                    <StatusBadge label="Завършена"></StatusBadge>
+                  </div>
+                  <div className="flex items-center justify-between ">
+                    <img src={publicImage(orderEntry.vendor.user.imageUrl)} alt="" className="mt-4 h-28 w-28 self-stretch rounded-lg object-cover" />
+                    <div className="ml-[min(5%,2rem)] flex-auto ">
+                      <dl className="space-y-2 font-normal text-gray-900 ">
                         <div className="flex items-start space-x-1">
                           <dt className="">
                             <ClockIcon className="mt-0.5 h-4 w-4 text-indigo-500" aria-hidden="true" />
                           </dt>
                           <dd>{dateFormatted(event.date, "HH:mm")}</dd>
                         </div>
-                      </div>
-                      <div className="flex flex-col gap-2 ">
                         <div className="flex items-start space-x-1 xl:mt-0 ">
                           <dt className="">
                             <span className="sr-only">Person</span>
@@ -197,8 +202,16 @@ export default function ScheduleList() {
                           </dt>
                           <dd>{orderEntry.districtName.value}</dd>
                         </div>
-                      </div>
-                    </dl>
+                      </dl>
+                    </div>
+                    <div className="w-fit space-y-2">
+                      <ButtonDefault category="primary" className="w-full" size="small">
+                        Оцени
+                      </ButtonDefault>
+                      <ButtonDefault category="secondary" className="w-full" size="small">
+                        Отвори поръчката
+                      </ButtonDefault>
+                    </div>
                   </div>
                   <Menu as="div" className="self-start">
                     <div>

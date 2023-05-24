@@ -1,4 +1,5 @@
 import { requestToAPI } from "../helpers/helperFunctions";
+import { TVendorFilterSet } from "../structure/searchOrders/VendorList";
 import { Portfolio, PortfolioImage, ProfileInputForm, User, Vendor } from "../types/types";
 
 // export interface Vendor {
@@ -25,6 +26,12 @@ export const getVendor = async (vendorId: string) => {
 
 export const getVendors = async () => {
   const res = await requestToAPI(`vendors/getVendors`, "GET");
+  return (await res.data) as Vendor[];
+};
+
+export const findVendors = async (data?: TVendorFilterSet) => {
+  if (!data) return getVendors()
+  const res = await requestToAPI(`vendors/findVendors`, "POST", data);
   return (await res.data) as Vendor[];
 };
 

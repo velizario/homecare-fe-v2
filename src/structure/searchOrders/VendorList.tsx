@@ -8,18 +8,19 @@ import VendorCard from "../cards/VendorCard";
 // Видове услуги
 // Име (търсене)
 
-import { Fragment, useEffect, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import { Dialog, Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getVendors } from "../../model/vendorModel";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Fragment, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { fetchDistrictNames, fetchServiceTypeState } from "../../model/essentialsModel";
+import { findVendors } from "../../model/vendorModel";
+import { SelectionOption } from "../../types/types";
+import ComboMultiSelect from "../../utilityComponents/ComboMultiSelect";
 import VendorCategories from "./VendorCategories";
 import VendorFilters from "./VendorFilters";
-import ComboMultiSelect from "../../utilityComponents/ComboMultiSelect";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import debounce from "lodash.debounce";
 
 const sortOptions = [
   { value: "Most Popular", href: "#", current: true },
@@ -29,7 +30,14 @@ const sortOptions = [
   { value: "Price: High to Low", href: "#", current: false },
 ];
 
-type filterOptions = {
+export type TVendorFilterSet = {
+  isAdhocEnabled: boolean | null;
+  isSubscriptionEnabled: Boolean | null;
+  servedDistrict: SelectionOption[];
+  portfolio: SelectionOption[];
+};
+
+type TFilterOptions = {
   id: string;
   label: string;
   options: {
@@ -40,12 +48,12 @@ type filterOptions = {
   }[];
 };
 
-const filters: filterOptions = {
+const filters: TFilterOptions = {
   id: "visitType",
   label: "Тип посещение",
   options: [
-    { name: "Adhoc", value: "true", label: "Еднократно", checked: false },
-    { name: "Subscription", value: "true", label: "Абонамент", checked: false },
+    { name: "isAdhocEnabled", value: "true", label: "Еднократно", checked: false },
+    { name: "isSubscriptionEnabled", value: "true", label: "Абонамент", checked: false },
   ],
 };
 
@@ -56,11 +64,10 @@ function classNames(...classes: string[]) {
 export default function VendorList() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const queryClient = useQueryClient();
-
   const { data: vendorData, isSuccess: vendorDataAvailable } = useQuery({
     queryKey: ["vendors"],
-    queryFn: () => getVendors(),
+    queryFn: () => findVendors(),
+    staleTime: Infinity,
   });
 
   const { data: serviceCategories, isSuccess: serviceCategoriesAvailable } = useQuery({
@@ -73,26 +80,44 @@ export default function VendorList() {
     queryFn: () => fetchDistrictNames(),
   });
 
+  const handleFilterUpdate = async (filterData: TVendorFilterSet) => {
+    return await findVendors(filterData);
+  };
 
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    register,
-    watch,
-    formState: { isDirty },
-  } = useForm({
+  const queryClient = useQueryClient();
+
+  const vendorListMutation = useMutation({
+    mutationFn: handleFilterUpdate,
+    onSuccess: (newData) => {
+      queryClient.setQueryData(["vendors"], newData);
+      // queryClient.invalidateQueries(["vendors"], { exact: true });
+    },
+  });
+
+  const { control, setValue, watch } = useForm<TVendorFilterSet>({
     // resolver: zodResolver(ValidationSchema),
-    defaultValues: {},
+    defaultValues: {
+      isAdhocEnabled: null,
+      isSubscriptionEnabled: null,
+      servedDistrict: [],
+      portfolio: [],
+    },
     // values: formDefaultValues,
   });
 
+  let filterTimeout : NodeJS.Timeout;
+
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => console.log(value));
+    const subscription = watch((data) => {
+      clearTimeout(filterTimeout);
+      filterTimeout = setTimeout(() => {
+        vendorListMutation.mutate(data as TVendorFilterSet);
+      }, 200);
+    });
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  return (
+  return ( 
     <div className="bg-white">
       <div>
         {/* Mobile filter dialog */}
@@ -127,7 +152,7 @@ export default function VendorList() {
                   <form onBlur={(d) => console.log(d)} onChange={(d) => console.log(d)} className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
                     <div className="px-2 py-3 font-medium text-gray-900">
-                      {serviceCategoriesAvailable && <VendorCategories categories={serviceCategories} />}
+                      {serviceCategoriesAvailable && <VendorCategories categories={serviceCategories} name="portfolio" setValue={setValue} />}
                       <VendorFilters {...filters} setValue={setValue} />
                       {districtNamesAvailable && (
                         <div className="mt-6">
@@ -214,8 +239,8 @@ export default function VendorList() {
               {/* Filters desktop*/}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                {serviceCategoriesAvailable && <VendorCategories categories={serviceCategories} />}
-                <VendorFilters {...filters}  setValue={setValue}/>
+                {serviceCategoriesAvailable && <VendorCategories categories={serviceCategories} name="portfolio" setValue={setValue} />}
+                <VendorFilters {...filters} setValue={setValue} />
                 {districtNamesAvailable && (
                   <div className="mt-6">
                     <p className="mb-2 text-xs font-normal uppercase text-gray-900">Район</p>

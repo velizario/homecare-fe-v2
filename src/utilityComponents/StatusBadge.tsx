@@ -5,19 +5,19 @@ import classNames from "../helpers/classNames";
 import Tooltip from "../structure/cards/Tooltip";
 
 interface StatusBadgeProps {
-  children: React.ReactNode;
+  label: string;
+  children?: React.ReactNode;
   xMark?: boolean;
   onClick?: MouseEventHandler<HTMLSpanElement> | undefined;
-  label: string;
 }
 
 const statusStyles = new Map([
-  ["Нова", "text-violet-400 bg-white ring-violet-400"],
-  ["Оферта", "text-sky-400 bg-white ring-sky-400"],
-  ["Резервация", "text-sky-400 bg-white ring-sky-400"],
-  ["Активна", "text-sky-400 bg-white ring-sky-400"],
-  ["Завършена", "text-green-400 bg-white ring-green-400"],
-  ["Анулирана", "text-orange-400 bg-white ring-orange-400"],
+  ["Нова", "text-violet-600 bg-white ring-violet-600"],
+  ["Оферта", "text-sky-600 bg-white ring-sky-600"],
+  ["Резервация", "text-sky-600 bg-white ring-sky-600"],
+  ["Активна", "text-sky-600 bg-white ring-sky-600"],
+  ["Завършена", "text-green-600 bg-white ring-green-600"],
+  ["Анулирана", "text-orange-600 bg-white ring-orange-600"],
 ]);
 
 const StatusBadge = ({ children, label, xMark, onClick }: StatusBadgeProps) => {
@@ -37,7 +37,7 @@ const StatusBadge = ({ children, label, xMark, onClick }: StatusBadgeProps) => {
             xMark ? "cursor-pointer transition-colors" : ""
           )}
         >
-          {children}
+          {children || label}
         </span>
       </Tooltip>
     </div>
