@@ -3,7 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { changeOrderStatus, fetchOrderState } from "../model/orderModel";
 import { orderState } from "../store/orderState";
-import Modal from "./Modal";
+import ModalAction from "./ModalAction";
 import { Link } from "react-router-dom";
 import { ORDER_STATUS } from "../types/types";
 
@@ -44,7 +44,7 @@ export default function ContextMenu({ orderId }: ContextMenuProps) {
 
   return (
     <Menu as="div" className="relative hidden w-min items-center justify-center text-left md:flex">
-      <Modal
+      <ModalAction
         messageType="alert"
         title="Прекратяване на поръчка"
         description="Прекратяването приключва отношенията клиент-доставчик. Сигурни ли сте, че искате да продължите?"

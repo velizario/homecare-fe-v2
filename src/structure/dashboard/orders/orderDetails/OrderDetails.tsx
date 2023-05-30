@@ -17,7 +17,7 @@ import { Order, ORDER_STATUS } from "../../../../types/types";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import CustomButton from "../../../../utilityComponents/CustomButton";
 import DropdownSingleSelect from "../../../../utilityComponents/DropdownSingleSelect";
-import Modal from "../../../../utilityComponents/Modal";
+import ModalAction from "../../../../utilityComponents/ModalAction";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { toasted } from "../../../../utilityComponents/Toast";
 import FileAttachmentsList from "./FileAttachmentsList";
@@ -131,7 +131,7 @@ export default function OrderDetails() {
   //   TODO: Order should be reported differently whether it is looked by vendor or user
   return (
     <div className="min-h-screen">
-      <Modal
+      <ModalAction
         messageType="info"
         title={orderData?.orderStatusId === ORDER_STATUS.RESERVATION ? "Потвърждение на резервация" : "Изпращане оферта към клиента"}
         description={
@@ -141,7 +141,7 @@ export default function OrderDetails() {
         }
         btnAckText={errors ? "Потвърди" : undefined}
         btnCloseText="Затвори"
-        confirmAction={() => changeStatus(ORDER_STATUS.RESERVATION)}
+        confirmAction={() => changeStatus(ORDER_STATUS.ACTIVE)}
         isOpen={modalOpen}
         setModalOpen={setModalOpen}
       />

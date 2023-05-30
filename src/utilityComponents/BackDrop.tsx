@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { useEffect, Fragment } from "react";
-import classNames from "../../helpers/classNames";
+import classNames from "../helpers/classNames";
 
 type BackDropProps = {
   closeModal: () => void;

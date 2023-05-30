@@ -1,10 +1,9 @@
-import { useContext, useState } from "react";
+import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import classNames from "../../../../helpers/classNames";
 import "./DatePicker.css";
-import { type DateRange, DayPicker } from "react-day-picker";
 import styles from "./DatePicker.module.css";
 import { dateRangeStore } from "./OrderSchedule";
-import classNames from "../../../../helpers/classNames";
 
 const pastMonth = new Date();
 

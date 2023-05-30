@@ -1,7 +1,8 @@
 import {
   addDays,
   compareAsc,
-  eachDayOfInterval, isSameDay,
+  eachDayOfInterval,
+  isSameDay,
   isSameMonth,
   max,
   nextFriday,
@@ -11,9 +12,10 @@ import {
   nextThursday,
   nextTuesday,
   nextWednesday,
-  parseJSON, startOfISOWeek,
+  parseJSON,
+  startOfISOWeek,
   startOfMonth,
-  subDays
+  subDays,
 } from "date-fns";
 import { createFullName, dateFormatted } from "../../../../helpers/helperFunctions";
 import { Order } from "../../../../types/types";
@@ -54,12 +56,13 @@ export const createOrdersEvents = (orderData: Order[], range: { from: Date; to: 
     (acc, order) => {
       if (!order.startDate) return acc;
       const eventDays = calculateEventDays(order, range);
-      const eventsArray = eventDays.map((date) => ({ date: date, order: order }));
+      const eventsArray = eventDays.map((date) => ({ id: `${order.id}-${dateFormatted(date, "ddMMyy")}`, date: date, order: order }));
       return [...acc, ...eventsArray];
     },
     [] as {
       date: Date;
       order: Order;
+      id: string;
     }[]
   );
 };
@@ -72,6 +75,7 @@ export const defineCalendarRange = (curentMonthDate: Date) => {
   return { from: calendarStartDay, to: addDays(calendarStartDay, 41) };
 };
 
+// normalize event data to calendar data format
 export const createCalendarSchedule = (orderData: Order[], calendarDate: Date) => {
   const range = defineCalendarRange(calendarDate);
   const dateRange = eachDayOfInterval({ start: range.from, end: range.to });
@@ -80,7 +84,7 @@ export const createCalendarSchedule = (orderData: Order[], calendarDate: Date) =
     const ordersByDate = ordersEvents
       .filter((event) => isSameDay(event.date, date))
       .map((event) => ({
-        id: event.order.id,
+        id: event.id,
         type: event.order.serviceType.value,
         name: createFullName(event.order.client.user),
         location: event.order.districtName.value,

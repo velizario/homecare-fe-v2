@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import classNames from "../helpers/classNames";
-import BackDrop from "../structure/orderManagement/BackDrop";
+import BackDrop from "./BackDrop";
 
 interface ModalContainerProps {
   children: React.ReactNode;

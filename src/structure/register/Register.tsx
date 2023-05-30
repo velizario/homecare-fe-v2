@@ -1,16 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
-import UserTypeSelection from "../dashboard/account/profile/UserTypeSelection";
-import { userState } from "../../store/userState";
-import classNames from "../../helpers/classNames";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import InputErrorMessage from "../../utilityComponents/InputErrorMessage";
-import { userSignup } from "../../model/clientModel";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { z } from "zod";
+import classNames from "../../helpers/classNames";
+import { userSignup } from "../../model/clientModel";
 import { UserRole } from "../../types/types";
 import InputField from "../../utilityComponents/InputField";
-import Toaster, { toasted } from "../../utilityComponents/Toast";
+import { toasted } from "../../utilityComponents/Toast";
+import UserTypeSelection from "../dashboard/account/profile/UserTypeSelection";
 
 const RegisterInputValues = {
   firstName: {
