@@ -1,14 +1,14 @@
 import { Menu, Transition } from "@headlessui/react";
-import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, EllipsisHorizontalIcon, MapPinIcon, UserIcon } from "@heroicons/react/20/solid";
+import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon, ClockIcon, EllipsisHorizontalIcon, MapPinIcon, StarIcon, UserIcon } from "@heroicons/react/20/solid";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
-import { addDays, nextFriday, nextMonday, nextSaturday, nextSunday, nextThursday, nextTuesday, nextWednesday } from "date-fns";
+import { addDays } from "date-fns";
 import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { createFullName, dateFormatted, publicImage } from "../../../../helpers/helperFunctions";
 import { editOrderEvent } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
-import { Order } from "../../../../types/types";
+import { OrderEvent } from "../../../../types/types";
 import ButtonDefault from "../../../../utilityComponents/CustomButton";
 import useModal from "../../../../utilityComponents/Modal";
 import StatusBadge from "../../../../utilityComponents/StatusBadge";
@@ -17,104 +17,19 @@ import { createOrdersEvents } from "./CalendarLogic";
 import Feedback, { TFeedbackForm } from "./Feedback";
 import { dateRangeStore } from "./OrderSchedule";
 
-// const orderEntrys = [
-//   {
-//     id: 1,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   {
-//     id: 2,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   {
-//     id: 3,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   {
-//     id: 4,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   {
-//     id: 5,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   {
-//     id: 6,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   {
-//     id: 7,
-//     date: "January 10th, 2022",
-//     time: "5:00 PM",
-//     datetime: "2022-01-10T17:00",
-//     name: "Leslie Alexander",
-//     imageUrl:
-//       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-//     location: "Starbucks",
-//   },
-//   // More meetings...
-// ];
-
-const dayToFn = {
-  1: nextMonday,
-  2: nextTuesday,
-  3: nextWednesday,
-  4: nextThursday,
-  5: nextFriday,
-  6: nextSaturday,
-  7: nextSunday,
-};
-
-type TWeekDay = keyof typeof dayToFn;
-const today = new Date();
-
 export default function ScheduleList() {
+
   const [dateRange] = dateRangeStore((store) => [store.dateRange]);
-  const [orderData] = orderState((state) => [state.orderData]);
+  const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
   const [feedbackEventId, setFeedbackEventId] = useState<string | null>(null);
-  const [events, setEvents] = useState<{ id: string; date: Date; order: Order }[] | null>(null);
+  const [events, setEvents] = useState<OrderEvent[] | null>(null);
   const { openModal, Modal, closeModal } = useModal();
 
   useEffect(() => {
     if (orderData.length < 1) return;
     const range = { from: dateRange?.from || new Date(), to: dateRange?.to || addDays(new Date(), 30) };
     const mapBookedDays = createOrdersEvents(orderData, range).sort((a, b) => a.date.getTime() - b.date.getTime());
+    console.log(mapBookedDays);
     setEvents(mapBookedDays);
   }, [orderData, dateRange]);
 
@@ -130,16 +45,20 @@ export default function ScheduleList() {
     newspaper?.animate(newspaperSpinning, newspaperTiming);
   }, [events?.length]);
 
-  const handleFeedbackSubmit = (data: TFeedbackForm, feedbackEventId : null | string) => {
+  const handleFeedbackSubmit = async (data: TFeedbackForm, feedbackEventId: null | string) => {
     // TODO handle on frontend, backend, etc.
-    const eventData = {...data, id: feedbackEventId, orderId: feedbackEventId?.slice(0, feedbackEventId.indexOf("-"))}
-    console.log(eventData);
-    editOrderEvent(eventData)
     closeModal();
+    if (!events) return;
+    const eventData = { ...data, id: feedbackEventId, orderId: feedbackEventId?.slice(0, feedbackEventId.indexOf("-")) };
+    const editRes = await editOrderEvent(eventData);
+    if (!editRes.id) {
+      toasted("Проблем с връзката, опитайте пак по-късно", "error");
+      return;
+    }
     toasted("Благодарим за обратната връзка!", "success");
+    const updatedEventList = events.map((event) => (event.id === editRes.id ? { ...event, ...editRes } : event));
+    setEvents(updatedEventList);
   };
-
-  console.log(events);
 
   // TODO: another scenario during loading time to show something like Suspense
   // When clicking on "изчисти", // When clicking on "изчисти", things are getting messy, because I'm triggering the above animation incorrectly
@@ -230,20 +149,32 @@ export default function ScheduleList() {
                         </dl>
                       </div>
                       <div className="w-fit max-w-[8rem] space-y-4">
-                        <ButtonDefault
-                          onClick={() => {
-                            setFeedbackEventId(event.id);
-                            openModal();
-                          }}
-                          category="primary"
-                          className="w-full"
-                          size="small"
-                        >
-                          Оцени
-                        </ButtonDefault>
-                        <ButtonDefault onClick={openModal} category="secondary" className="w-full" size="small">
-                          Маркирай като завършена
-                        </ButtonDefault>
+                        {event.rating ? (
+                          <div className="flex w-full justify-center">
+                            {[1, 2, 3, 4, 5].map((rating) => (
+                              <StarIcon
+                                key={rating}
+                                className={classNames(
+                                  event.rating >= rating ? "text-yellow-400 " : "stroke-gray-300 text-white ",
+                                  "stroke h-4 w-4 flex-shrink-0 cursor-pointer stroke-1"
+                                )}
+                                aria-hidden="true"
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <ButtonDefault
+                            onClick={() => {
+                              setFeedbackEventId(event.id);
+                              openModal();
+                            }}
+                            category="primary"
+                            className="w-full"
+                            size="small"
+                          >
+                            Оцени
+                          </ButtonDefault>
+                        )}
                         <Link className="group flex items-center justify-center text-xs hover:text-gray-600" to={`/dashboard/orders/${event.order.id}`}>
                           Към поръчката
                           <ChevronDoubleRightIcon className="ml-0.5 h-3 w-3 transition-transform group-hover:translate-x-1" />
