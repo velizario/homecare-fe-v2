@@ -1,6 +1,6 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { orderState } from "../store/orderState";
-import { Order, OrderComment, ORDER_STATUS } from "../types/types";
+import { Order, OrderComment, OrderEvent, ORDER_STATUS } from "../types/types";
 
 export const createOrder = async (vendorId: string, data: any) => {
   const resData = await requestToAPI("orders/createOrder", "POST", { vendorId, ...data });
@@ -32,4 +32,14 @@ export const fetchOrderState = async () => {
 export const addOrderComment = async (orderData: any) => {
   const resData = await requestToAPI(`orders/addComment`, "POST", orderData);
   return resData.data as OrderComment;
+};
+
+export const editOrderEvent = async (eventData: any) => {
+  const resData = await requestToAPI(`orders/editEvent`, "POST", eventData);
+  return resData.data as OrderEvent;
+};
+
+export const getOrderEvents = async (eventData: any) => {
+  const resData = await requestToAPI(`orders/editEvent`, "POST", eventData);
+  return resData.data as OrderEvent;
 };

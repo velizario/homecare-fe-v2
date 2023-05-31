@@ -5,10 +5,10 @@ import classNames from "../../../../helpers/classNames";
 import ButtonDefault from "../../../../utilityComponents/CustomButton";
 import ProfileAbout from "../../account/profile/ProfileAbout";
 
-const aboutTemplate = { className: "w-[25rem] mt-4", name: "about", id: "about", label: "Ако желаете, споделете няколко думи:" };
+const aboutTemplate = { className: "w-[25rem] mt-4", name: "feedback", id: "feedback", label: "Ако желаете, споделете няколко думи:" };
 
 export type TFeedbackForm = {
-  about: string;
+  feedback: string;
   rating: number;
   id: string;
 };
@@ -20,7 +20,7 @@ type FeedbackProps = {
 export default function Feedback({ submitModal }: FeedbackProps) {
   const { control, handleSubmit, setValue, watch } = useForm<TFeedbackForm>({
     defaultValues: {
-      about: "",
+      feedback: "",
       rating: -1,
     },
   });

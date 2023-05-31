@@ -75,6 +75,14 @@ export interface OrderComment {
   createdAt: string;
 }
 
+export interface OrderEvent {
+  id: string;
+  orderId: number;
+  status: ORDER_STATUS
+  rating: number;
+  feedback: string;
+}
+
 export enum OrderHistoryLogType {
   NEW = 1,
   OFFER,

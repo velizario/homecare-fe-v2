@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { createFullName, dateFormatted, publicImage } from "../../../../helpers/helperFunctions";
+import { editOrderEvent } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { Order } from "../../../../types/types";
 import ButtonDefault from "../../../../utilityComponents/CustomButton";
@@ -131,7 +132,9 @@ export default function ScheduleList() {
 
   const handleFeedbackSubmit = (data: TFeedbackForm, feedbackEventId : null | string) => {
     // TODO handle on frontend, backend, etc.
-    console.log({...data, feedbackEventId});
+    const eventData = {...data, id: feedbackEventId, orderId: feedbackEventId?.slice(0, feedbackEventId.indexOf("-"))}
+    console.log(eventData);
+    editOrderEvent(eventData)
     closeModal();
     toasted("Благодарим за обратната връзка!", "success");
   };
