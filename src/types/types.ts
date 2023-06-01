@@ -77,6 +77,8 @@ export interface OrderComment {
 
 export interface OrderEvent {
   id: string;
+  date: Date;
+  order: Order;
   orderId: number;
   status: ORDER_STATUS
   rating: number;
@@ -120,6 +122,7 @@ export interface Order {
   createdAt: string;
   districtName: EssentialDataAll;
   estateSize: EssentialDataAll;
+  event: OrderEvent[];
   orderComment: OrderComment[];
   orderHistory: OrderHistory[]
   orderStatus: EssentialDataAll;

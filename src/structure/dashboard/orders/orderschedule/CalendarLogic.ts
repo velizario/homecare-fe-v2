@@ -18,7 +18,7 @@ import {
   subDays,
 } from "date-fns";
 import { createFullName, dateFormatted } from "../../../../helpers/helperFunctions";
-import { Order } from "../../../../types/types";
+import { Order, OrderEvent } from "../../../../types/types";
 
 export const dayToFn = {
   1: nextMonday,
@@ -52,19 +52,17 @@ const calculateEventDays = (order: Order, range: { from: Date; to: Date }) => {
 };
 
 export const createOrdersEvents = (orderData: Order[], range: { from: Date; to: Date }) => {
-  return orderData.reduce(
-    (acc, order) => {
-      if (!order.startDate) return acc;
-      const eventDays = calculateEventDays(order, range);
-      const eventsArray = eventDays.map((date) => ({ id: `${order.id}-${dateFormatted(date, "ddMMyy")}`, date: date, order: order }));
-      return [...acc, ...eventsArray];
-    },
-    [] as {
-      date: Date;
-      order: Order;
-      id: string;
-    }[]
-  );
+  return orderData.reduce((acc, order) => {
+    if (!order.startDate) return acc;
+    const eventDays = calculateEventDays(order, range);
+
+    const eventsArray = eventDays.map((date) => {
+      const eventIdGenerated = `${order.id}-${dateFormatted(date, "ddMMyy")}`;
+      const eventData = order.event.find((event) => event.id === eventIdGenerated);
+      return { id: eventIdGenerated, date: date, order: order, ...eventData } as OrderEvent;
+    });
+    return [...acc, ...eventsArray];
+  }, [] as OrderEvent[]);
 };
 
 export const defineCalendarRange = (curentMonthDate: Date) => {

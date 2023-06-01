@@ -21,7 +21,7 @@ export default function Feedback({ submitModal }: FeedbackProps) {
   const { control, handleSubmit, setValue, watch } = useForm<TFeedbackForm>({
     defaultValues: {
       feedback: "",
-      rating: -1,
+      rating: 0,
     },
   });
 
@@ -32,9 +32,9 @@ export default function Feedback({ submitModal }: FeedbackProps) {
       <h3 className="text-center text-lg font-semibold">Оценка на посещението</h3>
       <p className="mt-4 text-sm">Доволни ли сте от услугата?</p>
       <div className="mt-1 flex items-center">
-        {[0, 1, 2, 3, 4].map((rating, index) => (
+        {[1, 2, 3, 4, 5].map((rating) => (
           <StarIcon
-            onClick={() => setValue("rating", index)}
+            onClick={() => setValue("rating", rating)}
             key={rating}
             className={classNames(
               userRating >= rating ? "text-yellow-400 " : "stroke-gray-300 text-white ",
