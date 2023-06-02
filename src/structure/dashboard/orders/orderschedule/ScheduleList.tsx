@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { createFullName, dateFormatted, publicImage } from "../../../../helpers/helperFunctions";
-import { editOrderEvent } from "../../../../model/orderModel";
+import { upsertOrderEvent } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { OrderEvent } from "../../../../types/types";
 import ButtonDefault from "../../../../utilityComponents/CustomButton";
@@ -50,7 +50,7 @@ export default function ScheduleList() {
     closeModal();
     if (!events) return;
     const eventData = { ...data, id: feedbackEventId, orderId: feedbackEventId?.slice(0, feedbackEventId.indexOf("-")) };
-    const editRes = await editOrderEvent(eventData);
+    const editRes = await upsertOrderEvent(eventData);
     if (!editRes.id) {
       toasted("Проблем с връзката, опитайте пак по-късно", "error");
       return;

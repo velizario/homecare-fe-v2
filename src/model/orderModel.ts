@@ -34,12 +34,12 @@ export const addOrderComment = async (orderData: any) => {
   return resData.data as OrderComment;
 };
 
-export const editOrderEvent = async (eventData: any) => {
-  const resData = await requestToAPI(`orders/editEvent`, "POST", eventData);
+export const upsertOrderEvent = async (eventData: any) => {
+  const resData = await requestToAPI(`orders/upsertEvent`, "POST", eventData);
   return resData.data as OrderEvent;
 };
 
 export const getOrderEvents = async (eventData: any) => {
-  const resData = await requestToAPI(`orders/editEvent`, "POST", eventData);
+  const resData = await requestToAPI(`orders/getEvent`, "GET", eventData);
   return resData.data as OrderEvent;
 };

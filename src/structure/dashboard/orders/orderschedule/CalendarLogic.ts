@@ -81,15 +81,15 @@ export const createCalendarSchedule = (orderData: Order[], calendarDate: Date) =
     const ordersEvents = createOrdersEvents(orderData, range);
     const ordersByDate = ordersEvents
       .filter((event) => isSameDay(event.date, date))
-      .map((event) => ({
-        id: event.id,
-        type: event.order.serviceType.value,
-        name: createFullName(event.order.client.user),
-        location: event.order.districtName.value,
-        time: event.order.visitHour.value,
-        day: event.order.visitDay.value,
-        href: `/dashboard/orders/${event.order.id}`,
-      }));
+      // .map((event) => ({
+      //   id: event.id,
+      //   type: event.order.serviceType.value,
+      //   name: createFullName(event.order.client.user),
+      //   location: event.order.districtName.value,
+      //   time: event.order.visitHour.value,
+      //   day: event.order.visitDay.value,
+      //   href: `/dashboard/orders/${event.order.id}`,
+      // }));
     const isCurrentMonth = isSameMonth(date, calendarDate);
     return { date: dateFormatted(date), isCurrentMonth: isCurrentMonth, isSelected: false, isToday: false, events: ordersByDate };
   });

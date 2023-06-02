@@ -1,22 +1,40 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { addMonths } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "../../../../helpers/classNames";
 import { dateFormatted } from "../../../../helpers/helperFunctions";
+import { fetchOrderState } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import Tooltip from "../../../cards/Tooltip";
 import { createCalendarSchedule } from "./CalendarLogic";
+import EventModal from "./EventModal";
+import useModal from "../../../../utilityComponents/Modal";
+import { OrderEvent } from "../../../../types/types";
+import { createPortal } from "react-dom";
 
 export default function ScheduleCalendar() {
   const [orderData] = orderState((state) => [state.orderData]);
   const [calendarDate, setCalendarDate] = useState(new Date());
+  const { openModal, Modal, closeModal } = useModal();
+  const [selectedEvent, setSelectedEvent] = useState<OrderEvent | null>(null);
+
+  useEffect(() => {
+    fetchOrderState();
+  }, []);
 
   const days = createCalendarSchedule(orderData, calendarDate);
   const changeMonth = (month: number) => setCalendarDate((date) => addMonths(date, month));
 
   return (
     <div className="w-full min-w-fit flex-shrink lg:flex lg:h-full lg:flex-col">
+      {selectedEvent &&
+        createPortal(
+          <Modal>
+            <EventModal event={selectedEvent} />
+          </Modal>,
+          document.body
+        )}
       <header className="flex items-center justify-between border-b border-gray-200 py-4 lg:flex-none">
         <div className="relative ml-auto mr-0 flex items-center rounded-md bg-white shadow-sm md:items-stretch">
           <div className="pointer-events-none absolute inset-0 rounded-md ring-1 ring-inset ring-gray-300" aria-hidden="true" />
@@ -89,23 +107,23 @@ export default function ScheduleCalendar() {
                             <div className="flex flex-col gap-1">
                               <div>
                                 <span>Вид поръчка: </span>
-                                <span className="text-sm font-medium">{event.type}</span>
+                                <span className="text-sm font-medium">{event.order.visitHour.value}</span>
                               </div>
                               <div>
                                 <span>Клиент/Доставчик: </span>
-                                <span className="text-sm font-medium">{event.time}</span>
+                                <span className="text-sm font-medium">{event.order.visitHour.value}</span>
                               </div>
                               <div>
                                 <span>Район: </span>
-                                <span className="text-sm font-medium">{event.location}</span>
+                                <span className="text-sm font-medium">{event.order.districtName.value}</span>
                               </div>
                               <div>
                                 <span>Ден: </span>
-                                <span className="text-sm font-medium">{event.day}</span>
+                                <span className="text-sm font-medium">{event.order.visitDay.value}</span>
                               </div>
                               <div>
                                 <span>Час: </span>
-                                <span className="text-sm font-medium">{event.time}</span>
+                                <span className="text-sm font-medium">{event.order.visitHour.value}</span>
                               </div>
                               <div>
                                 <span>(отвори за повече)</span>
@@ -113,14 +131,17 @@ export default function ScheduleCalendar() {
                             </div>
                           }
                         >
-                          <Link to={event.href} className="group flex">
-                            <p className="my-auto flex-auto items-center truncate border-l-4 border-emerald-600 bg-emerald-50 py-0.5 pl-1 text-xs font-medium text-black transition-colors group-hover:border-emerald-700 group-hover:bg-emerald-100">
-                              {event.time}
-                            </p>
-                            <time dateTime={event.time} className="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 ">
-                              {event.time}
-                            </time>
-                          </Link>
+                          <button
+                            onClick={() => {
+                              setSelectedEvent(event);
+                              openModal();
+                            }}
+                            className="group flex w-full justify-start"
+                          >
+                            <span className="w-full truncate border-l-4 border-emerald-600 bg-emerald-50 py-0.5 pl-1 text-start text-xs font-medium text-black transition-colors group-hover:border-emerald-700 group-hover:bg-emerald-100">
+                              {event.order.visitHour.value}
+                            </span>
+                          </button>
                         </Tooltip>
                       </div>
                     ))}

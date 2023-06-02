@@ -3,6 +3,8 @@ import { DateRange } from "react-day-picker";
 import create from "zustand";
 import { fetchOrderState } from "../../../../model/orderModel";
 import Filters from "../../../../utilityComponents/Filters";
+import Modal from "../../../../utilityComponents/Modal";
+import EventModal from "./EventModal";
 import ScheduleCalendar from "./ScheduleCalendar";
 import ScheduleList from "./ScheduleList";
 
@@ -17,9 +19,6 @@ export const dateRangeStore = create<DateRangeStore>()((set) => ({
 }));
 
 export default function OrderSchedule() {
-  useEffect(() => {
-    fetchOrderState();
-  }, []);
 
   return (
     <>
@@ -34,3 +33,4 @@ export default function OrderSchedule() {
     </>
   );
 }
+

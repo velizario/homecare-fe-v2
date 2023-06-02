@@ -10,7 +10,7 @@ interface ModalContainerProps {
 export default function ModalContainer({ children, styles }: ModalContainerProps) {
   return (
     <Transition
-      className={classNames("z-30 max-h-[85%] overflow-auto overscroll-contain rounded bg-white", styles || "")}
+      className={classNames("z-30 max-h-[85%] overscroll-contain rounded bg-white", styles || "")}
       appear={true}
       show={true}
       enter="transition-opacity duration-300"
