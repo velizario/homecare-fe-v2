@@ -20,19 +20,19 @@ export default function SelectService<K extends FieldValues>({ setValue, setNext
   return (
     <>
       {serviceTypeChoices.length>0 && (
-        <div className="max-w-4xl py-10">
+        <div className="max-w-4xl pt-10">
           <h2 id="step-1" className="mx-auto mt-4 w-max text-2xl font-semibold text-gray-900">
             Избери вид услуга
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
             Разполагаме с богата гама от услуги за да посрещнем вашите нужди.
           </p>
-          <div className="mt-8 divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
+          <div className="mt-8 rounded-lg sm:grid sm:grid-cols-2">
             {serviceTypeChoices.map((serviceType: EssentialDataServiceType, serviceTypeIdx) => (
               <div
                 key={serviceType.value}
                 className={classNames(
-                  "group relative bg-white p-2 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 hover:bg-neutral-100 sm:p-4 md:p-6"
+                  "group relative bg-white p-2 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 hover:bg-neutral-100 sm:p-4 md:p-6 border-b [&:nth-child(odd)]:border-r"
                 )}
               >
                 <div className="flex max-h-[7rem] justify-between overflow-hidden">

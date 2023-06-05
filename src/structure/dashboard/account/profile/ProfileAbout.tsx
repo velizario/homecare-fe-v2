@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
+import InputErrorMessage from "../../../../utilityComponents/InputErrorMessage";
 
 interface ProfileAboutProps<T extends FieldValues> {
   control: Control<T, object>;
@@ -9,11 +11,13 @@ interface ProfileAboutProps<T extends FieldValues> {
 
 export default function ProfileAbout<K extends FieldValues>({ name, control, label, className }: ProfileAboutProps<K>) {
   const {
-    field: { value, onChange },
+    field: { value, onChange,  }, 
+    fieldState: { error },
   } = useController({
     name: name as Path<K>,
     control,
   });
+
 
   return (
     <div className={className}>
@@ -27,6 +31,7 @@ export default function ProfileAbout<K extends FieldValues>({ name, control, lab
         value={value}
         onChange={onChange}
       />
+      <InputErrorMessage>{error?.message}</InputErrorMessage>
     </div>
   );
 }

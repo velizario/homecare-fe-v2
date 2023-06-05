@@ -64,7 +64,7 @@ export type RegistrationForm = {
 let BaseValidationSchema = z.object({
   firstName: z
     .string({ required_error: "Required field" })
-    .min(2, { message: "Minimum allowed characters are 2" })
+    .min(2, { message: "Минимум 2 символа" })
     .max(40, { message: "Maximum allowed characters are 40" }),
   lastName: z.string({ required_error: "Required field" }).max(40, "Maximum allowed characters are 40"),
   companyName: z.string().max(40, "Maximum allowed characters are 40").nonempty({ message: "Required field" }),

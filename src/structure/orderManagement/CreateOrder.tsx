@@ -26,7 +26,6 @@ export type CreateOrderForm = {
 };
 
 export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) {
-
   const [orderStep, setOrderStep] = useState<number>(1);
 
   const { watch, setValue } = useForm<CreateOrderForm>();
@@ -47,7 +46,7 @@ export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) 
 
   return (
     <>
-      <div className="fixed inset-0 z-30 flex items-center justify-center">
+      <div className="fixed inset-0 z-30 flex items-center justify-center bg-white">
         <BackDrop closeModal={closeModal} />
         {
           {

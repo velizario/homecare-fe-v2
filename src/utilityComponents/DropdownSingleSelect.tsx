@@ -16,6 +16,7 @@ interface TDropdownSingleSelect<T extends FieldValues> {
   className?: string;
   validOptions?: SelectionOption[];
   disabled?: boolean;
+  placeholderValue?: boolean;
 }
 
 export default function DropdownSingleSelect<K extends FieldValues>({
@@ -27,8 +28,13 @@ export default function DropdownSingleSelect<K extends FieldValues>({
   className,
   validOptions = options,
   disabled = false,
+  placeholderValue = true,
 }: TDropdownSingleSelect<K>) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    placeholderValue && options.unshift({ id: -1, value: "(избери)" });
+  }, [options]);
 
   const {
     field: { value, onChange },
@@ -66,9 +72,10 @@ export default function DropdownSingleSelect<K extends FieldValues>({
             disabled
               ? "pointer-events-none bg-gray-50 text-gray-600"
               : open
-              ? " ring-2 ring-inset ring-indigo-600"
-              : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
-            "w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6"
+              ? "ring-2 ring-inset ring-indigo-600"
+              : value || value?.value ? "bg-indigo-600 text-white"
+              : "text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
+            "h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6 "
           )}
         >
           {`${value?.value || value || "(избери)"}`}
@@ -78,7 +85,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >
-          <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ChevronDownIcon className={classNames("h-5 w-5", value || value?.value ? "text-white" : "text-gray-400")} aria-hidden="true" />
         </button>
       </div>
 
@@ -90,7 +97,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
       >
         {options.map((option) => (
           <div
-            onClick={() => onChange(option)}
+            onClick={() => onChange(option.id > 0 ? option : null)}
             data-id={option.id}
             key={option.id}
             className={classNames(

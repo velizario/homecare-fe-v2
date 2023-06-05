@@ -20,7 +20,13 @@ import Toaster from "./utilityComponents/Toast";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false, // default: true
+      },
+    },
+  });
 
   // do I need to refresh user? How is data lost? Added only for development purposes
   useEffect(() => {
@@ -41,7 +47,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
           <Route path="dashboard/*" element={<Dashboard />} />
-          <Route path="vendor-card/:id" element={<VendorCardFull/>} />
+          <Route path="vendor-card/:id" element={<VendorCardFull />} />
           <Route path="vendor-list/*" element={<VendorList />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

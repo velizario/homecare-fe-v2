@@ -60,6 +60,8 @@ export default function ScheduleList() {
     setEvents(updatedEventList);
   };
 
+  
+
   // TODO: another scenario during loading time to show something like Suspense
   // When clicking on "изчисти", // When clicking on "изчисти", things are getting messy, because I'm triggering the above animation incorrectly
   return (

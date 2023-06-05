@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { FieldValues, Path, PathValue, UseFormSetValue } from "react-hook-form";
-import classNames from "../../helpers/classNames";
-import { EssentialDataServiceType } from "../../types/types";
+import classNames from "../helpers/classNames";
+import { EssentialDataServiceType } from "../types/types";
 
-type VendorCategoriesProps<T extends FieldValues> = {
-  categories: EssentialDataServiceType[];
+type ListSingleSelectProps<T extends FieldValues> = {
+  options: EssentialDataServiceType[];
   name: string;
   setValue: UseFormSetValue<T>;
 };
 
-export default function VendorCategories<K extends FieldValues>({ categories, name, setValue }: VendorCategoriesProps<K>) {
+export default function ListSingleSelect<K extends FieldValues>({ options, name, setValue }: ListSingleSelectProps<K>) {
   const [activeValue, setActiveValue] = useState<number | null>(null);
   return (
     <ul role="list" className="space-y-4 py-3 text-sm font-medium text-gray-900">
       <span className="text-xs font-normal uppercase text-gray-900">Категории</span>
-      {categories.map((category) => (
+      {options.map((category) => (
         <li key={category.value}>
           <span
             onClick={() => {

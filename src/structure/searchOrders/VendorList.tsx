@@ -16,11 +16,12 @@ import { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { fetchDistrictNames, fetchServiceTypeState } from "../../model/essentialsModel";
 import { findVendors } from "../../model/vendorModel";
-import { SelectionOption } from "../../types/types";
+import { EssentialDataServiceType, SelectionOption } from "../../types/types";
 import ComboMultiSelect from "../../utilityComponents/ComboMultiSelect";
-import VendorCategories from "./VendorCategories";
+import ListSingleSelect from "../../utilityComponents/ListSingleSelect";
 import VendorFilters from "./VendorFilters";
 import debounce from "lodash.debounce";
+import DropdownSingleSelect from "../../utilityComponents/DropdownSingleSelect";
 
 const sortOptions = [
   { value: "Most Popular", href: "#", current: true },
@@ -34,7 +35,7 @@ export type TVendorFilterSet = {
   isAdhocEnabled: boolean | null;
   isSubscriptionEnabled: Boolean | null;
   servedDistrict: SelectionOption[];
-  portfolio: SelectionOption[];
+  portfolio: { service: EssentialDataServiceType | null };
 };
 
 type TFilterOptions = {
@@ -100,12 +101,16 @@ export default function VendorList() {
       isAdhocEnabled: null,
       isSubscriptionEnabled: null,
       servedDistrict: [],
-      portfolio: [],
+      portfolio: { service: null },
     },
     // values: formDefaultValues,
   });
 
-  let filterTimeout : NodeJS.Timeout;
+  let filterTimeout: NodeJS.Timeout;
+
+  const userRating = watch();
+
+  console.log(userRating);
 
   useEffect(() => {
     const subscription = watch((data) => {
@@ -117,7 +122,7 @@ export default function VendorList() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  return ( 
+  return (
     <div className="bg-white">
       <div>
         {/* Mobile filter dialog */}
@@ -152,7 +157,7 @@ export default function VendorList() {
                   <form onBlur={(d) => console.log(d)} onChange={(d) => console.log(d)} className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
                     <div className="px-2 py-3 font-medium text-gray-900">
-                      {serviceCategoriesAvailable && <VendorCategories categories={serviceCategories} name="portfolio" setValue={setValue} />}
+                      {serviceCategoriesAvailable && <ListSingleSelect options={serviceCategories} name="portfolio" setValue={setValue} />}
                       <VendorFilters {...filters} setValue={setValue} />
                       {districtNamesAvailable && (
                         <div className="mt-6">
@@ -239,7 +244,11 @@ export default function VendorList() {
               {/* Filters desktop*/}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                {serviceCategoriesAvailable && <VendorCategories categories={serviceCategories} name="portfolio" setValue={setValue} />}
+
+                {serviceCategoriesAvailable && (
+                  <DropdownSingleSelect options={serviceCategories} name="portfolio.service" control={control} label="Услуга" id="portfolio" />
+                )}
+                {/* {serviceCategoriesAvailable && <ListSingleSelect options={serviceCategories} name="portfolio" setValue={setValue} />} */}
                 <VendorFilters {...filters} setValue={setValue} />
                 {districtNamesAvailable && (
                   <div className="mt-6">

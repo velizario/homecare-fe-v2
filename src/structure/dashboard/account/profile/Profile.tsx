@@ -34,7 +34,7 @@ let ValidationSchema = z.object({
   firstName: z
     .string({ required_error: "Required field" })
     .nonempty({ message: "Required field" })
-    .min(2, { message: "Minimum allowed characters are 2" })
+    .min(2, { message: "Минимум 2 символа" })
     .max(40, { message: "Maximum allowed characters are 40" }),
   lastName: z.string().nonempty({ message: "Required field" }).max(40, "Maximum allowed characters are 40"),
   phone: z.string().max(15, "Maximum allowed characters are 15").optional(),
