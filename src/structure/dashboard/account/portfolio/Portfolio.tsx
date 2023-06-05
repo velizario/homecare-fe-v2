@@ -19,11 +19,10 @@ import { GalleryItem } from "lightgallery/lg-utils";
 export default function Portfolio() {
   const { setUpload, status } = useUpload();
 
-  const galleryRef = useRef<any>(null);
-
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const images = userData?.vendor?.portfolioImage;
 
+  console.log(userData)
   const submitHandler = async (image: PortfolioImage) => {
     const resData = await deletePortfolioImage(image);
     if (!resData) {
@@ -72,7 +71,7 @@ export default function Portfolio() {
                 className="absolute"
                 data-id={image.id}
                 onClick={(e) => {
-                  e.stopPropagation();
+                  e.preventDefault();
                   submitHandler(image);
                 }}
               >
