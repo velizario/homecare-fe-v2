@@ -36,7 +36,7 @@ export default function EventModal({ event }: EventModalProps) {
               <dt className="">
                 <ClockIcon className="mt-0.5 h-3 w-3 text-gray-600" aria-hidden="true" />
               </dt>
-              <dd>{dateFormatted(event.date, "HH:mm")}</dd>
+              <dd>{event.order.visitHour.value}</dd>
             </div>
             <div className="flex w-max max-w-[10rem] items-center space-x-1 xl:mt-0">
               <dt className="">
