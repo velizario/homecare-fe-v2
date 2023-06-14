@@ -63,7 +63,7 @@ export const toggleSelectionOption = (selectedItem: SelectionOption, selection: 
 
 export const publicImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "common/defaultImage.png"}`;
 
-export const publicPortfolioImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "common/placeholder-image.png"}`;
+export const portfolioImage = (imgUrl: string) => `${BACKEND_URL}/users/public/${imgUrl || "common/public_placeholder_image.jpg"}`;
 
 export const dateFormatted = (dateString: string | Date, dateFormat: string = "dd.MM.yyyy HH:mm") => {
   return format(parseJSON(dateString), dateFormat, { locale: bg });

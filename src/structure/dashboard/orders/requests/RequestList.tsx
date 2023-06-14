@@ -5,12 +5,12 @@ import { createFullName, sortObjArrDesc } from "../../../../helpers/helperFuncti
 import { fetchOrderState } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { userState } from "../../../../store/userState";
-import { Order } from "../../../../types/types";
+import { Order, OrderHistoryLogType, ORDER_STATUS } from "../../../../types/types";
 import ContextMenu from "../../../../utilityComponents/ContextMenu";
 import Filters from "../../../../utilityComponents/Filters";
-import OrderItem from "./OrderListItem";
+import OrderItem from "./RequestItem";
 
-export default function OrderlistGrid() {
+export default function RequestList() {
   const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
   const [userRoles] = userState((state) => [state.userData.roles]);
 
@@ -18,6 +18,8 @@ export default function OrderlistGrid() {
   useEffect(() => {
     fetchOrderState();
   }, []);
+
+  const orderFilter = [ORDER_STATUS.NEW, ORDER_STATUS.OFFER, ORDER_STATUS.RESERVATION]
 
   return (
     <div className="pt-4">
@@ -37,7 +39,7 @@ export default function OrderlistGrid() {
               <OrderItem>Услуга</OrderItem>
               <OrderItem>Честота</OrderItem>
             </div>
-            {sortObjArrDesc(orderData).map((order: Order) => {
+            {sortObjArrDesc(orderData).filter(order => orderFilter.includes(order.orderStatus.id)).map((order: Order) => {
               return (
                 <div
                   key={order.id}

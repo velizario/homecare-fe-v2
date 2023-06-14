@@ -1,20 +1,16 @@
 import { CameraIcon, TrashIcon } from "@heroicons/react/24/outline";
-import LightGallery from "lightgallery/react";
+import "lightgallery/css/lg-thumbnail.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lightgallery.css";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import classNames from "../../../../helpers/classNames";
-import { publicImage, publicPortfolioImage, sortObjArrAsc } from "../../../../helpers/helperFunctions";
+import { portfolioImage, sortObjArrAsc } from "../../../../helpers/helperFunctions";
 import { useUpload } from "../../../../helpers/UploadImage";
 import { deletePortfolioImage } from "../../../../model/vendorModel";
+import { placeholderImage } from "../../../../store/static";
 import { userState } from "../../../../store/userState";
-import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-zoom.css";
-import "lightgallery/css/lg-thumbnail.css";
-import lgThumbnail from "lightgallery/plugins/thumbnail";
-import lgZoom from "lightgallery/plugins/zoom";
 import { PortfolioImage } from "../../../../types/types";
-import { useCallback, useEffect, useRef } from "react";
-import { InitDetail } from "lightgallery/lg-events";
-import ImageGallery from "../../../../utilityComponents/ImageGallery";
-import { GalleryItem } from "lightgallery/lg-utils";
 
 export default function Portfolio() {
   const { setUpload, status } = useUpload();
@@ -22,7 +18,7 @@ export default function Portfolio() {
   const [userData, setUserData] = userState((state) => [state.userData, state.setUserData]);
   const images = userData?.vendor?.portfolioImage;
 
-  console.log(userData)
+  console.log(userData);
   const submitHandler = async (image: PortfolioImage) => {
     const resData = await deletePortfolioImage(image);
     if (!resData) {
@@ -61,12 +57,21 @@ export default function Portfolio() {
         {images?.length > 0 &&
           sortObjArrAsc(images).map((image, index) => (
             <a
-              href={publicPortfolioImage(image.imgUrl)}
+              href={portfolioImage(image.imgUrl)}
               target="_blank"
               key={image.id}
               className="group relative inline-flex h-[10rem] w-full min-w-[12rem]  flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-gray-50 ring-1 transition-colors hover:ring-2"
             >
-              <img src={publicPortfolioImage(image.imgUrl)} alt={image.imgUrl} className="h-full w-full object-cover" />
+              {/* <img src={portfolioImage(image.imgUrl)} alt={image.imgUrl} className="h-full w-full object-cover" /> */}
+              <LazyLoadImage
+                className="h-full w-full object-cover"
+                placeholderSrc={placeholderImage}
+                alt={portfolioImage(image.imgUrl)}
+                effect="blur"
+                // height={image.height}
+                src={portfolioImage(image.imgUrl)} // use normal <img> attributes as props
+                // width={image.width}
+              />
               <button
                 className="absolute"
                 data-id={image.id}

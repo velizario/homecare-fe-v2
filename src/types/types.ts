@@ -102,6 +102,7 @@ export enum ORDER_STATUS {
   ACTIVE,
   COMPLETE,
   CANCELLED,
+  PASSED,
 }
 
 export interface OrderHistory {

@@ -75,7 +75,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
               ? "ring-2 ring-inset ring-indigo-600"
               : value || value?.value ? "bg-indigo-600 text-white"
               : "text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
-            "h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6 "
+            "h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6  transition-colors"
           )}
         >
           {`${value?.value || value || "(избери)"}`}

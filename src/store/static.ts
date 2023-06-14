@@ -1,5 +1,9 @@
+import { BACKEND_URL } from "../helpers/envVariables";
 
 // TODO can I get rid of the static data since I already get it in the requests?
+
+
+export const placeholderImage = `${BACKEND_URL}/users/public/common/public_placeholder_image.jpg"}`;
 
 // if changed here, needs to be changed on the BE too
 // if changed here, revise in 1. SelectFrequency.tsx  - frequencyOptions variables. 2. CalendarLogic - eachDayOfInterval (step)

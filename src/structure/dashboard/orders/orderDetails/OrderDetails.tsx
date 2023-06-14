@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { z } from "zod";
 import classNames from "../../../../helpers/classNames";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
-import { createFullName, dateFormatted } from "../../../../helpers/helperFunctions";
+import { createFullName, dateFormatted, portfolioImage } from "../../../../helpers/helperFunctions";
 import { fetchDistrictNames } from "../../../../model/essentialsModel";
 import { addOrderComment, changeOrderStatus, getOrder, updateOrder } from "../../../../model/orderModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
@@ -232,7 +232,7 @@ export default function OrderDetails() {
                             <div className="relative">
                               <img
                                 className="h-16 w-16 rounded-full"
-                                src={`${BACKEND_URL}/users/public/${orderData.vendor.user.imageUrl || "defaultImage.png"}`}
+                                src={portfolioImage(orderData.vendor.user.imageUrl)}
                                 alt=""
                               />
                               <span className="absolute inset-0 rounded-full shadow-inner" aria-hidden="true" />
@@ -242,7 +242,7 @@ export default function OrderDetails() {
                             <h1 className="text-lg font-semibold text-gray-900">{createFullName(orderData.vendor.user)}</h1>
                           </div>
                         </div>
-                        <StatusBadge label="Нова">{orderData.orderStatus.value}</StatusBadge>
+                        <StatusBadge label={orderData.orderStatus.value}>{orderData.orderStatus.value}</StatusBadge>
                       </div>
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                         <dl className="sm:grid-cols-[5fr_3fr] grid  grid-cols-1 gap-x-4 gap-y-8">

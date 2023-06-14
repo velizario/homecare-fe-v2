@@ -3,6 +3,7 @@ import loadingImage from "../../../../assets/loading.gif";
 import { BACKEND_URL } from "../../../../helpers/envVariables";
 import { userState } from "../../../../store/userState";
 import { useUpload } from "../../../../helpers/UploadImage";
+import { portfolioImage } from "../../../../helpers/helperFunctions";
 
 export default function ProfilePhoto() {
   const imageUrl = userState((state) => state.userData.imageUrl);
@@ -16,7 +17,7 @@ export default function ProfilePhoto() {
           {status.isUploading  && <img src={loadingImage} className="ml-4 h-5 w-5"></img>}
         </label>
         <div className="mt-1 flex items-center">
-          <img className="inline-block h-12 w-12 rounded-full" src={`${BACKEND_URL}/users/public/${imageUrl || "defaultImage.png"}`} alt="" />
+          <img className="inline-block h-12 w-12 rounded-full" src={portfolioImage(imageUrl)} alt="" />
           <div className="ml-4 flex items-center">
             <div className="relative flex cursor-pointer items-center rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm hover:bg-gray-50">
               <label htmlFor="user-photo" className="pointer-events-none relative text-sm text-gray-900">
