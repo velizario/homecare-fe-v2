@@ -1,11 +1,12 @@
 import { FaceSmileIcon, ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import classNames from "../../../helpers/classNames";
 import data from "@emoji-mart/data/sets/14/native.json";
 import Picker from "@emoji-mart/react";
 import throttle from "lodash.throttle";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import ContextMenu from "./ContextMenu";
 
 const messages = [
   {
@@ -154,7 +155,8 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
     setMessageText(e.target.value);
   };
 
-  const addMessage = () => {
+  const addMessage = (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
     if (messageText.length === 0) return;
     const newId = chatContent[chatContent.length - 1].id + 1;
     setChatContent((chat) => [
@@ -180,48 +182,62 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
 
   const selectEmoji = (data: Emojis) => {
     setMessageText((text) => text + data.native);
-    console.log(data);
     // inputRef.current?.focus()
   };
 
   // Add context menu
-  const innerHtml = `
-  <a class="text-xs font-medium block cursor-pointer px-2 py-1.5 rounded hover:bg-gray-100">Редактирай</a>
-  <a class="text-xs font-medium block cursor-pointer px-2 py-1.5 rounded hover:bg-gray-100">Изтрий</a>
-  `;
-  const test = document.createElement("div");
-  test.className = "absolute p-2 bg-white rounded-lg border min-w-[6rem] text-gray-800";
-  test.innerHTML = innerHtml;
-  function rightClickMessageHandler(ev: MouseEvent) {
-    ev.preventDefault();
-    ev.stopPropagation()
-    console.log(ev.clientX, ev.clientY);
-    test.style.left = `${ev.clientX}px`;
-    test.style.top = `${ev.clientY}px`;
-    document.body.append(test);
-  }
-  // Click event trigger context menu
-  // useEffect(() => {
-  //   const messageElements = document.querySelectorAll(".personal-message");
-  //   messageElements && [...messageElements].forEach((element) => (element as HTMLParagraphElement).addEventListener("contextmenu", rightClickMessageHandler));
-  // }, []);
+  // const innerHtml = `
+  // <a class="text-xs font-medium block cursor-pointer px-2 py-1.5 rounded hover:bg-gray-100">Редактирай</a>
+  // <a class="text-xs font-medium block cursor-pointer px-2 py-1.5 rounded hover:bg-gray-100">Изтрий</a>
+  // `;
+  // const test = useMemo(() => document.createElement("div"), []);
+  // const activeMenuParagraph = useRef<null | HTMLParagraphElement>(null);
+  // // let activeMenuParagraph = null as null | HTMLParagraphElement;
+  // test.className = "absolute p-2 bg-white transition-opacity rounded-lg border min-w-[6rem] text-gray-800";
+  // test.innerHTML = innerHtml;
+  // function contextMenuHandler(ev: React.MouseEvent<HTMLParagraphElement, MouseEvent>) {
+  //   ev.stopPropagation();
+  //   activeMenuParagraph.current?.classList.add("text-transparent");
+  //   ev.currentTarget.classList.remove("text-transparent");
+  //   activeMenuParagraph.current = ev.currentTarget;
+  //   test.classList.remove("opacity-100");
+  //   test.classList.add("opacity-0");
+  //   activeMenuParagraph.current.append(test);
+  //   const containerWidth = document.querySelector(".message-container")?.clientWidth;
+  //   const containerHeight = (document.querySelector(".message-container")?.clientHeight || 0) + (document.querySelector(".message-container")?.scrollTop || 0);
+  //   const menuRightPosition = activeMenuParagraph.current?.offsetLeft;
+  //   const menuBottomPosition = activeMenuParagraph.current?.offsetTop;
+  //   const menuWidth = test.offsetWidth;
+  //   const menuHeight = test.offsetHeight;
+  //   const menuPositionLeft = containerWidth && menuRightPosition && containerWidth - menuRightPosition < menuWidth ? `${-menuWidth + 10}px` : "10px";
+  //   const menuPositionTop = containerHeight && menuBottomPosition && containerHeight - menuBottomPosition < menuHeight ? `${-menuHeight}px` : "20px";
+  //   test.style.left = menuPositionLeft;
+  //   test.style.top = menuPositionTop;
+  //   test.classList.add("opacity-100");
+  // }
 
-    useEffect(() => {
-    document.body.addEventListener("click", (e) => test.remove());
-    document.body.addEventListener("keydown", (e) => e.key === "Escape" && test.remove());
-  }, []);
+  // const removeMenu = () => {
+  //   test.remove();
+  //   activeMenuParagraph.current?.classList.add("text-transparent");
+  // };
+
+  // useEffect(() => {
+  //   document.body.addEventListener("click", removeMenu);
+  //   document.body.addEventListener("keydown", (e) => {
+  //     if (e.key === "Escape") removeMenu();
+  //   });
+  //   return () => {
+  //     document.body.removeEventListener("click", removeMenu);
+  //     document.body.removeEventListener("keydown", removeMenu);
+  //   };
+  // }, []);
 
   return (
     // TODO fix the view for mobile - right now using fixed as workaround. Remove the stuff like headers and footers and such.
     <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex bg-white", "h-[calc(100dvh-88px)] w-full flex-col border pb-4 md:flex")}>
       {/* Selected person for chat */}
       <div className="relative mb-2 flex items-center justify-between space-x-3 border-b px-4 py-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 md:justify-end  md:py-4">
-        <ArrowSmallLeftIcon
-          onClick={() => {
-            toggleChat();
-          }}
-          className="h-6 w-6 text-indigo-500 md:hidden"
-        />
+        <ArrowSmallLeftIcon onClick={toggleChat} className="h-6 w-6 text-indigo-500 md:hidden" />
         <div className="flex items-center gap-2">
           <img
             className="h-10 w-10 flex-shrink-0 rounded-full"
@@ -232,12 +248,12 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         </div>
       </div>
       {/* Chat window */}
-      <ul ref={chatRef} className="flex flex-col overflow-y-auto  px-4">
+      <ul ref={chatRef} className="message-container relative flex flex-col overflow-y-auto  px-4">
         {chatContent.map((message) => {
           return (
             <li
               key={message.id}
-              className={classNames(message.type === "out" ? "items-end self-end" : "items-start self-start", "mb-4 flex w-full max-w-xs flex-col gap-1")}
+              className={classNames(message.type === "out" ? "items-end self-end" : "items-start self-start", "mb-4 flex w-full flex-col gap-1")}
             >
               <div className="group flex items-end gap-1">
                 <img
@@ -250,15 +266,21 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
                     message.type === "out" ? "order-2 bg-indigo-600 text-gray-200" : "bg-gray-200 text-gray-800",
                     message.text.replace(emojiRE, "").length === 0
                       ? "bg-transparent p-0 text-4xl"
-                      : "max-w-chat whitespace-pre-line break-words rounded-2xl px-4 py-2 text-sm shadow-md md:max-w-chat-md",
-                    "personal-message "
+                      : "w-full max-w-sm whitespace-pre-line break-words rounded-2xl px-4 py-2 text-sm shadow-md",
+                    "personal-message"
                   )}
                 >
                   {message.text}
                 </p>
-                <p onClick={(e) => rightClickMessageHandler(e.nativeEvent)} className=" flex-0 order-1 h-6 w-6 min-w-[1.5rem] cursor-pointer self-center text-transparent group-hover:text-gray-800">
-                  <EllipsisVerticalIcon  className="rounded-full p-1 hover:bg-gray-100 transition-colors" />
-                </p>
+                <ContextMenu target=".message-container" className="h-6 w-6 min-w-[1.5rem] cursor-pointer self-center  group-hover:text-gray-800">
+                  <ContextMenu.Button>
+                    <EllipsisVerticalIcon className="h-6 w-6  rounded-full p-1 transition-colors hover:bg-gray-100" />
+                  </ContextMenu.Button>
+                  <ContextMenu.Content>
+                    <a className="block cursor-pointer rounded px-2 py-1.5 text-xs font-medium hover:bg-gray-100">Редактирай</a>
+                    <a className="block cursor-pointer rounded px-2 py-1.5 text-xs font-medium hover:bg-gray-100">Изтрий</a>
+                  </ContextMenu.Content>
+                </ContextMenu>
               </div>
 
               <p className={classNames(message.type === "out" ? "pr-2" : "pl-2", "text-xs text-gray-500")}>{message.date}</p>
@@ -270,13 +292,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
       </ul>
       {/* Chat input */}
       <div className="flex items-end gap-2 px-4">
-        <form
-          ref={formRef}
-          onSubmit={() => {
-            addMessage();
-          }}
-          className="flex w-full items-end gap-2"
-        >
+        <form ref={formRef} onSubmit={addMessage} className="flex w-full items-end gap-2">
           <div className="relative flex h-10 items-center">
             <FaceSmileIcon onClick={() => toggleEmoji("toggle")} className="h-7 w-7 cursor-pointer text-indigo-500" />
             <div className={classNames(emojiActive ? "block" : "hidden", "absolute bottom-0 -translate-y-11 transform")}>
@@ -295,12 +311,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
             />
           </div>
           <button type="submit" className="h-10">
-            <PaperAirplaneIcon
-              onClick={() => {
-                addMessage();
-              }}
-              className="h-9 w-9 cursor-pointer p-1 text-indigo-500"
-            ></PaperAirplaneIcon>
+            <PaperAirplaneIcon className="h-9 w-9 cursor-pointer p-1 text-indigo-500"></PaperAirplaneIcon>
           </button>
         </form>
       </div>
