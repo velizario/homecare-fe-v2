@@ -272,9 +272,9 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
                 >
                   {message.text}
                 </p>
-                <ContextMenu target=".message-container" className="h-6 w-6 min-w-[1.5rem] cursor-pointer self-center  group-hover:text-gray-800">
+                <ContextMenu target=".message-container" className="flex cursor-pointer self-center text-transparent group-hover:text-gray-800">
                   <ContextMenu.Button>
-                    <EllipsisVerticalIcon className="h-6 w-6  rounded-full p-1 transition-colors hover:bg-gray-100" />
+                    <EllipsisVerticalIcon className="h-6 w-6 rounded-full p-1 transition-colors hover:bg-gray-100" />
                   </ContextMenu.Button>
                   <ContextMenu.Content>
                     <a className="block cursor-pointer rounded px-2 py-1.5 text-xs font-medium hover:bg-gray-100">Редактирай</a>
