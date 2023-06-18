@@ -7,6 +7,7 @@ import Picker from "@emoji-mart/react";
 import throttle from "lodash.throttle";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import ContextMenu from "./ContextMenu";
+import OrderDetails from "./OrderDetails";
 
 const messages = [
   {
@@ -236,16 +237,20 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
     // TODO fix the view for mobile - right now using fixed as workaround. Remove the stuff like headers and footers and such.
     <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex bg-white", "h-[calc(100dvh-88px)] w-full flex-col border pb-4 md:flex")}>
       {/* Selected person for chat */}
-      <div className="relative mb-2 flex items-center justify-between space-x-3 border-b px-4 py-1 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 md:justify-end  md:py-4">
-        <ArrowSmallLeftIcon onClick={toggleChat} className="h-6 w-6 text-indigo-500 md:hidden" />
-        <div className="flex items-center gap-2">
-          <img
-            className="h-10 w-10 flex-shrink-0 rounded-full"
-            src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
-          <p className="truncate text-sm font-medium text-gray-900">Leslie Alexand</p>
+      <div className="border-b px-4 py-1 mb-2">
+        <div className="flex items-center justify-between space-x-3 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 md:justify-end  md:py-4">
+          <ArrowSmallLeftIcon onClick={toggleChat} className="h-6 w-6 text-indigo-500 md:hidden" />
+          <div className="flex items-center gap-2">
+            <img
+              className="h-10 w-10 flex-shrink-0 rounded-full"
+              src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt=""
+            />
+            <p className="truncate text-sm font-medium text-gray-900">Leslie Alexand</p>
+          </div>
         </div>
+        <OrderDetails></OrderDetails>
+        
       </div>
       {/* Chat window */}
       <ul ref={chatRef} className="message-container relative flex flex-col overflow-y-auto  px-4">
@@ -263,10 +268,10 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
                 />
                 <p
                   className={classNames(
-                    message.type === "out" ? "order-2 bg-indigo-600 text-gray-200" : "bg-gray-200 text-gray-800",
+                    message.type === "out" ? "order-2 bg-indigo-600 text-gray-50" : "bg-gray-200 text-gray-800",
                     message.text.replace(emojiRE, "").length === 0
                       ? "bg-transparent p-0 text-4xl"
-                      : "w-full max-w-sm whitespace-pre-line break-words rounded-2xl px-4 py-2 text-sm shadow-md",
+                      : "w-full max-w-sm whitespace-pre-line break-words rounded-2xl px-4 py-2 text-sm shadow-sm",
                     "personal-message"
                   )}
                 >
