@@ -1,6 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { parseJSON } from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -22,16 +23,9 @@ import StatusBadge from "../../../../utilityComponents/StatusBadge";
 import { toasted } from "../../../../utilityComponents/Toast";
 import FileAttachmentsList from "./FileAttachmentsList";
 import OrderComments from "./OrderComments";
+import OrderDetails from "./OrderDetails";
 import OrderTimeline from "./OrderTimeline";
 
-const formTemplate = {
-  visitFrequency: { name: "visitFrequency", id: "visitFrequency", label: "Честота" },
-  districtName: { name: "districtName", id: "districtName", label: "Район" },
-  estateSize: { name: "estateSize", id: "estateSize", label: "Площ на имота, кв.м." },
-  visitDay: { name: "visitDay", id: "visitDay", label: "Ден на посещение" },
-  visitHour: { name: "visitHour", id: "visitHour", label: "Час на посещение" },
-  additionalInfo: { name: "additionalInfo", id: "additionalInfo", label: "Допълнителна информация" },
-};
 
 let ValidationSchema = z.object({
   visitFrequency: z.object({ id: z.number(), value: z.string() }),
@@ -42,30 +36,27 @@ let ValidationSchema = z.object({
   additionalInfo: z.string().optional().nullable(),
 });
 
+
 // Export as reusable components stuff like comments, file extract, etc
 
-export default function OrderDetails() {
+export default function ManageOrder() {
   // TODO: handle wrong address param for order - /orders/<orderId> - fetch order and return error if not found
   const { orderId } = useParams();
+
   const [editMode, setEditMode] = useState(false);
   // TODO Export modal as reusable component, can I do it without useState?
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [districtNames] = essentialsStore((essentials) => [essentials.districtNames]);
   const [userData] = userState((state) => [state.userData]);
 
   const queryClient = useQueryClient();
   const orderDataRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchDistrictNames();
-  }, []);
-
   const { data: orderData, isSuccess } = useQuery({
     queryKey: ["orders", orderId],
     queryFn: () => getOrder(orderId as string),
   });
-
+  
   const {
     control,
     register,
@@ -242,66 +233,9 @@ export default function OrderDetails() {
                             <h1 className="text-lg font-semibold text-gray-900">{createFullName(orderData.vendor.user)}</h1>
                           </div>
                         </div>
-                        <StatusBadge label={orderData.orderStatus.value}>{orderData.orderStatus.value}</StatusBadge>
+                        <StatusBadge  orderDate={parseJSON(orderData.startDate)} label={orderData.orderStatus.value}>{orderData.orderStatus.value}</StatusBadge>
                       </div>
-                      <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-                        <dl className="sm:grid-cols-[5fr_3fr] grid  grid-cols-1 gap-x-4 gap-y-8">
-                          <div className="sm:col-span-1">
-                            <dt className="block text-sm font-normal text-gray-900">Услуга</dt>
-                            <dd className="mt-1 text-base font-semibold text-gray-900">
-                              <p className="w-full rounded-md border-0 bg-gray-50 py-1.5 pl-3 pr-10 text-gray-600  sm:text-sm sm:leading-6">
-                                {orderData.serviceType.value}
-                              </p>
-                            </dd>
-                          </div>
-                          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-                            <DropdownSingleSelect {...formTemplate.visitFrequency} disabled={!editMode} options={visitFrequencySelections} control={control} />
-                          </dd>
-                          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-                            <DropdownSingleSelect
-                              {...formTemplate.visitDay}
-                              validOptions={orderData.clientDayChoice}
-                              disabled={!editMode}
-                              options={weekDaySelections}
-                              control={control}
-                            />
-                          </dd>
-                          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-                            <DropdownSingleSelect
-                              {...formTemplate.visitHour}
-                              validOptions={orderData.clientHourChoice}
-                              disabled={!editMode}
-                              options={hourDaySelections}
-                              control={control}
-                            />
-                          </dd>
-                          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-                            <ComboSingleSelect {...formTemplate.districtName} disabled={!editMode} options={districtNames} control={control} />
-                          </dd>
-                          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-                            <ComboSingleSelect {...formTemplate.estateSize} disabled={!editMode} options={estateSizeSelections} control={control} />
-                          </dd>
-                          <div className="sm:col-span-2">
-                            <dt className="block text-sm font-normal text-gray-900">Допълнителна информация</dt>
-                            <textarea
-                              id="comment"
-                              {...register("additionalInfo")}
-                              rows={3}
-                              disabled={!editMode}
-                              className={classNames(
-                                !editMode
-                                  ? "bg-gray-50 text-gray-600"
-                                  : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600",
-                                "mt-1 w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
-                              )}
-                              placeholder={`${editMode ? "Добави коментар" : ""}`}
-                            />
-                          </div>
-                          <div className="sm:col-span-2">
-                            <FileAttachmentsList />
-                          </div>
-                        </dl>
-                      </div>
+                        <OrderDetails editMode={editMode} register={register} control={control} orderData={orderData}/>
                       <div>
                         <a
                           onClick={handleSubmit((formData) => updateOrderMutation.mutate({ ...orderData, ...formData }))}

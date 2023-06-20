@@ -51,7 +51,7 @@ function App() {
           <Route path="vendor-list/*" element={<VendorList />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
       </QueryClientProvider>
     </BrowserRouter>
   );

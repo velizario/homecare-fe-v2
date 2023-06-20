@@ -75,6 +75,7 @@ module.exports = {
       lineClamp: {
         none: "display: flex",
       },
+
     },
   },
   plugins: [require("@tailwindcss/forms"), require("@headlessui/tailwindcss")],

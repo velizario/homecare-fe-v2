@@ -23,10 +23,10 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
     (image) => ({ src: portfolioImage(image.imgUrl), thumb: portfolioImage(image.imgUrl), subHtml: image.imgUrl } as GalleryItem)
   );
 
-  const onInit = useCallback((detail: InitDetail) => {
+  const onInit = (detail: InitDetail) => {
     galleryControl = detail.instance;
     // detail && (galleryRef.current = detail.instance);
-  }, []);
+  }
 
   return (
     <>
@@ -36,7 +36,7 @@ export default function ImageGallery({ images }: ImageGalleryProps) {
       )}
       {sortObjArrAsc(images).map((image, index) => (
         <div
-          onClick={() => galleryControl?.openGallery(index)}
+          onClick={() => {console.log(galleryControl);galleryControl?.openGallery(index)}}
           key={image.id}
           className="group relative inline-flex h-[10rem] w-full min-w-[10rem] flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-gray-300 shadow-[-15px_5px_10px_-5px_rgba(0,0,0,0.3)] transition-all hover:-translate-y-2 hover:shadow-[-5px_-0px_15px_0px_rgba(39,42,181,1)]"
         >

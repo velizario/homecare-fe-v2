@@ -1,0 +1,20 @@
+.wave {
+    background: linear-gradient(145deg, rgb(52, 143, 0) 30%, rgb(133, 212, 104) 40%, rgb(52, 143, 0) 50%, rgb(133, 212, 104) 60%, rgb(52, 143, 0)  70%);
+    background-size:400% 400%;
+    animation: wave 20s ease infinite forwards;
+    animation-play-state: running;
+}
+
+.wave:hover {
+    /* animation-play-state: paused; */
+    background:rgb(31, 117, 0) ;
+    color: white;
+}
+
+@keyframes wave {
+    0%{background-position:100% 50%}
+    20%{background-position:0% 50%}
+    100%{background-position:0% 50%}
+    /* 20%{background-position:100% 50%}
+    100%{background-position:100% 50%} */
+}

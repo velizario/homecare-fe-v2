@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { orderState } from "../../../store/orderState";
 import TabsMenu from "../../../utilityComponents/TabsMenu";
-import OrderDetails from "./orderDetails/OrderDetails";
+import OrderDetails from "./ManageOrder/ManageOrder";
 import OrderList from "./orderlist/OrderList";
 import OrderSchedule from "./orderschedule/OrderSchedule";
 import RequestList from "./requests/RequestList";

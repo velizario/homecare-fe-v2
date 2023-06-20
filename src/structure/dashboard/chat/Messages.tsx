@@ -7,7 +7,8 @@ import Picker from "@emoji-mart/react";
 import throttle from "lodash.throttle";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import ContextMenu from "./ContextMenu";
-import OrderDetails from "./OrderDetails";
+import MessagesOrderDetails, { messageOrderOpenState } from "./MessagesOrderDetails";
+import ButtonDefault from "../../../utilityComponents/CustomButton";
 
 const messages = [
   {
@@ -102,6 +103,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
   const [emojiActive, setEmojiActive] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [chatContent, setChatContent] = useState(messages);
+  const [isOpen, setIsOpen] = messageOrderOpenState((state) => [state.isOpen, state.setIsOpen]);
   const inputRef = useRef<null | HTMLTextAreaElement>(null);
   const formRef = useRef<null | HTMLFormElement>(null);
   const chatRef = useRef<null | HTMLUListElement>(null);
@@ -186,61 +188,13 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
     // inputRef.current?.focus()
   };
 
-  // Add context menu
-  // const innerHtml = `
-  // <a class="text-xs font-medium block cursor-pointer px-2 py-1.5 rounded hover:bg-gray-100">Редактирай</a>
-  // <a class="text-xs font-medium block cursor-pointer px-2 py-1.5 rounded hover:bg-gray-100">Изтрий</a>
-  // `;
-  // const test = useMemo(() => document.createElement("div"), []);
-  // const activeMenuParagraph = useRef<null | HTMLParagraphElement>(null);
-  // // let activeMenuParagraph = null as null | HTMLParagraphElement;
-  // test.className = "absolute p-2 bg-white transition-opacity rounded-lg border min-w-[6rem] text-gray-800";
-  // test.innerHTML = innerHtml;
-  // function contextMenuHandler(ev: React.MouseEvent<HTMLParagraphElement, MouseEvent>) {
-  //   ev.stopPropagation();
-  //   activeMenuParagraph.current?.classList.add("text-transparent");
-  //   ev.currentTarget.classList.remove("text-transparent");
-  //   activeMenuParagraph.current = ev.currentTarget;
-  //   test.classList.remove("opacity-100");
-  //   test.classList.add("opacity-0");
-  //   activeMenuParagraph.current.append(test);
-  //   const containerWidth = document.querySelector(".message-container")?.clientWidth;
-  //   const containerHeight = (document.querySelector(".message-container")?.clientHeight || 0) + (document.querySelector(".message-container")?.scrollTop || 0);
-  //   const menuRightPosition = activeMenuParagraph.current?.offsetLeft;
-  //   const menuBottomPosition = activeMenuParagraph.current?.offsetTop;
-  //   const menuWidth = test.offsetWidth;
-  //   const menuHeight = test.offsetHeight;
-  //   const menuPositionLeft = containerWidth && menuRightPosition && containerWidth - menuRightPosition < menuWidth ? `${-menuWidth + 10}px` : "10px";
-  //   const menuPositionTop = containerHeight && menuBottomPosition && containerHeight - menuBottomPosition < menuHeight ? `${-menuHeight}px` : "20px";
-  //   test.style.left = menuPositionLeft;
-  //   test.style.top = menuPositionTop;
-  //   test.classList.add("opacity-100");
-  // }
-
-  // const removeMenu = () => {
-  //   test.remove();
-  //   activeMenuParagraph.current?.classList.add("text-transparent");
-  // };
-
-  // useEffect(() => {
-  //   document.body.addEventListener("click", removeMenu);
-  //   document.body.addEventListener("keydown", (e) => {
-  //     if (e.key === "Escape") removeMenu();
-  //   });
-  //   return () => {
-  //     document.body.removeEventListener("click", removeMenu);
-  //     document.body.removeEventListener("keydown", removeMenu);
-  //   };
-  // }, []);
-
   return (
     // TODO fix the view for mobile - right now using fixed as workaround. Remove the stuff like headers and footers and such.
-    <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex bg-white", "h-[calc(100dvh-88px)] w-full flex-col border pb-4 md:flex")}>
+    <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex ", "w-full flex-col  pl-2 md:flex")}>
       {/* Selected person for chat */}
-      <div className="border-b px-4 py-1 mb-2">
-        <div className="flex items-center justify-between space-x-3 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 md:justify-end  md:py-4">
-          <ArrowSmallLeftIcon onClick={toggleChat} className="h-6 w-6 text-indigo-500 md:hidden" />
-          <div className="flex items-center gap-2">
+      <div className={classNames("mb-4 flex flex-col gap-2 rounded-t-lg bg-neutral-50 px-4 pb-4 pt-2", isOpen ? "" : "")}>
+        <div className="flex justify-between gap-4 md:justify-end">
+          <div className="flex w-max items-center gap-2">
             <img
               className="h-10 w-10 flex-shrink-0 rounded-full"
               src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -249,11 +203,21 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
             <p className="truncate text-sm font-medium text-gray-900">Leslie Alexand</p>
           </div>
         </div>
-        <OrderDetails></OrderDetails>
-        
+        <MessagesOrderDetails></MessagesOrderDetails>
       </div>
       {/* Chat window */}
-      <ul ref={chatRef} className="message-container relative flex flex-col overflow-y-auto  px-4">
+      <div className="relative">
+        <ButtonDefault category="bare"  className="absolute right-0 mr-8 mt-4 border-0 shadow-[2px_2px_10px_rgba(147,155,0,0.5)] bg-yellow-200 text-yellow-700 hover:shadow-[3px_3px_12px_rgba(147,155,0.5)] transition-all">
+          Активирай поръчка
+        </ButtonDefault>
+      </div>
+      <ul
+        ref={chatRef}
+        className={classNames(
+          "message-container flex-col overflow-y-auto bg-neutral-50 p-2 transition-opacity duration-500 ",
+          isOpen ? "opacity-0" : "opacity-100"
+        )}
+      >
         {chatContent.map((message) => {
           return (
             <li
@@ -296,7 +260,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         {/* <ScrollIntoView messageAdded={messageAdded} /> */}
       </ul>
       {/* Chat input */}
-      <div className="flex items-end gap-2 px-4">
+      <div className={classNames("flex items-end gap-2 bg-neutral-50 px-4 pb-4 transition-opacity duration-500 ", isOpen ? "opacity-0" : "opacity-100")}>
         <form ref={formRef} onSubmit={addMessage} className="flex w-full items-end gap-2">
           <div className="relative flex h-10 items-center">
             <FaceSmileIcon onClick={() => toggleEmoji("toggle")} className="h-7 w-7 cursor-pointer text-indigo-500" />
@@ -305,7 +269,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
               <Picker set="native" onClickOutside={() => toggleEmoji("off")} data={data} onEmojiSelect={selectEmoji} />
             </div>
           </div>
-          <div className="flex w-full items-center overflow-hidden rounded-2xl border-2 border-indigo-300 pr-4  text-sm text-gray-700 transition-colors duration-200 focus:border-indigo-500">
+          <div className="flex w-full items-center overflow-hidden rounded-2xl border-2 border-indigo-300 bg-white pr-4  text-sm text-gray-700 transition-colors duration-200 focus:border-indigo-500">
             <textarea
               id="textarea"
               value={messageText}

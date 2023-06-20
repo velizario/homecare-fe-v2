@@ -11,7 +11,7 @@ export default function Chat() {
 
 
   return (
-    <div className="flex">
+    <div className="flex h-[calc(100vh-116px)] overflow-none">
       <ChatBuddies toggleChat={toggleChat} chatIsActive={chatIsActive} />
       <Messages toggleChat={toggleChat} chatIsActive={chatIsActive} />
     </div>
