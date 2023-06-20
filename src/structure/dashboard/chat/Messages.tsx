@@ -207,7 +207,10 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
       </div>
       {/* Chat window */}
       <div className="relative">
-        <ButtonDefault category="bare"  className="absolute right-0 mr-8 mt-4 border-0 shadow-[2px_2px_10px_rgba(147,155,0,0.5)] bg-yellow-200 text-yellow-700 hover:shadow-[3px_3px_12px_rgba(147,155,0.5)] transition-all">
+        <ButtonDefault
+          category="secondary"
+          className="absolute right-0 mr-8 mt-4  border-[rgb(52,143,0)] text-[rgb(16,61,0)]  shadow-xl transition-all hover:bg-[rgba(102,185,102,0.1)]"
+        >
           Активирай поръчка
         </ButtonDefault>
       </div>
@@ -215,7 +218,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         ref={chatRef}
         className={classNames(
           "message-container flex-col overflow-y-auto bg-neutral-50 p-2 transition-opacity duration-500 ",
-          isOpen ? "opacity-0" : "opacity-100"
+          isOpen ? "pointer-events-none  opacity-0" : "opacity-100"
         )}
       >
         {chatContent.map((message) => {
@@ -252,7 +255,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
                 </ContextMenu>
               </div>
 
-              <p className={classNames(message.type === "out" ? "pr-2" : "pl-2", "text-xs text-gray-500")}>{message.date}</p>
+              <p className={classNames(message.type === "out" ? "pr-2" : "pl-2", "text-xs text-gray-500 ")}>{message.date}</p>
             </li>
           );
         })}
@@ -260,7 +263,12 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
         {/* <ScrollIntoView messageAdded={messageAdded} /> */}
       </ul>
       {/* Chat input */}
-      <div className={classNames("flex items-end gap-2 bg-neutral-50 px-4 pb-4 transition-opacity duration-500 ", isOpen ? "opacity-0" : "opacity-100")}>
+      <div
+        className={classNames(
+          "flex items-end gap-2 bg-neutral-50 px-4 pb-4 transition-opacity duration-500",
+          isOpen ? "pointer-events-none  opacity-0" : "opacity-100"
+        )}
+      >
         <form ref={formRef} onSubmit={addMessage} className="flex w-full items-end gap-2">
           <div className="relative flex h-10 items-center">
             <FaceSmileIcon onClick={() => toggleEmoji("toggle")} className="h-7 w-7 cursor-pointer text-indigo-500" />
