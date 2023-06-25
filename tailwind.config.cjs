@@ -36,10 +36,13 @@ module.exports = {
     // },
     extend: {
       colors: {
-        picker: {
-          hover: "#e7edff",
-          selected: "rgba(51, 0, 193, 0.1)",
-        },
+        // picker: {
+        //   hover: "#e7edff",
+        //   selected: "rgba(51, 0, 193, 0.1)",
+        // },
+      third: {
+        500: "rgb(52,143,0)"
+      }
       },
       screens: {
         xs: "400px",

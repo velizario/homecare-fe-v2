@@ -69,13 +69,10 @@ export default function DropdownSingleSelect<K extends FieldValues>({
         <div
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(
-            disabled
-              ? "pointer-events-none bg-gray-50 text-gray-600"
-              : open
-              ? "ring-2 ring-inset ring-indigo-600"
-              : value || value?.value ? "bg-indigo-600 text-white"
-              : "text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300",
-            "h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 sm:text-sm sm:leading-6  transition-colors"
+            disabled ? "pointer-events-none bg-gray-200 text-gray-600" : "",
+            open ? "ring-2 ring-inset ring-indigo-600" : "",
+            value || value?.value ? "font-semibold" : "font-normal shadow-sm ring-1 ring-inset ring-gray-300",
+            "text-gray-900 bg-white  h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 transition-colors sm:text-sm  sm:leading-6"
           )}
         >
           {`${value?.value || value || "(избери)"}`}
@@ -85,7 +82,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >
-          <ChevronDownIcon className={classNames("h-5 w-5", value || value?.value ? "text-white" : "text-gray-400")} aria-hidden="true" />
+          <ChevronDownIcon className={classNames("h-5 w-5 text-gray-600")} aria-hidden="true" />
         </button>
       </div>
 

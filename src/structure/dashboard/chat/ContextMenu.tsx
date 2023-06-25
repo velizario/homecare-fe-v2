@@ -84,7 +84,7 @@ const Content: React.FC<SubComponentProps> = ({ children, className }) => {
     console.log(containerWidth, menuRightPosition, menuWidth);
     menuContainer.classList.add("relative")
     const menuPositionLeft = containerWidth && menuRightPosition && containerWidth - menuRightPosition < menuWidth ? `${-menuWidth+menuButtonWidth/2}px` : `${menuButtonWidth/2}px`; //better to take 10px size from button via queryselector(button class)
-    const menuPositionTop = containerHeight && menuBottomPosition && containerHeight - menuBottomPosition < menuHeight ? `${-menuHeight+menuButtonHeight/2}px` : `${menuButtonHeight/2}px`; //same
+    const menuPositionTop = containerHeight && menuBottomPosition && containerHeight - menuBottomPosition < menuHeight ? `${-menuHeight+menuButtonHeight}px` : `${menuButtonHeight}px`; //same
     ref.current.style.left = menuPositionLeft;
     ref.current.style.top = menuPositionTop;
     ref.current.classList.add("opacity-100")
@@ -94,7 +94,7 @@ const Content: React.FC<SubComponentProps> = ({ children, className }) => {
   return (
     <>
       {menuActive && (
-        <div ref={ref} className={classNames(className, "absolute min-w-[6rem] rounded-lg border bg-white p-2 text-gray-800 transition-opacity")}>
+        <div ref={ref} className={classNames(className, "z-50 absolute min-w-[6rem] rounded-lg border bg-white py-1 text-gray-800 transition-opacity shadow-lg")}>
           {children}
         </div>
       )}
@@ -110,7 +110,7 @@ const Button: React.FC<SubComponentProps> = ({ children, className }) => {
     <button
       className={classNames(className, "menu-button")}
       onClick={(e) => {
-        setMenuActive(true);
+        setMenuActive(state => !state);
       }}
     >
       {children}

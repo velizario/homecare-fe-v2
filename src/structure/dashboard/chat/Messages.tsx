@@ -190,30 +190,12 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
 
   return (
     // TODO fix the view for mobile - right now using fixed as workaround. Remove the stuff like headers and footers and such.
-    <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex ", "w-full flex-col  pl-2 md:flex")}>
+    <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex ", "w-full flex-col  pl-2 md:flex messages")}>
       {/* Selected person for chat */}
-      <div className={classNames("mb-4 flex flex-col gap-2 rounded-t-lg bg-neutral-50 px-4 pb-4 pt-2", isOpen ? "" : "")}>
-        <div className="flex justify-between gap-4 md:justify-end">
-          <div className="flex w-max items-center gap-2">
-            <img
-              className="h-10 w-10 flex-shrink-0 rounded-full"
-              src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt=""
-            />
-            <p className="truncate text-sm font-medium text-gray-900">Leslie Alexand</p>
-          </div>
-        </div>
+      <div className={classNames("mb-4 rounded-t-lg border bg-neutral-50 p-4")}>
         <MessagesOrderDetails></MessagesOrderDetails>
       </div>
       {/* Chat window */}
-      <div className="relative">
-        <ButtonDefault
-          category="secondary"
-          className="absolute right-0 mr-8 mt-4  border-[rgb(52,143,0)] text-[rgb(16,61,0)]  shadow-xl transition-all hover:bg-[rgba(102,185,102,0.1)]"
-        >
-          Активирай поръчка
-        </ButtonDefault>
-      </div>
       <ul
         ref={chatRef}
         className={classNames(

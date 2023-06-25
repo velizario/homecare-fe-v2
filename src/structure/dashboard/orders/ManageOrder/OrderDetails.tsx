@@ -54,7 +54,7 @@ export default function OrderDetails({ orderData, control, register, editMode }:
 
   return (
     <>
-      <div className="border-gray-200">
+      <div className="border-gray-200 pt-4">
         <dl className="grid grid-cols-1  gap-x-4 sm:grid-cols-[5fr_3fr]">
           <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
             <DropdownSingleSelect {...formTemplate.serviceType} disabled={!editMode} options={serviceTypes} control={control} />
