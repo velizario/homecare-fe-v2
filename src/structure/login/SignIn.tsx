@@ -19,7 +19,7 @@ let validationSchema = z.object({
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const [setIsLoggedIn, setUserData] = userState((state) => [state.setIsLoggedIn, state.setUserData]);
+  // const [setIsLoggedIn, setUserData] = userState((state) => [state.setIsLoggedIn, state.setUserData]);
 
   const {
     register,

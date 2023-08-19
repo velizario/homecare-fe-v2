@@ -1,6 +1,7 @@
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, Path, PathValue, useController, UseFormSetValue } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 import classNames from "../helpers/classNames";
 import { SelectionOption } from "../types/types";
 
@@ -69,12 +70,12 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
       </label>
       <div className={classNames(`relative mt-1  ${id}`)}>
         <input
-          className={classNames(
-            disabled
-              ? "bg-gray-50 text-gray-600 pointer-events-none"
-              : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600",
-            open ? "ring-2 ring-inset ring-indigo-600" : "",
-            "w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
+          className={twMerge(
+            open && "ring-2 ring-inset ring-indigo-600" ,
+            value || value?.value ? "font-medium" : "font-light shadow-sm ring-1 ring-inset ring-gray-300",
+            "text-gray-900 bg-white  h-[2.25rem] w-full rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 transition-colors sm:text-sm  sm:leading-6",
+            disabled ? "pointer-events-none bg-gray-100 text-gray-500 ring-gray-200" : ""
+
           )}
           onChange={(event) => {
             const newValue = event.target.value;
@@ -90,14 +91,14 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
           }}
           className={classNames(disabled ? "hidden" : "absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none")}
         >
-          <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <ChevronUpDownIcon className="h-5 w-5 text-gray-600" aria-hidden="true" />
         </button>
       </div>
 
       <div
         className={classNames(
-          "absolute z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 transition-opacity focus:outline-none sm:text-sm",
-          open ? "opacity-100" : " invisible opacity-0"
+          "absolute z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
+          open ? "opacity-100 translate-y-0  transition-all duration-200" : " invisible opacity-0 -translate-y-1"
         )}
       >
         {filteredOptions.map((item) => (
@@ -105,13 +106,13 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
             onClick={updateSelection}
             data-id={item.id}
             key={item.id}
-            className={classNames(
-              "p-2 text-sm ",
-              query === item.value
+            className={twMerge(
+              "p-2 text-sm font-normal",
+              value?.id === item.id
                 ? "cursor-pointer bg-indigo-600 text-white"
                 : (validOptions || options).find((option) => option.id === item.id)
-                ? "cursor-pointer hover:bg-neutral-100"
-                : "pointer-events-none cursor-default text-gray-400  line-through"
+                ? "cursor-pointer hover:bg-neutral-100" 
+                : "pointer-events-none cursor-default text-gray-400 line-through "
             )}
           >
             <p>{item.value}</p>

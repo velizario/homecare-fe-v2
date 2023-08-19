@@ -74,8 +74,9 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
         Възползвайте се от абонаментата ни услуга и получи отстъпка или избери еднократно посещение.
       </p>
       <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 items-center gap-y-6 sm:mt-10 sm:gap-y-0 lg:max-w-4xl lg:grid-cols-2">
-        {tiers.map((tier, frequencyIdx) => (
-          <div
+        {tiers.map((tier, frequencyIdx) => {
+          console.log(tier)
+          return <div
             key={tier.id}
             className={classNames(
               tier.featured ? "relative bg-white shadow-2xl" : "bg-white/60 sm:mx-8 lg:mx-0",
@@ -102,12 +103,14 @@ export default function SelectFrequency<K extends FieldValues>({ setValue, setNe
               ))}
             </ul>
             <div className="mt-8 flex flex-col gap-4">
-              {tier.frequencyOptions.map((option) => (
-                <SelectFrequencyButton key={option.id} selection={option} handleChange={handleChange} />
-              ))}
+              {tier.frequencyOptions.map((option) => {
+                console.log(option)
+                return <SelectFrequencyButton key={option.id} selection={option} handleChange={handleChange} />
+              }
+              )}
             </div>
           </div>
-        ))}
+})}
       </div>
       {/* <a
         onClick={() => {

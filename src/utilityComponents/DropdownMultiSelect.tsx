@@ -13,7 +13,7 @@ interface TDropdownMultiSelect<T extends FieldValues> {
   label: string;
   control: Control<T, object>;
   id: string;
-  className: string;
+  className?: string;
   options: SelectionOption[];
   validOptions?: SelectionOption[];
   disabled?: boolean;
@@ -101,9 +101,10 @@ export default function DropdownMultiSelect<K extends FieldValues>({
 
       <div
         className={classNames(
-          "z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
-          open ? "absolute" : "hidden",
-          multiSelect ? id : ""
+          open ? "ring-2 ring-inset ring-indigo-600" : "",
+          value || value?.value ? "font-medium" : "font-light shadow-sm ring-1 ring-inset ring-gray-300",
+          "text-gray-900 bg-white  h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 transition-colors sm:text-sm  sm:leading-6",
+          disabled ? "pointer-events-none bg-gray-100 text-gray-500 ring-gray-200" : "",
         )}
       >
         {options.map((option) => (
@@ -112,10 +113,10 @@ export default function DropdownMultiSelect<K extends FieldValues>({
             data-id={option.id}
             key={option.id}
             className={classNames(
-              "group relative cursor-pointer p-2 text-sm hover:bg-neutral-100",
+              "group relative cursor-pointer p-2 text-sm hover:bg-neutral-100 font-normal",
               validOptions.find((item) => item.id === option.id)
                 ? selectionIncludes(option, selections)
-                  ? "font-semibold text-indigo-600"
+                  ? "cursor-pointer bg-indigo-600 text-white"
                   : "text-gray-800"
                 : "pointer-events-none cursor-default text-gray-400 line-through"
             )}

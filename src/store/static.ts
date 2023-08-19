@@ -6,11 +6,11 @@ import { BACKEND_URL } from "../helpers/envVariables";
 export const placeholderImage = `${BACKEND_URL}/users/public/common/public_placeholder_image.jpg"}`;
 
 // if changed here, needs to be changed on the BE too
-// if changed here, revise in 1. SelectFrequency.tsx  - frequencyOptions variables. 2. CalendarLogic - eachDayOfInterval (step)
+// if changed here, revise in 1. SelectFrequency.tsx  (only if order is changed) - frequencyOptions variables. 2. CalendarLogic - eachDayOfInterval (step)
 export const visitFrequencySelections = [
-  { id: 0, value: "Еднократно" },
-  { id: 1, value: "Седмично" },
-  { id: 2, value: "Двуседмично" },
+  { id: 1, value: "Еднократно" },
+  { id: 2, value: "Седмично" },
+  { id: 3, value: "Двуседмично" },
 ];
 
 // if changed here, needs to be changed on the BE too

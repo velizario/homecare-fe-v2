@@ -1,7 +1,7 @@
 import { requestToAPI } from "../helpers/helperFunctions";
 import { ApiError, ProfileInputForm, User } from "../types/types";
 import { userState } from "../store/userState";
-
+import { SignOutUser } from "../helpers/signoutUser";
 
 // export interface Client {
 //   id: string;
@@ -25,6 +25,8 @@ type HandleRequestData = {
   token: string;
 };
 
+
+
 const handleRequest = async (endpoint: string, method: string, data?: {}) => {
   const resData: HandleRequestData = await requestToAPI(`users/${endpoint}`, method, data);
   if (resData.status === "success") {
@@ -32,10 +34,7 @@ const handleRequest = async (endpoint: string, method: string, data?: {}) => {
     userState.setState({ isLoggedIn: true, userData: resData.data });
   }
 
-  if (resData.status === "fail" || resData.status === "error") {
-    localStorage.setItem("token", "");
-    userState.setState({ isLoggedIn: false, userData: {} as User });
-  }
+  if (resData.status === "fail" || resData.status === "error") SignOutUser();
   return resData;
 };
 
@@ -52,7 +51,7 @@ export const fetchUserState = async () => {
 };
 
 export const updateUserData = async (data: Partial<ProfileInputForm>) => {
-  console.log("data to update with", data)
+  console.log("data to update with", data);
   const resData = await requestToAPI(`users`, "PATCH", data);
   // if (resData.status === 'success')
   return (await resData.data) as User;

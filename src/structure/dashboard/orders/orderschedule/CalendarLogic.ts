@@ -48,7 +48,7 @@ const calculateEventDays = (order: Order, range: { from: Date; to: Date }) => {
   if (compareAsc(startDateByWeekDay, endDate) > 0) return [];
 
   // return array of service dates for the order
-  return eachDayOfInterval({ start: startDateByWeekDay, end: endDate }, { step: order.visitFrequency.id * 7 });
+  return eachDayOfInterval({ start: startDateByWeekDay, end: endDate }, { step: (order.visitFrequency.id - 1) * 7 });
 };
 
 export const createOrdersEvents = (orderData: Order[], range: { from: Date; to: Date }) => {

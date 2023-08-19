@@ -1,12 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import { Control, useForm, UseFormRegister } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { z } from "zod";
+import { useEffect, useState } from "react";
+import { Control, UseFormRegister } from "react-hook-form";
 import classNames from "../../../../helpers/classNames";
 import { fetchDistrictNames, fetchServiceTypeState } from "../../../../model/essentialsModel";
-import { getOrder } from "../../../../model/orderModel";
 import { getVendor } from "../../../../model/vendorModel";
 import { essentialsStore } from "../../../../store/essentialsStore";
 import { estateSizeSelections, hourDaySelections, visitFrequencySelections, weekDaySelections } from "../../../../store/static";
@@ -14,10 +9,9 @@ import { Order, Vendor } from "../../../../types/types";
 import ComboSingleSelect from "../../../../utilityComponents/ComboSingleSelect";
 import DropdownSingleSelect from "../../../../utilityComponents/DropdownSingleSelect";
 import ImageGallery from "../../../../utilityComponents/ImageGallery";
-import FileAttachmentsList from "./FileAttachmentsList";
 
 type OrderDetailsProps = {
-  orderData: Order;
+  orderData: Order | undefined;
   control: Control<Order, object>;
   register: UseFormRegister<Order>;
   editMode: boolean;
@@ -56,34 +50,46 @@ export default function OrderDetails({ orderData, control, register, editMode }:
     <>
       <div className="border-gray-200 pt-4">
         <dl className="grid grid-cols-1  gap-x-4 sm:grid-cols-[5fr_3fr]">
-          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-            <DropdownSingleSelect {...formTemplate.serviceType} disabled={!editMode} options={serviceTypes} control={control} />
+          <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
+            <DropdownSingleSelect integratedLabel {...formTemplate.serviceType} disabled={!editMode} options={serviceTypes} control={control} />
           </dd>
-          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
-            <DropdownSingleSelect {...formTemplate.visitFrequency} disabled={!editMode} options={visitFrequencySelections} control={control} />
+          <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
+            <DropdownSingleSelect integratedLabel {...formTemplate.visitFrequency} disabled={!editMode} options={visitFrequencySelections} control={control} />
           </dd>
-          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
+          <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
             <DropdownSingleSelect
+              integratedLabel
               {...formTemplate.visitDay}
-              validOptions={orderData.clientDayChoice}
+              // validOptions={orderData.clientDayChoice}
               disabled={!editMode}
               options={weekDaySelections}
               control={control}
             />
           </dd>
-          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
+          <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
             <DropdownSingleSelect
+              integratedLabel
               {...formTemplate.visitHour}
-              validOptions={orderData.clientHourChoice}
+              // validOptions={orderData.clientHourChoice}
               disabled={!editMode}
               options={hourDaySelections}
               control={control}
             />
-          </dd>
-          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
+         </dd>
+         {/*TODO Fix dropdownMultiselect */}
+          {/* <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
+            <DropdownMultiSelect
+              {...formTemplate.visitHour}
+              // validOptions={orderData.clientHourChoice}
+              disabled={!editMode}
+              options={hourDaySelections}
+              control={control}
+            />
+          </dd> */}
+          <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
             <ComboSingleSelect {...formTemplate.districtName} disabled={!editMode} options={districtNames} control={control} />
           </dd>
-          <dd className="mt-1 text-base font-semibold text-gray-900 sm:col-span-1">
+          <dd className="mt-1 text-base  text-gray-900 sm:col-span-1">
             <ComboSingleSelect {...formTemplate.estateSize} disabled={!editMode} options={estateSizeSelections} control={control} />
           </dd>
           <div className="mt-6 sm:col-span-2">

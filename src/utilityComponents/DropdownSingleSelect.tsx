@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { Control, FieldValues, Path, useController } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 import classNames from "../helpers/classNames";
 import { SelectionOption } from "../types/types";
 import InputErrorMessage from "./InputErrorMessage";
@@ -16,7 +17,8 @@ interface TDropdownSingleSelect<T extends FieldValues> {
   className?: string;
   validOptions?: SelectionOption[];
   disabled?: boolean;
-  placeholderValue?: boolean;
+  placeholder?: boolean;
+  integratedLabel?: boolean;
 }
 
 export default function DropdownSingleSelect<K extends FieldValues>({
@@ -28,12 +30,16 @@ export default function DropdownSingleSelect<K extends FieldValues>({
   className,
   validOptions = options,
   disabled = false,
-  placeholderValue = true,
+  placeholder = true,
+  integratedLabel = false,
 }: TDropdownSingleSelect<K>) {
   const [open, setOpen] = useState(false);
 
+  const placeholderValue = integratedLabel ? `Избери ${label.toLocaleLowerCase()}` : "(избери)"
+
   useEffect(() => {
-    placeholderValue && options.unshift({ id: -1, value: "(избери)" });
+    if (!placeholder) return;
+    options.unshift({ id: -1, value: placeholderValue });
   }, [options]);
 
   const {
@@ -61,21 +67,21 @@ export default function DropdownSingleSelect<K extends FieldValues>({
 
   return (
     <div className={classNames("relative", className || "")}>
-      <label htmlFor={id} className="block text-sm font-normal text-gray-900">
+      {!integratedLabel && <label htmlFor={id} className="block text-sm font-normal text-gray-900">
         {label}
-      </label>
+      </label>}
 
       <div className={classNames("relative mt-1", id)}>
         <div
           onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
-          className={classNames(
-            disabled ? "pointer-events-none bg-gray-200 text-gray-600" : "",
+          className={twMerge(
             open ? "ring-2 ring-inset ring-indigo-600" : "",
-            value || value?.value ? "font-semibold" : "font-normal shadow-sm ring-1 ring-inset ring-gray-300",
-            "text-gray-900 bg-white  h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 transition-colors sm:text-sm  sm:leading-6"
+            value || value?.value ? "font-medium" : "font-light shadow-sm ring-1 ring-inset ring-gray-300",
+            "text-gray-900 bg-white  h-[2.25rem] w-full cursor-pointer rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 transition-colors sm:text-sm  sm:leading-6",
+            disabled ? "pointer-events-none bg-gray-100 text-gray-500 ring-gray-200" : "",
           )}
         >
-          {`${value?.value || value || "(избери)"}`}
+          {`${value?.value || value || placeholderValue}`}
         </div>
         <button
           type="button"
@@ -88,8 +94,8 @@ export default function DropdownSingleSelect<K extends FieldValues>({
 
       <div
         className={classNames(
-          "z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm",
-          open ? "absolute" : "hidden"
+          "absolute z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black ring-opacity-5  focus:outline-none sm:text-sm",
+          open ? "opacity-100 translate-y-0  transition-all duration-200" : " invisible opacity-0 -translate-y-1"
         )}
       >
         {options.map((option) => (
@@ -98,7 +104,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
             data-id={option.id}
             key={option.id}
             className={classNames(
-              "p-2 text-sm ",
+              "p-2 text-sm font-normal min-h-[36px] flex",
               value?.id === option.id
                 ? "cursor-pointer bg-indigo-600 text-white"
                 : validOptions.find((validOption) => validOption.id === option.id)
@@ -106,7 +112,7 @@ export default function DropdownSingleSelect<K extends FieldValues>({
                 : "pointer-events-none cursor-default text-gray-400  line-through"
             )}
           >
-            <p>{option.value}</p>
+            <p >{option.value}</p>
           </div>
         ))}
       </div>

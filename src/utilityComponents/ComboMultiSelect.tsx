@@ -1,6 +1,7 @@
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useEffect, useRef, useState } from "react";
 import { Control, FieldValues, Path, PathValue, useController, UseFormSetValue } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
 import classNames from "../helpers/classNames";
 import { toggleSelectionOption } from "../helpers/helperFunctions";
 import { SelectionOption } from "../types/types";
@@ -80,11 +81,10 @@ export default function ComboMultiSelect<K extends FieldValues>({
       <div className={classNames(`relative mt-1  ${id}`)}>
         <input
           className={classNames(
-            disabled
-              ? "bg-gray-50 text-gray-600"
-              : "bg-white text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600",
             open ? "ring-2 ring-inset ring-indigo-600" : "",
-            "w-full rounded-md border-0 py-1.5 pl-3 pr-10  sm:text-sm sm:leading-6"
+            value || value?.value ? "font-medium" : "font-light shadow-sm ring-1 ring-inset ring-gray-300",
+            "text-gray-900 bg-white  h-[2.25rem] w-full rounded-md border-0 py-1.5 pl-3 pr-10 shadow-sm ring-1 ring-inset ring-gray-300 transition-colors sm:text-sm  sm:leading-6",
+            disabled ? "pointer-events-none bg-gray-100 text-gray-500 ring-gray-200" : "",
           )}
           onChange={(event) => {
             const newValue = event.target.value;
@@ -105,8 +105,8 @@ export default function ComboMultiSelect<K extends FieldValues>({
       </div>
       <div
         className={classNames(
-          "z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto overscroll-contain rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none  sm:text-sm",
-          open ? "absolute" : "hidden",
+          "absolute z-10 mt-1 flex max-h-64 w-full flex-col overflow-auto overscroll-contain rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none  sm:text-sm",
+          open ? "opacity-100 translate-y-0  transition-all duration-200" : " invisible opacity-0 -translate-y-1",
           multiSelect ? id : ""
         )}
       >
@@ -121,13 +121,13 @@ export default function ComboMultiSelect<K extends FieldValues>({
               }
             }}
             key={option.id}
-            className={classNames(
-              "group relative cursor-pointer p-2 text-sm hover:bg-indigo-600 hover:text-white",
+            className={twMerge(
+              "group relative cursor-pointer p-2 text-sm hover:bg-indigo-600 hover:text-white font-normal",
               validOptions.find((item) => item.id === option.id)
                 ? selectionIncludes(option, selections)
-                  ? "font-semibold text-indigo-600 "
+                  ? "cursor-pointer bg-indigo-600 text-white"
                   : "text-gray-800"
-                : "pointer-events-none cursor-default text-gray-400 line-through"
+                : "pointer-events-none cursor-default text-gray-400 line-through "
             )}
           >
             <p>{option.value}</p>
