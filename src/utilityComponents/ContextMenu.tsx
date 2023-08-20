@@ -1,11 +1,10 @@
-import { Dispatch, Fragment, MouseEventHandler, useEffect, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
-import { changeOrderStatus, fetchOrderState } from "../model/orderModel";
-import { orderState } from "../store/orderState";
-import ModalAction from "./ModalAction";
+import { Fragment, MouseEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { changeOrderStatus, fetchOrderState } from "../model/orderModel";
 import { ORDER_STATUS } from "../types/types";
+import ModalAction from "./ModalAction";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -16,7 +15,6 @@ type ContextMenuProps = {
 };
 
 export default function ContextMenu({ orderId }: ContextMenuProps) {
-  const updateOrderData = orderState((state) => state.updateOrderData);
   const [modalOpen, setModalOpen] = useState(false);
   const [userConfirmed, setUserConfirmed] = useState(false);
   const [orderAnullment, setOrderAnullment] = useState(false);

@@ -11,7 +11,7 @@ import Filters from "../../../../utilityComponents/Filters";
 import OrderItem from "./OrderItem";
 
 export default function OrderList() {
-  const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
+  const [orderData] = orderState((state) => [state.orderData]);
   const [userRoles] = userState((state) => [state.userData.roles]);
 
 

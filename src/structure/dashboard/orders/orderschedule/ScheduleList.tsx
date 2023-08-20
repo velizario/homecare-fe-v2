@@ -20,7 +20,7 @@ import { dateRangeStore } from "./OrderSchedule";
 export default function ScheduleList() {
 
   const [dateRange] = dateRangeStore((store) => [store.dateRange]);
-  const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
+  const [orderData] = orderState((state) => [state.orderData]);
   const [feedbackEventId, setFeedbackEventId] = useState<string | null>(null);
   const [events, setEvents] = useState<OrderEvent[] | null>(null);
   const { openModal, Modal, closeModal } = useModal();

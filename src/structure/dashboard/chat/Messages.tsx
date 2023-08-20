@@ -1,14 +1,14 @@
-import { FaceSmileIcon, ArrowSmallLeftIcon } from "@heroicons/react/24/outline";
-import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import classNames from "../../../helpers/classNames";
 import data from "@emoji-mart/data/sets/14/native.json";
 import Picker from "@emoji-mart/react";
-import throttle from "lodash.throttle";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import { FaceSmileIcon } from "@heroicons/react/24/outline";
+import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import throttle from "lodash.throttle";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import classNames from "../../../helpers/classNames";
+import { fetchOrderState } from "../../../model/orderModel";
 import ContextMenu from "./ContextMenu";
 import MessagesOrderDetails, { messageOrderOpenState } from "./MessagesOrderDetails";
-import ButtonDefault from "../../../utilityComponents/CustomButton";
 
 const messages = [
   {
@@ -85,10 +85,6 @@ const messages = [
   },
 ];
 
-interface MessagesProps {
-  toggleChat: () => void;
-  chatIsActive: boolean;
-}
 
 interface Emojis {
   id: string;
@@ -99,7 +95,7 @@ interface Emojis {
   unified: string;
 }
 
-export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
+export default function Messages() {
   const [emojiActive, setEmojiActive] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [chatContent, setChatContent] = useState(messages);
@@ -190,7 +186,7 @@ export default function Messages({ toggleChat, chatIsActive }: MessagesProps) {
 
   return (
     // TODO fix the view for mobile - right now using fixed as workaround. Remove the stuff like headers and footers and such.
-    <div className={classNames(!chatIsActive ? "hidden" : "z-50 flex ", "w-full flex-col  pl-2 md:flex messages")}>
+    <div className={classNames("z-50 flex ", "w-full flex-col  pl-2 md:flex messages")}>
       {/* Selected person for chat */}
       <div className={classNames("mb-4 rounded-t-lg border bg-neutral-50 p-4")}>
         <MessagesOrderDetails></MessagesOrderDetails>

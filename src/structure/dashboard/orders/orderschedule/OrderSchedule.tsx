@@ -1,10 +1,5 @@
-import { useEffect } from "react";
 import { DateRange } from "react-day-picker";
 import create from "zustand";
-import { fetchOrderState } from "../../../../model/orderModel";
-import Filters from "../../../../utilityComponents/Filters";
-import Modal from "../../../../utilityComponents/Modal";
-import EventModal from "./EventModal";
 import ScheduleCalendar from "./ScheduleCalendar";
 import ScheduleList from "./ScheduleList";
 

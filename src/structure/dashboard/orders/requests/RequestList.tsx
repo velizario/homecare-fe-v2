@@ -5,13 +5,13 @@ import { createFullName, sortObjArrDesc } from "../../../../helpers/helperFuncti
 import { fetchOrderState } from "../../../../model/orderModel";
 import { orderState } from "../../../../store/orderState";
 import { userState } from "../../../../store/userState";
-import { Order, OrderHistoryLogType, ORDER_STATUS } from "../../../../types/types";
+import { Order, ORDER_STATUS } from "../../../../types/types";
 import ContextMenu from "../../../../utilityComponents/ContextMenu";
 import Filters from "../../../../utilityComponents/Filters";
 import OrderItem from "./RequestItem";
 
 export default function RequestList() {
-  const [orderData, updateOrderData] = orderState((state) => [state.orderData, state.updateOrderData]);
+  const [orderData] = orderState((state) => [state.orderData]);
   const [userRoles] = userState((state) => [state.userData.roles]);
 
 

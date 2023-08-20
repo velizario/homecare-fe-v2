@@ -4,6 +4,7 @@ import { Control, FieldValues, Path, PathValue, useController, UseFormSetValue }
 import { twMerge } from "tailwind-merge";
 import classNames from "../helpers/classNames";
 import { SelectionOption } from "../types/types";
+import InputErrorMessage from "./InputErrorMessage";
 
 // TODO forbid entering free text, maybe via some validation
 // TODO enable mouse events - mouse up/down, enter, escape
@@ -28,6 +29,8 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
     name: name as Path<K>,
     control,
   });
+
+  const errorMessage = error?.message?.toString();
 
   const filteredOptions =
     query === "" || query === null
@@ -119,6 +122,8 @@ export default function ComboSingleSelect<K extends FieldValues>({ options, labe
           </div>
         ))}
       </div>
+      <InputErrorMessage>{errorMessage}</InputErrorMessage>
+
     </div>
   );
 }

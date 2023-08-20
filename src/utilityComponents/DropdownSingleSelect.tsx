@@ -50,7 +50,6 @@ export default function DropdownSingleSelect<K extends FieldValues>({
     control,
   });
 
-  // I dont need error, but will leave it for building other components from this
   const errorMessage = error?.message?.toString();
 
   const dismissDropdown = (e: MouseEvent) => {

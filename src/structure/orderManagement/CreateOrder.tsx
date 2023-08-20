@@ -9,6 +9,7 @@ import CleaningEntityInfo from "./CleaningEntityInfo";
 import SelectFrequency from "./SelectFrequency";
 import SelectService from "./SelectService";
 import SelectTimeframe from "./SelectTimeframe";
+import { EssentialDataAll } from "../../types/types";
 
 interface CreateOrderProps {
   closeModal: () => void;
@@ -16,13 +17,13 @@ interface CreateOrderProps {
 }
 
 export type CreateOrderForm = {
-  serviceType: number;
+  serviceType: EssentialDataAll;
   // additionalService: string[];
-  visitFrequency: number;
-  clientDayChoice: number[];
-  clientHourChoice: number[];
-  estateSize: number;
-  districtName: number;
+  visitFrequency: EssentialDataAll;
+  clientDayChoice: EssentialDataAll[];
+  clientHourChoice: EssentialDataAll[];
+  estateSize: EssentialDataAll;
+  districtName: EssentialDataAll;
 };
 
 export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) {
@@ -40,7 +41,7 @@ export default function CreateOrder({ closeModal, vendorId }: CreateOrderProps) 
   }, [orderStep]);
 
   const submitFormHandler = async (data: CreateOrderForm) => {
-    const resData = await createOrder(vendorId, data);
+    const resData = await createOrder({...data, vendorId: Number(vendorId)});
     toasted(`Заявката е изпратена! Можи да видите статуса й в административния панел`, "success");
   };
 

@@ -2,8 +2,8 @@ import { requestToAPI } from "../helpers/helperFunctions";
 import { orderState } from "../store/orderState";
 import { Order, OrderComment, OrderEvent, ORDER_STATUS } from "../types/types";
 
-export const createOrder = async (vendorId: string, data: any) => {
-  const resData = await requestToAPI("orders/createOrder", "POST", { vendorId, ...data });
+export const createOrder = async (data: Partial<Order>) => {
+  const resData = await requestToAPI("orders/createOrder", "POST", data );
   return resData as Order;
 };
 
@@ -12,7 +12,7 @@ export const getOrder = async (data: string) => {
   return resData.data as Order;
 };
 
-export const updateOrder = async (data: any) => {
+export const updateOrder = async (data: Order) => {
   console.log("Order data to update with: ", data);
   console.log({ ...data });
   const resData = await requestToAPI("orders/updateOrder", "POST", data);
