@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import classNames from "../../../helpers/classNames";
+import { createFullName, publicImage } from "../../../helpers/helperFunctions";
 import { fetchOrderState } from "../../../model/orderModel";
+import { orderState } from "../../../store/orderState";
 import Messages from "./Messages";
 
 const chatBuddies = [
@@ -43,7 +46,9 @@ const chatBuddies = [
 ];
 
 export default function Chat() {
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
+  const [orders] = orderState((state) => [state.orderData]);
+  const navigate = useNavigate()
 
   const handleBuddySelect = (buddyId: number) => {
     setActive(buddyId);
@@ -52,44 +57,46 @@ export default function Chat() {
   useEffect(() => {
     fetchOrderState();
   }, []);
-
+  
+  // TODO works only from user perspective (only vendor data is used). Make it work for vendors also
   return (
     <div className="overflow-none flex h-[calc(100vh-116px)]">
       <div className={classNames("block", "w-full min-w-0 flex-none border-y md:block md:w-auto")}>
         {
           <ul role="list" className="relative z-0">
-            {chatBuddies.map((person) => (
+            {orders.map((order) => (
               <li
-                key={person.id}
+                key={order.id}
                 onClick={() => {
-                  handleBuddySelect(person.id);
+                  handleBuddySelect(order.id)
+                  navigate(`/dashboard/chat/?orderId=${order.id}&partnerId=${order.vendorId}`)
                 }}
                 className={classNames(
-                  person.id === active ? "bg-indigo-50" : "",
+                  order.id === active ? "bg-indigo-50" : "",
                   "group flex cursor-pointer justify-between border-b border-indigo-100 px-4  hover:bg-indigo-50"
                 )}
               >
                 <div className="relative flex items-center space-x-3 py-4 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500 ">
-                  <img className="h-10 w-10 flex-shrink-0 rounded-full" src={person.imageUrl} alt="" />
+                  <img className="h-10 w-10 flex-shrink-0 rounded-full" src={publicImage(order.vendor.user.imageUrl)} alt="" />
                   <div className="w-44 truncate">
                     <a className="focus:outline-none">
                       {/* Extend touch target to entire panel */}
                       <span className="absolute inset-0" aria-hidden="true" />
-                      <p className="truncate text-sm font-medium text-gray-900">{person.name}</p>
-                      <p className="truncate text-xs text-gray-500">{person.role}</p>
+                      <p className="truncate text-sm font-medium text-gray-900">{createFullName(order.vendor.user)}</p>
+                      <p className="truncate text-xs text-gray-500">{order.serviceType.value}</p>
                     </a>
                   </div>
                 </div>
-                {person.unread > 0 ? (
+                {/* {order.unread > 0 ? (
                   <span
                     className={classNames(
-                      person.id === active ? "bg-indigo-200" : "bg-indigo-50",
+                      order.id === active ? "bg-indigo-200" : "bg-indigo-50",
                       "ml-3 block self-center rounded-full px-3 py-0.5 text-xs font-medium group-hover:bg-indigo-200 "
                     )}
                   >
-                    {person.unread}
+                    {order.unread}
                   </span>
-                ) : null}
+                ) : null} */}
               </li>
             ))}
           </ul>

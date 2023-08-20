@@ -10,6 +10,7 @@ import { fetchOrderState } from "../../../model/orderModel";
 import ContextMenu from "./ContextMenu";
 import MessagesOrderDetails, { messageOrderOpenState } from "./MessagesOrderDetails";
 
+//NOTE Refactor Component for using messages in DB
 const messages = [
   {
     id: 1,
